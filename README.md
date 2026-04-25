@@ -1,20 +1,20 @@
 # Naruto Arena Agent
 
-Это мой небольшой тестовый репозиторий под Naruto Arena.
+This is my small test repo for Naruto Arena.
 
-Я в детстве очень много играл в Naruto Arena, и захотелось собрать для себя штуку, которая помогает разбираться в командах без гадания и советов из головы.
+I played a lot of Naruto Arena as a kid, and I wanted a little helper for figuring out teams without guessing or pulling advice out of thin air.
 
-Naruto Arena - это браузерная пошаговая 3 на 3 игра: берешь трех персонажей, собираешь из них команду и пытаешься нормально прожать скиллы, чакру, станы, хилы, каунтеры и прочие неприятные штуки.
+Naruto Arena is a browser-based turn-based 3v3 game: you pick three characters, make them work as a team, and try to use skills, chakra, stuns, heals, counters, and other annoying stuff better than the other side.
 
-Идея репы простая: сделать skill/agent для Codex, потому что я пользуюсь Codex. Агент берет данные по игре с `https://www.naruto-arena.site/`, складывает их в локальные references и потом отвечает с опорой на эти данные, а не просто придумывает "лучшую тиму".
+The idea here is simple: I use Codex, so I am making a Codex skill/agent for the game. It uses game data from `https://www.naruto-arena.site/`, keeps local references, and answers from that data instead of making things up.
 
-Что он должен уметь:
+What I want it to help with:
 
-- собирать команды вокруг конкретного персонажа;
-- объяснять, как играть командой или отдельным персонажем;
-- помогать с миссиями и планом боя;
-- смотреть на вражеский комп и подсказывать, кого фокусить первым;
-- говорить, чего бояться: каунтеров, хилов, защиты, контроля и похожих угроз;
-- честно писать, если по данным чего-то не хватает.
+- build teams around a character;
+- explain how to use a team or a single character;
+- help with missions and a battle plan;
+- look at an enemy comp and suggest who to focus first;
+- call out threats like counters, heals, defense, control, and similar problems;
+- say honestly when the data is missing something.
 
-Это не серьезный продукт и не красивая платформа. Просто личный тестовый проект под мой Codex-воркфлоу и старую игру, которую я хорошо помню.
+This is not a serious product or some polished platform. It is just a personal Codex test project for an old game I still remember way too well.
