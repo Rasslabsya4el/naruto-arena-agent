@@ -1,0 +1,91 @@
+task_id: TASK-E2E-MVP-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Run the first representative MVP end-to-end proof across the actual user-facing request classes promised by the skill contract.
+- Determine what is already proven at prompt level, what still fails or remains weak, and whether the project is genuinely close to MVP rather than only locally well-structured.
+
+why_now:
+- The local bundle, helper layer, mission-pool planner, and their dedicated validators are now frozen enough that prompt-level validation can measure the real product surface.
+- This task is the first point where the project can honestly test user-visible behavior instead of only internal data and helper contracts.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-MVP-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\scripts
+
+acceptance:
+- Validate at least one representative prompt for each MVP request class: build around a character, build for a mission, optimize a mission pool, diagnose or improve an existing team, and explain a mechanic or character difference.
+- For each prompt, prove whether the answer stays grounded in the validated local bundle, separates confirmed mechanics from inference, surfaces uncertainty honestly, and includes the practical sections required by `skills\naruto-arena-team-builder\SKILL.md`.
+- For the mission-pool prompt, prove the answer uses the accepted grouped-coverage surface rather than vague “one team covers most of this” language.
+- For the diagnosis prompt, prove the answer identifies a main structural issue or explicitly justifies that the team is already coherent; do not accept fake rebuilds.
+- For the mechanics prompt, prove source-backed facts are separated from interpretation and that provenance can be resolved when it matters.
+- Produce an honest MVP-status conclusion in the result: what is proven ready, what is still weak or blocked, and whether `TASK-DOCS-FINALIZE-01` is actually justified next.
+- Keep this task validation-only. Do not modify runtime code, skill docs, references, or project docs in this task.
+
+validation:
+- Use the accepted local bundle, helper outputs, and mission-pool planner as the only mechanics evidence surfaces.
+- Record the exact representative prompts used, the answer-shape checks performed, and the concrete pass/fail observations for each request class.
+- If a prompt class fails, report the smallest credible next task instead of patching code in this task.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-MVP-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

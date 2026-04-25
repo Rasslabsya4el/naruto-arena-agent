@@ -1,0 +1,32 @@
+task_id: TASK-TEAM-HELPERS-VALIDATE-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+
+validation:
+- command: python -m py_compile C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+  result: success; the dedicated validator compiled cleanly.
+- command: python C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py --help
+  result: success; CLI help exposes the validator purpose around skill-local runtime boundaries, representative search transparency, team-report transparency, and conservative non-hardcoded behavior.
+- command: python C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+  result: success; validator returned status ok with no failures, confirmed search_characters.py uses the skill-local bundle at C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references, confirmed team_candidate_report.py reuses the shared loader and avoids direct file-read primitives, validated representative search surfaces (query_match, tags, effect_types/families, chakra_profile, data_quality, provenance), validated representative team-report surfaces (resolved members, role_matrix, team_identity_hints, chakra_curve, strength_notes, weakness_notes, substitution_hooks, data_quality_warnings, provenance_hooks), and confirmed no authoritative score or best-team fields were emitted in representative payloads.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py as a dedicated validator for C:\Coding\Naruto arena agent\scripts\search_characters.py and C:\Coding\Naruto arena agent\scripts\team_candidate_report.py.
+- The validator proves the search helper preserves transparent query-match, tag, effect, chakra, data-quality, and provenance surfaces on a representative filtered query.
+- The validator proves the helper runtime boundary stays on the validated skill-local bundle by checking DEFAULT_REFERENCES_DIR, loader defaults, cross-module loader reuse, and successful CLI execution from C:\Coding instead of repo root.
+- The validator proves the team report preserves resolved-member surfaces, role-shell hints, chakra-pressure notes, strength notes, weakness notes, substitution hooks, data-quality warnings, and provenance hooks on a representative trio.
+- The validator proves helper behavior remains conservative in representative outputs: no authoritative score fields, no best-team fields, and no silent suppression of data-quality or provenance markers.
+- The task kept helper scripts unchanged and validated the accepted helper contract as-is.
+
+limitations:
+- Coverage is intentionally narrow and representative: one filtered search query and one team-report trio are validated, not an exhaustive matrix of every tag/effect/weakness combination.
+- The no-static-best-team proof is conservative rather than absolute: the validator checks payload fields and team_candidate_report.py source markers, but it does not attempt broader semantic proof beyond the current accepted helper scope.
+- The validator is a standalone script and is not yet wired into a higher-level repo wrapper or automated test suite.
+
+follow_up_needed: yes
+follow_up:
+- Reuse this validator in later mission-pool and e2e tasks as the frozen helper-layer contract check instead of re-inspecting helper output manually.
+- If the repo later gains a native validation wrapper or targeted test harness, add this script to that wrapper so helper-contract regressions stay cheap to run.

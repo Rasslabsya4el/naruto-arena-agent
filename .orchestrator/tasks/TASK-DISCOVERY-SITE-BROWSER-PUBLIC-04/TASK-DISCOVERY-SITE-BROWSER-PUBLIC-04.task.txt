@@ -1,0 +1,93 @@
+task_id: TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Validate which non-home canonical routes render publicly in a normal browser session without login.
+- Produce a route accessibility report, not scraper/runtime implementation.
+
+why_now:
+- Accepted parse recon confirmed route inventory and data shapes, but raw non-browser fetches for non-home routes currently redirect to `/`.
+- Raw ingestion cannot be designed safely until normal browser rendering is verified.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+canonical_site:
+https://www.naruto-arena.site/
+
+source_restriction:
+- Use only https://www.naruto-arena.site/.
+- Do not use mirrors, other versions, or model memory as evidence.
+
+session_policy:
+- Do not log in for this task.
+- Do not persist credentials, cookies, tokens, auth headers, localStorage, or sessionStorage values.
+- If the browser session is already logged in, do not use account-specific state as evidence for this task.
+
+allowed_methods:
+- Normal browser navigation to canonical routes.
+- Read-only inspection of rendered page content and visible route behavior.
+- Capture of public route availability and visible field presence only.
+
+forbidden_methods:
+- No auth bypass, rate-limit bypass, or challenge bypass.
+- No brute-force hidden route enumeration.
+- No scraper, normalizer, validator, or skill runtime implementation.
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\.orchestrator\site-parse-recon-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\site-browser-public-report.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-PARSE-03
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-02
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01
+- Any scraper, normalizer, validator, skill runtime, or product implementation files.
+- Any file containing credentials, cookies, tokens, or browser session data.
+
+acceptance:
+- Inspect `/`, `/characters-and-skills`, one representative `/chars/<slug>`, `/ninja-missions`, one representative `/missions/<section>`, one representative `/mission/<id>`, `/ninja-ladder`, `/clan-ladder`, one representative `/profile/<id>`, and one representative `/clan/<id>` when reachable.
+- Report for each inspected route whether it renders publicly, redirects, challenges, fails, or appears auth-gated.
+- Record which data fields are visibly present on rendered pages, without secrets.
+- Confirm whether browser rendering changes the current redirect-to-home picture from raw fetch mode.
+- If browser runtime/environment still blocks navigation, return blocked with the exact runtime blocker.
+
+validation:
+- Confirm outputs contain no credentials, cookies, tokens, auth headers, or session values.
+- Confirm changed files are only within write_scope.
+- Summarize exactly which canonical routes were opened in the browser and what outcome each produced.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

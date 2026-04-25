@@ -1,0 +1,380 @@
+# DECISION_LOG
+
+Use this file for durable decisions only. Do not log every validation run or minor note.
+
+## 2026-04-24 - Canonical Game Source - accepted
+
+### Context
+
+- Naruto Arena has multiple versions and mirrors.
+- The project requires stable grounded data for a non-hallucinating team-builder skill.
+
+### Decision
+
+- Use only `https://www.naruto-arena.site/` as the canonical game source.
+- Do not use other domains, mirrors, or model memory for mechanics unless the user explicitly authorizes version comparison.
+
+### Consequences
+
+- Every data record and mechanical claim must trace back to local references sourced from the canonical site.
+- Workers must reject or flag unsupported-version data.
+
+## 2026-04-24 - Data-Driven Skill, No Hardcoded Best Teams - accepted
+
+### Context
+
+- The product must be a team-building assistant, not a static advice list.
+
+### Decision
+
+- Store normalized game data and references separately from reasoning/instructions.
+- The skill may generate and compare teams using local data, but must not hardcode a fixed set of best teams as the product core.
+
+### Consequences
+
+- Schema, validators, provenance, taxonomy, and skill reference build are MVP-critical.
+- Recommendations must explain uncertainty and avoid invented mechanics.
+
+## 2026-04-24 - Discovery Before Implementation - accepted
+
+### Context
+
+- The repo started without implementation files or canonical project docs beyond `.orchestrator` bootstrap artifacts.
+
+### Decision
+
+- Complete bounded discovery/planning/bootstrap tasks before scraper, normalizer, validator, or skill implementation work.
+
+### Consequences
+
+- Implementation tasks should wait for accepted repo bootstrap, site reconnaissance, and schema planning outputs.
+
+## 2026-04-24 - GitHub Repository Registered - accepted
+
+### Context
+
+- User created `https://github.com/Rasslabsya4el/naruto-arena-agent.git`.
+- Discovery found the local workspace was not yet a git repository and the remote appeared empty/reachable.
+
+### Decision
+
+- Treat `https://github.com/Rasslabsya4el/naruto-arena-agent.git` as the intended project remote.
+
+### Consequences
+
+- Local bootstrap must initialize git, set `origin`, create policy/docs, and avoid commit/push unless explicitly authorized.
+
+## 2026-04-24 - Schema Planning Completed - accepted
+
+### Context
+
+- `TASK-SCHEMA-PLAN-01` produced a draft normalized schema and validator plan in `.orchestrator/schema-proposal.md`.
+
+### Decision
+
+- Accept the schema proposal as planning input for future schema implementation.
+- Do not create concrete schema files or validator implementation until site recon and repo bootstrap are accepted.
+
+### Consequences
+
+- `TASK-SCHEMA-FILES-01` remains blocked until required upstream tasks are accepted.
+
+## 2026-04-24 - Separate Public Facts From Session-Aware User State - accepted
+
+### Context
+
+- Accepted canonical-site parse recon shows public home-page data is directly visible, route bundles define public fact shapes, and mission/profile surfaces also contain viewer-specific state such as completion and availability.
+- Raw non-browser fetches of tested non-home routes redirect to `/`, so accessibility and personalization must be treated explicitly instead of inferred.
+
+### Decision
+
+- Model the ingestion domain as at least two distinct record families.
+- Public facts cover characters, skills, mission text/rewards, public ladders, and public clan/profile facts.
+- Session-aware user state covers progression, mission availability/completion, and account-specific unlock context.
+
+### Consequences
+
+- Concrete schema files must not mix public facts with per-account state.
+- Authenticated capture, if needed later, becomes a separate workflow from public-fact ingestion.
+- Team-building logic can depend on public facts first and consume user-state only when explicitly available.
+
+## 2026-04-24 - Browser-First Validation For Non-Home Routes - accepted
+
+### Context
+
+- Accepted parse recon confirms route inventory and prop shapes from canonical Next artifacts.
+- The same recon also shows that tested raw HTTP access to non-home routes currently redirects to `/`.
+
+### Decision
+
+- Treat browser rendering, not raw non-browser fetches, as the next validation step for non-home public routes.
+- Do not treat redirecting raw HTTP responses as proof that those routes are private or unusable.
+
+### Consequences
+
+- Raw ingestion implementation stays blocked until browser validation confirms how public route capture should work.
+- Public browser validation is now the main acquisition blocker task for `R1`.
+
+## 2026-04-24 - Public Browser Validation Blocked By Local Runtime - blocked
+
+### Context
+
+- `TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04` failed before first navigation.
+- Browser Use / `node_repl` resolved `C:\nvm4w\nodejs\node.exe` at `v20.19.5`, while the browser runtime requires `>= 22.22.0`.
+- No canonical browser evidence was collected.
+
+### Decision
+
+- Treat the failed public browser validation as an environment blocker, not a site-access finding.
+- Keep schema work moving in parallel while a separate runtime-fix task addresses the local browser environment.
+
+### Consequences
+
+- `TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04` is blocked, not rejected on product grounds.
+- `TASK-BROWSER-RUNTIME-FIX-01` becomes the active blocker-removal task for the browser branch.
+
+## 2026-04-24 - Concrete Schema Files Accepted - accepted
+
+### Context
+
+- `TASK-SCHEMA-FILES-01` created concrete schema files under `schemas/`.
+- The task enforced the public-fact versus user-state boundary and added shared provenance/confidence/ambiguity structures.
+
+### Decision
+
+- Accept the concrete schema files as the new schema baseline.
+- Require a follow-up schema-validation task before using them as the contract for ingestion code.
+
+### Consequences
+
+- Schema work moves from materialization to validation.
+- Raw ingestion can plan against the schema baseline, but should not assume cross-file validation is already proven.
+
+## 2026-04-24 - Browser Runtime Diagnosis Accepted - accepted
+
+### Context
+
+- `TASK-BROWSER-RUNTIME-FIX-01` confirmed that `node_repl` resolves `C:\nvm4w\nodejs\node.exe` at `v20.19.5`.
+- The browser runtime requires `>= 22.22.0`.
+- Installed `22.20.0` is still insufficient, and the bundled Codex Node path was not a validated executable fallback from the worker.
+
+### Decision
+
+- Accept the runtime diagnosis as sufficient blocker evidence.
+- Use the existing `nvm` workflow as the least-risk fix path instead of relying on the bundled WindowsApps Node path.
+
+### Consequences
+
+- The next browser-runtime task should request explicit confirmation inside the worker thread before running `nvm install 22.22.0` and `nvm use 22.22.0`.
+- Browser validation remains blocked until that runtime change and a bootstrap recheck succeed.
+
+## 2026-04-24 - Normalized Project Data Lives Under data/normalized - accepted
+
+### Context
+
+- The source prompt expects primary normalized outputs at `data/normalized/characters.json` and `data/normalized/missions.json`.
+- Skill-ready reference artifacts are a later build product, not the first normalized source of truth.
+
+### Decision
+
+- Keep project-owned normalized canonical data under `data/normalized/`.
+- Build later skill-facing copies from that normalized layer into the skill package reference directory.
+
+### Consequences
+
+- Character and mission normalization tasks should target `data/normalized/` first.
+- Reference-build tasks should consume normalized project data instead of re-reading raw snapshots directly.
+
+## 2026-04-24 - Authenticated Playwright Capture Unblocks Mainline Ingestion - accepted
+
+### Context
+
+- A local authenticated capture run against `https://www.naruto-arena.site/` produced a usable raw snapshot bundle with characters, missions, ladders, manual pages, and public profile data.
+- The capture works by combining authenticated Next JSON reads with rendered-page fallback for routes where the canonical Next JSON path is inconsistent.
+- Browser Use remains blocked by the local Node runtime, but Python Playwright capture is already functioning.
+
+### Decision
+
+- Treat authenticated Playwright capture as the current mainline raw acquisition path for the project.
+- Treat the Browser Use runtime issue as a secondary tooling branch, not the mainline ingestion blocker.
+
+### Consequences
+
+- Mainline work can move to schema proof and normalization from the existing raw snapshot.
+- Browser Use runtime repair remains useful for optional in-app browser validation, but it no longer gates the next MVP tasks.
+- Session-aware user state still stays separate from public-fact normalization.
+
+## 2026-04-24 - Schema Proof Accepted, Mission Level Requirement Must Be Modeled - accepted
+
+### Context
+
+- Snapshot-derived schema fixtures and the local validator now prove that the current schema set is structurally valid.
+- That proof also surfaced a real public mission field from the canonical snapshot, `levelRequirement`, that the current mission schema cannot store.
+
+### Decision
+
+- Accept schema validation as successful proof for the current schema baseline.
+- Before mission normalization starts, extend the mission schema so public level requirements are not silently dropped.
+
+### Consequences
+
+- Character normalization can proceed.
+- Mission normalization should wait for a small mission-schema refinement task.
+
+## 2026-04-24 - Hidden Or Unknown Mission Objectives Are Valid Canonical State - accepted
+
+### Context
+
+- User clarified that some Naruto Arena missions legitimately have hidden or unknown objectives.
+- The first mission normalization pass preserved explicit unknown mission requirements where the captured canonical data did not reveal objective text.
+
+### Decision
+
+- Do not treat hidden or unknown mission objectives as an automatic ingestion failure.
+- When the canonical source does not reveal a mission objective, preserve an explicit unknown/hidden requirement state with ambiguity markers instead of inventing the mechanic.
+
+### Consequences
+
+- Mission normalization follow-ups should focus on real contract gaps such as missing structured public fields or schema-invalid ids, not on forcing every mission into a known objective.
+- The skill should explain that some mission goals are genuinely hidden or unknown in the source data.
+
+## 2026-04-24 - Playable Character Bundle May Exclude Disabled Zero-Skill Raw Entries - accepted
+
+### Context
+
+- The raw snapshot contains two character entries, `Shinobi Alliance Kakashi (S)` and `Edo Tensei Itachi (S)`, with zero skills because the canonical source currently marks them as disabled.
+- The current character schema requires non-empty `skills`, and inventing placeholder skills would break the product contract.
+
+### Decision
+
+- Treat `data/normalized/characters.json` as the accepted playable character bundle, not as a mandatory full mirror of every raw character stub.
+- It is acceptable to exclude disabled zero-skill raw entries from that playable bundle when exclusion is explicit and source-backed.
+
+### Consequences
+
+- Downstream team-building work can rely on the accepted character bundle without inventing mechanics for disabled entries.
+- Any future requirement for full raw-roster completeness should use a separate exclusion-aware contract or artifact, not silently change the playable bundle semantics.
+
+## 2026-04-24 - Mission Schema Uses `level_requirement` For Public Level Gates - accepted
+
+### Context
+
+- The canonical snapshot exposes a real public mission level gate.
+- Schema refinement needed one durable field name for normalized mission records and fixtures.
+
+### Decision
+
+- Use `level_requirement` as the public normalized field name for mission level gates.
+- Keep it in the public mission schema and out of viewer-specific availability/completion state.
+
+### Consequences
+
+- Mission normalization follow-ups should emit `level_requirement` into normalized records.
+- Downstream mission planning, references, and skill behavior should rely on this field name instead of raw-text scraping for level gates.
+
+## 2026-04-24 - Live Capture Output Must Stay Under snapshots/raw - accepted
+
+### Context
+
+- The hardened capture runner now exposes a safe operator contract and explicitly rejects output paths outside runtime snapshot space.
+- Live raw captures are runtime artifacts, not tracked project memory.
+
+### Decision
+
+- Future live capture runs must write only under `snapshots/raw`.
+- Contract inspection should use `python scripts\capture_site.py --help` or `python scripts\capture_site.py --print-contract` instead of ad hoc path guesses or trial writes into tracked source directories.
+
+### Consequences
+
+- Fresh refresh validation should prove `manifest.captureContract`, `manifest.routeCapture`, and per-record `capture.*` fields only through runtime-path snapshots.
+- Worker tasks should treat writes into tracked source paths like `data/normalized` as a hard failure for live capture output.
+
+## 2026-04-24 - Skill Runtime Must Read Skill-Local Reference Bundle - accepted
+
+### Context
+
+- The project now has an accepted skill-local reference bundle built from accepted normalized data, taxonomy artifacts, and validation facts.
+- Future skill/runtime work needs one stable local surface instead of mixing reads from `data/normalized`, top-level `references`, and orchestration result files.
+
+### Decision
+
+- Future skill/runtime behavior must read its mechanics and provenance surfaces from `skills/naruto-arena-team-builder/references/`.
+- `source-map.json` and `data-quality-report.md` are part of that required bundle contract, not optional side artifacts.
+
+### Consequences
+
+- `TASK-REFERENCES-VALIDATE-01` should validate bundle completeness, provenance carry-through, and data-quality/report invariants against the skill-local bundle.
+- `TASK-SKILL-BASE-01` should load local bundle artifacts and must not bypass them by reading project-root `references/` or `data/normalized/` directly at runtime.
+
+## 2026-04-24 - Project-Owned Taxonomy Artifacts Live Under Top-Level references - accepted
+
+### Context
+
+- Taxonomy now becomes the active layer between accepted normalized data and later skill-reference build.
+- The repo keeps normalized data, schemas, validators, and reference/reasoning artifacts separated.
+
+### Decision
+
+- Phase-5 taxonomy outputs should live under top-level `references\` plus `docs\tagging-guide.md`, not inside `data\normalized` and not directly inside a future skill package.
+- Later reference-build work can copy or transform these project-owned taxonomy artifacts into skill-local references as needed.
+
+### Consequences
+
+- `TASK-TAXONOMY-01` should produce `references\effect-taxonomy.json`, `references\tags.json`, and `references\synergy-patterns.md` as project-owned source artifacts.
+- `TASK-REFERENCES-BUILD-01` becomes the phase that decides the final skill-local reference layout.
+
+## 2026-04-24 - Fresh Authenticated Refresh Validation Is Deferred Hardening, Not Current-Use Blocker - accepted
+
+### Context
+
+- The current repo already has an accepted raw snapshot, accepted normalized data, accepted validators, an accepted skill-local reference bundle, accepted helper/planner layers, and accepted representative answer samples.
+- User clarified that for the current working agent, no new site refresh is needed because the required data is already parsed and the product is already operating on that local bundle.
+- `TASK-INGEST-RAW-VALIDATE-01` would only prove a fresh rerun of the hardened capture contract on newly generated raw artifacts.
+
+### Decision
+
+- Treat `TASK-INGEST-RAW-VALIDATE-01` as deferred ingestion hardening for future data refreshes, not as a blocker for the current usable agent surface.
+- Do not require authenticated env vars merely to declare the currently parsed local-data skill usable.
+
+### Consequences
+
+- The current representative MVP surface is no longer blocked on fresh authenticated refresh validation.
+- If the project later needs to refresh site data, prove the new capture metadata contract on a fresh run, or resume ingestion maintenance, then `TASK-INGEST-RAW-VALIDATE-01` should be revived.
+- Current next steps become optional operational choices such as publish, integration, or future refresh work, not mandatory proof debt for current use.
+
+## 2026-04-24 - Alternative-Character Mission Progress Must Be Modeled Explicitly - accepted
+
+### Context
+
+- The accepted normalized and skill-local mission bundles already contain visible composite-subject requirements such as `The Lone Swordsman`, whose text says `Win 4 battles in a row with Momochi Zabuza or Hoshigaki Kisame.`
+- User clarified a required gameplay rule for this project: if both eligible named characters are present on the team for this kind of mission, progress should count twice rather than once.
+- The current local mission/runtime surface still preserves these eligible pairs mostly in free text, which means mission planning can undercount progress for this subset of missions.
+
+### Decision
+
+- Treat visible `A or B` mission requirements as a dedicated product/runtime semantic that must not remain free-text-only.
+- Add a bounded follow-up that makes the eligible alternatives explicit enough for normalization, references, and mission planning to support stacked per-battle progress when more than one eligible named character is present.
+
+### Consequences
+
+- Until that follow-up lands, alternative-character mission progress must not be treated as fully exact in the runtime.
+- Mission normalization, bundle-building, planner behavior, and targeted validators may all need refinement, but hidden or unknown mission objectives still remain explicit unknowns instead of guessed text.
+
+## 2026-04-24 - Mission Requests Imply A Conservative Roster Ceiling From Mission Rank - accepted
+
+### Context
+
+- User clarified a product rule for mission-team advice: if they ask for teams for missions, the skill should assume characters are unlocked only within the rank band implied by those missions.
+- Concrete example: if the user asks for a team to unlock `Choji (C)`, the answer should not default to `Sannin+` or similar later-rank characters.
+- The current local bundle already exposes `rank_requirement` and `level_requirement` for missions, but the accepted runtime contract does not yet force mission recommendations to honor that progression ceiling by default.
+
+### Decision
+
+- Treat mission and mission-pool requests as progression-scoped by default.
+- Unless the user explicitly says that higher-rank characters are already unlocked or asks for aspirational or future-planning teams, recommendations must stay within the highest requested mission rank band.
+
+### Consequences
+
+- Mission recommendation logic must not treat the full character bundle as freely available for every mission request.
+- If runtime data needs a small structural addition to represent unlock bands safely, add that durable structure rather than relying only on prompt wording.
+- If a mission rank is missing or ambiguous, the answer should surface that limit instead of silently widening the roster to late-rank characters.

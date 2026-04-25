@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena Public Clan Record",
+  "description": "Public clan facts only. Session-specific member management or viewer permissions do not belong in this schema.",
+  "type": "object",
+  "$defs": {
+    "memberRef": {
+      "type": "object",
+      "properties": {
+        "profile_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "username": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "display_name": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "profile_url": {
+          "$ref": "./_common.schema.json#/$defs/nullableCanonicalUrl"
+        },
+        "role_label": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "username",
+        "display_name",
+        "profile_url",
+        "role_label"
+      ],
+      "additionalProperties": false
+    },
+    "memberGroup": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/memberRef"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "label",
+        "members"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "record_type": {
+      "const": "clan_public"
+    },
+    "record_family": {
+      "const": "public_fact"
+    },
+    "name": {
+      "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+    },
+    "abbreviation": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "clan_url": {
+      "$ref": "./_common.schema.json#/$defs/nullableCanonicalUrl"
+    },
+    "ladder_rank": {
+      "$ref": "./_common.schema.json#/$defs/nullableInteger"
+    },
+    "stats": {
+      "$ref": "./_common.schema.json#/$defs/statsBlock"
+    },
+    "member_groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/memberGroup"
+      }
+    },
+    "source_refs": {
+      "$ref": "./_common.schema.json#/$defs/sourceRefList"
+    },
+    "raw_text": {
+      "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+    },
+    "parse": {
+      "$ref": "./_common.schema.json#/$defs/parseMeta"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "record_family",
+    "name",
+    "member_groups",
+    "source_refs",
+    "raw_text",
+    "parse"
+  ],
+  "additionalProperties": false
+}

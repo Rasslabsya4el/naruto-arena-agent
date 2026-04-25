@@ -1,0 +1,86 @@
+task_id: TASK-TAXONOMY-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Define the first project-owned effect taxonomy and tag system that makes the accepted normalized character and mission data useful for downstream team-building and reference generation.
+- Produce machine-readable taxonomy/tag artifacts plus a reproducible inference path without introducing hardcoded team picks.
+
+why_now:
+- Both normalized bundles and their coverage audits are now accepted, so taxonomy can be built on audited data instead of schema-green guesses.
+- Reference build and later team-building logic depend on explicit tags/effects rather than unexplained labels.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\validate_character_bundle.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_bundle.py
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-VALIDATE-01\RESULT.txt
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\references\tags.json
+- C:\Coding\Naruto arena agent\references\synergy-patterns.md
+- C:\Coding\Naruto arena agent\docs\tagging-guide.md
+- C:\Coding\Naruto arena agent\scripts\infer_tags.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TAXONOMY-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- Any skill package files under a future C:\Coding\Naruto arena agent\skills
+
+acceptance:
+- Create machine-readable `references\effect-taxonomy.json` and `references\tags.json` with explicit definitions rather than label-only placeholders.
+- Create `references\synergy-patterns.md` and `docs\tagging-guide.md` that explain how tags/effects are intended to be inferred and used.
+- Implement `scripts\infer_tags.py` if feasible so taxonomy/tag assignment can be reproduced from accepted normalized data instead of being hand-maintained only.
+- Represent tag inference uncertainty or explicit unknowns where the accepted data is incomplete, especially for mission records that still carry source-backed unknown objectives.
+- Do not introduce ready-made team hardcode or unsupported mechanics from memory.
+- Keep taxonomy artifacts project-owned under top-level `references\`; later skill-reference build will decide what to copy into skill-local references.
+
+validation:
+- Run `python -m py_compile scripts\infer_tags.py`.
+- Run `python scripts\infer_tags.py --help` if a CLI is implemented.
+- If the task emits inferred outputs, report the exact produced artifact paths and a concise count summary.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TAXONOMY-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

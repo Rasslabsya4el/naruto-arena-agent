@@ -1,0 +1,636 @@
+{
+  "id": "character_haruno_sakura",
+  "record_type": "character",
+  "record_family": "public_fact",
+  "name": "Haruno Sakura",
+  "display_name": "Haruno Sakura",
+  "aliases": [],
+  "description": "A Genin from Team 7, Sakura is very intelligent, but self-conscious about herself. Having just recently received training from Tsunade, Sakura is now able to deliver powerful punches and heal her own allies.",
+  "availability": {
+    "unlock_state": "unknown",
+    "unlock_mission_id": null,
+    "unlock_mission_name": null,
+    "raw_unlock_text": null,
+    "confidence": 0.0,
+    "ambiguity_flags": [
+      {
+        "code": "unlock_not_present_in_overview",
+        "field": "availability",
+        "detail": "The current character overview snapshot does not expose Sakura's unlock source.",
+        "severity": "info"
+      }
+    ]
+  },
+  "classes": [],
+  "skills": [
+    {
+      "record_type": "skill",
+      "record_family": "public_fact",
+      "skill_id": "skill_haruno_sakura_ko_punch",
+      "slot": 1,
+      "name": "KO Punch",
+      "description": "Sakura punches one enemy with all her strength, <Damage>dealing 20 damage<Damage> to them and <Effects>stunning<Effects> their <Classes>physical and mental<Classes> skills for 1 turn. During <SkillName>'Inner Sakura'<SkillName>, this skill will <Improvements>deal 10 additional damage<Improvements>.",
+      "cost": {
+        "components": [
+          {
+            "chakra_type": "tai",
+            "amount": 1,
+            "raw_text": "Tai",
+            "confidence": 0.98
+          }
+        ],
+        "total": 1,
+        "raw_text": "Tai",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "cooldown": {
+        "turns": 0,
+        "raw_text": "0",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "classes": [
+        {
+          "class_id": "physical",
+          "label": "Physical",
+          "source_ref_id": "src_characters_overview_sakura_skill_1",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "melee",
+          "label": "Melee",
+          "source_ref_id": "src_characters_overview_sakura_skill_1",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "instant",
+          "label": "Instant",
+          "source_ref_id": "src_characters_overview_sakura_skill_1",
+          "confidence": 0.98
+        }
+      ],
+      "effects": [
+        {
+          "effect_id": "effect_haruno_sakura_ko_punch_damage",
+          "effect_type": "damage",
+          "targeting": {
+            "target_type": "enemy",
+            "target_count": 1,
+            "raw_text": "one enemy"
+          },
+          "magnitude": {
+            "amount": 20,
+            "unit": "health",
+            "operator": "exact",
+            "raw_text": "dealing 20 damage"
+          },
+          "duration": {
+            "turns": null,
+            "timing": "instant",
+            "raw_text": null
+          },
+          "conditions": [],
+          "raw_text": "dealing 20 damage to them",
+          "confidence": 0.96,
+          "ambiguity_flags": []
+        },
+        {
+          "effect_id": "effect_haruno_sakura_ko_punch_stun",
+          "effect_type": "stun",
+          "targeting": {
+            "target_type": "enemy",
+            "target_count": 1,
+            "raw_text": "their physical and mental skills"
+          },
+          "magnitude": {
+            "amount": null,
+            "unit": "unknown",
+            "operator": "unknown",
+            "raw_text": null
+          },
+          "duration": {
+            "turns": 1,
+            "timing": "unknown",
+            "raw_text": "for 1 turn"
+          },
+          "conditions": [],
+          "raw_text": "stunning their physical and mental skills for 1 turn",
+          "confidence": 0.9,
+          "ambiguity_flags": []
+        },
+        {
+          "effect_id": "effect_haruno_sakura_ko_punch_bonus",
+          "effect_type": "conditional",
+          "targeting": {
+            "target_type": "enemy",
+            "target_count": 1,
+            "raw_text": "this skill"
+          },
+          "magnitude": {
+            "amount": 10,
+            "unit": "health",
+            "operator": "exact",
+            "raw_text": "deal 10 additional damage"
+          },
+          "duration": {
+            "turns": null,
+            "timing": "unknown",
+            "raw_text": "During 'Inner Sakura'"
+          },
+          "conditions": [
+            {
+              "condition_type": "requires_state",
+              "raw_text": "During 'Inner Sakura'",
+              "normalized_ref": "skill_haruno_sakura_inner_sakura",
+              "confidence": 0.88
+            }
+          ],
+          "raw_text": "During 'Inner Sakura', this skill will deal 10 additional damage.",
+          "confidence": 0.88,
+          "ambiguity_flags": []
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "src_characters_overview_sakura_skill_1",
+          "url": "https://www.naruto-arena.site/characters-and-skills",
+          "canonical_domain": "www.naruto-arena.site",
+          "visibility": "public",
+          "capture_mode": "next_data",
+          "retrieved_at": "2026-04-24T17:06:08.456321+00:00",
+          "snapshot_path": "snapshots/raw/site_capture/latest/characters/overview.json",
+          "raw_text_hash": null,
+          "section": "pageProps.chars[1].skills[0]",
+          "version_label": null
+        }
+      ],
+      "raw_text": {
+        "primary": "Sakura punches one enemy with all her strength, <Damage>dealing 20 damage<Damage> to them and <Effects>stunning<Effects> their <Classes>physical and mental<Classes> skills for 1 turn. During <SkillName>'Inner Sakura'<SkillName>, this skill will <Improvements>deal 10 additional damage<Improvements>.",
+        "fragments": [
+          {
+            "field": "description",
+            "text": "Sakura punches one enemy with all her strength, <Damage>dealing 20 damage<Damage> to them and <Effects>stunning<Effects> their <Classes>physical and mental<Classes> skills for 1 turn. During <SkillName>'Inner Sakura'<SkillName>, this skill will <Improvements>deal 10 additional damage<Improvements>.",
+            "source_ref_id": "src_characters_overview_sakura_skill_1"
+          }
+        ]
+      },
+      "parse": {
+        "parser_version": "task-schema-validate-02-fixture",
+        "confidence": 0.88,
+        "confidence_reasons": [
+          "The overview payload exposes exact skill text, cost labels, cooldown, and class labels.",
+          "The fixture normalizes the conditional damage bonus into a separate effect object."
+        ],
+        "ambiguity_flags": [],
+        "unsupported_version": false,
+        "normalized_at": "2026-04-24T19:45:00+02:00",
+        "provisional_fields": [
+          "effects[2]"
+        ],
+        "notes": [
+          "The sample keeps the raw angle-bracket markup from the canonical snapshot."
+        ]
+      }
+    },
+    {
+      "record_type": "skill",
+      "record_family": "public_fact",
+      "skill_id": "skill_haruno_sakura_cure",
+      "slot": 2,
+      "name": "Cure",
+      "description": "Using basic healing techniques, Sakura <Defense>heals<Defense> herself or an ally <Defense>for 25 health<Defense>.",
+      "cost": {
+        "components": [
+          {
+            "chakra_type": "nin",
+            "amount": 1,
+            "raw_text": "Nin",
+            "confidence": 0.98
+          }
+        ],
+        "total": 1,
+        "raw_text": "Nin",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "cooldown": {
+        "turns": 0,
+        "raw_text": "0",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "classes": [
+        {
+          "class_id": "chakra",
+          "label": "Chakra",
+          "source_ref_id": "src_characters_overview_sakura_skill_2",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "instant",
+          "label": "Instant",
+          "source_ref_id": "src_characters_overview_sakura_skill_2",
+          "confidence": 0.98
+        }
+      ],
+      "effects": [
+        {
+          "effect_id": "effect_haruno_sakura_cure_heal",
+          "effect_type": "heal",
+          "targeting": {
+            "target_type": "any",
+            "target_count": 1,
+            "raw_text": "herself or an ally"
+          },
+          "magnitude": {
+            "amount": 25,
+            "unit": "health",
+            "operator": "exact",
+            "raw_text": "for 25 health"
+          },
+          "duration": {
+            "turns": null,
+            "timing": "instant",
+            "raw_text": null
+          },
+          "conditions": [],
+          "raw_text": "Sakura heals herself or an ally for 25 health.",
+          "confidence": 0.97,
+          "ambiguity_flags": []
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "src_characters_overview_sakura_skill_2",
+          "url": "https://www.naruto-arena.site/characters-and-skills",
+          "canonical_domain": "www.naruto-arena.site",
+          "visibility": "public",
+          "capture_mode": "next_data",
+          "retrieved_at": "2026-04-24T17:06:08.456321+00:00",
+          "snapshot_path": "snapshots/raw/site_capture/latest/characters/overview.json",
+          "raw_text_hash": null,
+          "section": "pageProps.chars[1].skills[1]",
+          "version_label": null
+        }
+      ],
+      "raw_text": {
+        "primary": "Using basic healing techniques, Sakura <Defense>heals<Defense> herself or an ally <Defense>for 25 health<Defense>.",
+        "fragments": [
+          {
+            "field": "description",
+            "text": "Using basic healing techniques, Sakura <Defense>heals<Defense> herself or an ally <Defense>for 25 health<Defense>.",
+            "source_ref_id": "src_characters_overview_sakura_skill_2"
+          }
+        ]
+      },
+      "parse": {
+        "parser_version": "task-schema-validate-02-fixture",
+        "confidence": 0.97,
+        "confidence_reasons": [
+          "The skill text is direct and the target set is explicit."
+        ],
+        "ambiguity_flags": [],
+        "unsupported_version": false,
+        "normalized_at": "2026-04-24T19:45:00+02:00",
+        "provisional_fields": [],
+        "notes": []
+      }
+    },
+    {
+      "record_type": "skill",
+      "record_family": "public_fact",
+      "skill_id": "skill_haruno_sakura_inner_sakura",
+      "slot": 3,
+      "name": "Inner Sakura",
+      "description": "Sakura's inner self surfaces and urges her on. For 4 turns, Sakura will gain <Defense>10 points of damage reduction<Defense>. During this time, Sakura will <Defense>ignore non-damage effects<Defense> and <SkillName>'KO Punch'<SkillName> will <Improvements>deal 10 additional damage<Improvements>.",
+      "cost": {
+        "components": [
+          {
+            "chakra_type": "random",
+            "amount": 1,
+            "raw_text": "Random",
+            "confidence": 0.98
+          }
+        ],
+        "total": 1,
+        "raw_text": "Random",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "cooldown": {
+        "turns": 4,
+        "raw_text": "4",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "classes": [
+        {
+          "class_id": "mental",
+          "label": "Mental",
+          "source_ref_id": "src_characters_overview_sakura_skill_3",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "instant",
+          "label": "Instant",
+          "source_ref_id": "src_characters_overview_sakura_skill_3",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "unique",
+          "label": "Unique",
+          "source_ref_id": "src_characters_overview_sakura_skill_3",
+          "confidence": 0.98
+        }
+      ],
+      "effects": [
+        {
+          "effect_id": "effect_haruno_sakura_inner_sakura_reduction",
+          "effect_type": "reduce_damage",
+          "targeting": {
+            "target_type": "self",
+            "target_count": 1,
+            "raw_text": "Sakura"
+          },
+          "magnitude": {
+            "amount": 10,
+            "unit": "unknown",
+            "operator": "exact",
+            "raw_text": "10 points of damage reduction"
+          },
+          "duration": {
+            "turns": 4,
+            "timing": "ongoing",
+            "raw_text": "For 4 turns"
+          },
+          "conditions": [],
+          "raw_text": "For 4 turns, Sakura will gain 10 points of damage reduction.",
+          "confidence": 0.93,
+          "ambiguity_flags": []
+        },
+        {
+          "effect_id": "effect_haruno_sakura_inner_sakura_ignore",
+          "effect_type": "protect",
+          "targeting": {
+            "target_type": "self",
+            "target_count": 1,
+            "raw_text": "Sakura"
+          },
+          "magnitude": {
+            "amount": null,
+            "unit": "unknown",
+            "operator": "unknown",
+            "raw_text": null
+          },
+          "duration": {
+            "turns": 4,
+            "timing": "ongoing",
+            "raw_text": "During this time"
+          },
+          "conditions": [],
+          "raw_text": "During this time, Sakura will ignore non-damage effects.",
+          "confidence": 0.84,
+          "ambiguity_flags": [
+            {
+              "code": "protect_subtype_not_modeled",
+              "field": "effects[1]",
+              "detail": "The current schema does not distinguish between invulnerability and ignoring non-damage effects.",
+              "severity": "info"
+            }
+          ]
+        },
+        {
+          "effect_id": "effect_haruno_sakura_inner_sakura_bonus",
+          "effect_type": "conditional",
+          "targeting": {
+            "target_type": "self",
+            "target_count": 1,
+            "raw_text": "'KO Punch'"
+          },
+          "magnitude": {
+            "amount": 10,
+            "unit": "health",
+            "operator": "exact",
+            "raw_text": "deal 10 additional damage"
+          },
+          "duration": {
+            "turns": 4,
+            "timing": "ongoing",
+            "raw_text": "During this time"
+          },
+          "conditions": [
+            {
+              "condition_type": "requires_state",
+              "raw_text": "During this time",
+              "normalized_ref": null,
+              "confidence": 0.82
+            }
+          ],
+          "raw_text": "'KO Punch' will deal 10 additional damage.",
+          "confidence": 0.82,
+          "ambiguity_flags": []
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "src_characters_overview_sakura_skill_3",
+          "url": "https://www.naruto-arena.site/characters-and-skills",
+          "canonical_domain": "www.naruto-arena.site",
+          "visibility": "public",
+          "capture_mode": "next_data",
+          "retrieved_at": "2026-04-24T17:06:08.456321+00:00",
+          "snapshot_path": "snapshots/raw/site_capture/latest/characters/overview.json",
+          "raw_text_hash": null,
+          "section": "pageProps.chars[1].skills[2]",
+          "version_label": null
+        }
+      ],
+      "raw_text": {
+        "primary": "Sakura's inner self surfaces and urges her on. For 4 turns, Sakura will gain <Defense>10 points of damage reduction<Defense>. During this time, Sakura will <Defense>ignore non-damage effects<Defense> and <SkillName>'KO Punch'<SkillName> will <Improvements>deal 10 additional damage<Improvements>.",
+        "fragments": [
+          {
+            "field": "description",
+            "text": "Sakura's inner self surfaces and urges her on. For 4 turns, Sakura will gain <Defense>10 points of damage reduction<Defense>. During this time, Sakura will <Defense>ignore non-damage effects<Defense> and <SkillName>'KO Punch'<SkillName> will <Improvements>deal 10 additional damage<Improvements>.",
+            "source_ref_id": "src_characters_overview_sakura_skill_3"
+          }
+        ]
+      },
+      "parse": {
+        "parser_version": "task-schema-validate-02-fixture",
+        "confidence": 0.84,
+        "confidence_reasons": [
+          "The main duration and damage-reduction amount are explicit in the snapshot.",
+          "The schema does not have a more specific type for ignoring non-damage effects."
+        ],
+        "ambiguity_flags": [
+          {
+            "code": "effect_taxonomy_coarse_for_ignore_effects",
+            "field": "effects[1]",
+            "detail": "The ignore-non-damage clause is represented with the generic protect effect type.",
+            "severity": "info"
+          }
+        ],
+        "unsupported_version": false,
+        "normalized_at": "2026-04-24T19:45:00+02:00",
+        "provisional_fields": [
+          "effects[1]"
+        ],
+        "notes": []
+      }
+    },
+    {
+      "record_type": "skill",
+      "record_family": "public_fact",
+      "skill_id": "skill_haruno_sakura_replacement_technique",
+      "slot": 4,
+      "name": "Sakura Replacement Technique",
+      "description": "This skill makes Haruno Sakura <Defense>invulnerable<Defense> for 1 turn.",
+      "cost": {
+        "components": [
+          {
+            "chakra_type": "random",
+            "amount": 1,
+            "raw_text": "Random",
+            "confidence": 0.98
+          }
+        ],
+        "total": 1,
+        "raw_text": "Random",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "cooldown": {
+        "turns": 4,
+        "raw_text": "4",
+        "confidence": 0.98,
+        "ambiguity_flags": []
+      },
+      "classes": [
+        {
+          "class_id": "chakra",
+          "label": "Chakra",
+          "source_ref_id": "src_characters_overview_sakura_skill_4",
+          "confidence": 0.98
+        },
+        {
+          "class_id": "instant",
+          "label": "Instant",
+          "source_ref_id": "src_characters_overview_sakura_skill_4",
+          "confidence": 0.98
+        }
+      ],
+      "effects": [
+        {
+          "effect_id": "effect_haruno_sakura_replacement_invulnerable",
+          "effect_type": "protect",
+          "targeting": {
+            "target_type": "self",
+            "target_count": 1,
+            "raw_text": "Haruno Sakura"
+          },
+          "magnitude": {
+            "amount": null,
+            "unit": "unknown",
+            "operator": "unknown",
+            "raw_text": null
+          },
+          "duration": {
+            "turns": 1,
+            "timing": "unknown",
+            "raw_text": "for 1 turn"
+          },
+          "conditions": [],
+          "raw_text": "This skill makes Haruno Sakura invulnerable for 1 turn.",
+          "confidence": 0.94,
+          "ambiguity_flags": []
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "src_characters_overview_sakura_skill_4",
+          "url": "https://www.naruto-arena.site/characters-and-skills",
+          "canonical_domain": "www.naruto-arena.site",
+          "visibility": "public",
+          "capture_mode": "next_data",
+          "retrieved_at": "2026-04-24T17:06:08.456321+00:00",
+          "snapshot_path": "snapshots/raw/site_capture/latest/characters/overview.json",
+          "raw_text_hash": null,
+          "section": "pageProps.chars[1].skills[3]",
+          "version_label": null
+        }
+      ],
+      "raw_text": {
+        "primary": "This skill makes Haruno Sakura <Defense>invulnerable<Defense> for 1 turn.",
+        "fragments": [
+          {
+            "field": "description",
+            "text": "This skill makes Haruno Sakura <Defense>invulnerable<Defense> for 1 turn.",
+            "source_ref_id": "src_characters_overview_sakura_skill_4"
+          }
+        ]
+      },
+      "parse": {
+        "parser_version": "task-schema-validate-02-fixture",
+        "confidence": 0.94,
+        "confidence_reasons": [
+          "The effect and duration are stated directly in the snapshot."
+        ],
+        "ambiguity_flags": [],
+        "unsupported_version": false,
+        "normalized_at": "2026-04-24T19:45:00+02:00",
+        "provisional_fields": [],
+        "notes": []
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_id": "src_characters_overview_sakura",
+      "url": "https://www.naruto-arena.site/characters-and-skills",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:08.456321+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/characters/overview.json",
+      "raw_text_hash": null,
+      "section": "pageProps.chars[1]",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "A Genin from Team 7, Sakura is very intelligent, but self-conscious about herself. Having just recently received training from Tsunade, Sakura is now able to deliver powerful punches and heal her own allies.",
+    "fragments": [
+      {
+        "field": "description",
+        "text": "A Genin from Team 7, Sakura is very intelligent, but self-conscious about herself. Having just recently received training from Tsunade, Sakura is now able to deliver powerful punches and heal her own allies.",
+        "source_ref_id": "src_characters_overview_sakura"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.81,
+    "confidence_reasons": [
+      "The character overview snapshot exposes public description text and four skill payloads.",
+      "The overview payload does not include character-level classes or unlock provenance."
+    ],
+    "ambiguity_flags": [
+      {
+        "code": "character_level_classes_not_exposed",
+        "field": "classes",
+        "detail": "The overview snapshot does not provide character-level class labels, so the sample keeps an empty array.",
+        "severity": "info"
+      }
+    ],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "availability",
+      "classes"
+    ],
+    "notes": [
+      "Image URLs were intentionally omitted because the snapshot points to off-domain Imgur assets and the current schema only accepts canonical or relative URLs."
+    ]
+  }
+}

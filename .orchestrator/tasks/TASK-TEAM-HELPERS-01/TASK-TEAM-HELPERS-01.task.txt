@@ -1,0 +1,91 @@
+task_id: TASK-TEAM-HELPERS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Implement the first deterministic helper layer that supports the accepted skill contract with transparent candidate search and team-candidate reporting from the validated skill-local bundle.
+- Give later mission-pool and e2e work auditable helper surfaces for synergy, chakra-pressure, weakness, and substitution support without hardcoded best teams.
+
+why_now:
+- The skill contract now defines how answers should look, so the next blocker is the lack of deterministic helper surfaces that keep candidate generation and team reporting grounded and transparent.
+- This task builds the reusable helper layer that later mission-pool and validation work can depend on.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+
+acceptance:
+- Implement `scripts\search_characters.py` to query the validated skill-local bundle for character-centric candidate discovery without reading project-root `references\` or `data\normalized\` at runtime.
+- Implement `scripts\team_candidate_report.py` to inspect a candidate team from the validated skill-local bundle and emit a transparent report surface instead of opaque scoring or hardcoded best-team output.
+- `search_characters.py` must support at least name/identity search plus filtering or narrowing by tag/effect/role-like metadata exposed through the accepted bundle.
+- `team_candidate_report.py` must surface at least: resolved team members, role shell or team identity hints, visible chakra-pressure or curve hints from the bundle, obvious strengths/synergy notes, obvious weakness or risk notes, relevant data-quality warnings, and source/provenance hooks that later skill behavior can reuse.
+- Helper outputs must stay transparent and conservative: no static best-team database, no invented mechanics, no hidden weighting presented as authoritative fact, and no silent suppression of data-quality or unknown-objective markers.
+- Keep mission-pool optimization out of scope for this task; this layer is only the reusable helper substrate for later tasks.
+
+validation:
+- Run `python -m py_compile scripts\search_characters.py scripts\team_candidate_report.py`.
+- Run `python scripts\search_characters.py --help`.
+- Run `python scripts\team_candidate_report.py --help`.
+- Run one representative `search_characters.py` query against the accepted skill-local bundle.
+- Run one representative `team_candidate_report.py` command against a small candidate team and report the surfaced transparency fields.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

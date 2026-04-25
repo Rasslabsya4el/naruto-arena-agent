@@ -1,0 +1,33 @@
+task_id: TASK-SCHEMA-MISSIONS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-MISSIONS-01\RESULT.txt
+
+validation:
+- command: python scripts\validate_schemas.py
+  result: Validated 7 schema files and 6 fixture files successfully.
+- command: python -m py_compile scripts\validate_schemas.py
+  result: Succeeded with no output.
+- command: rg -n '"level_requirement"' C:\Coding\Naruto arena agent\schemas\mission.schema.json C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+  result: Confirmed the new mission field name is `level_requirement` in both the schema and the sample fixture.
+- command: git status --short -- schemas/mission.schema.json schemas/fixtures/mission.sample.json .orchestrator/tasks/TASK-SCHEMA-MISSIONS-01/RESULT.txt
+  result: Reported only the expected write-scope files as untracked in this bootstrap repository.
+
+completed_acceptance:
+- Added public mission-schema support for the confirmed numeric mission level gate via the field `level_requirement`.
+- Updated the mission fixture to carry `level_requirement: 21` from the current canonical snapshot and grounded it in `raw_text.fragments`.
+- Removed the previous fixture warning that the canonical level requirement was unmodeled.
+- Kept viewer-specific availability and completion state out of the public mission schema; no `isAvailable`, `isLevelAvailable`, or `isCompleted` fields were introduced.
+- Kept the schema validator green after the refinement.
+
+limitations:
+- This task only refined the schema contract and sample fixture; a separate mission-normalization follow-up is still required to emit `level_requirement` into normalized mission records.
+- `scripts\validate_schemas.py` did not need changes because the existing schema-to-fixture matching already covered this refinement.
+
+follow_up_needed: yes
+follow_up:
+- Update mission normalization in a separate task so normalized public mission records emit `level_requirement` from mission group rows.
+- Revalidate the normalized mission bundle after the pending mission id-pattern cleanup and level-requirement emission land.

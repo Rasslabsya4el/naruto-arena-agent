@@ -1,0 +1,88 @@
+task_id: TASK-DOCS-FINALIZE-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Finalize repo-facing docs so a reader can understand what the Naruto Arena Team Builder already proves, how it is grounded, and where the current limits still are.
+- Turn the current near-MVP evidence into honest public documentation without overstating strategy quality or hidden-mission coverage.
+
+why_now:
+- The answer-surface proof is now accepted across all five MVP request classes.
+- The remaining mainline gap is public documentation alignment, not missing core helper/planner behavior.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-MVP-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-ANSWER-SAMPLES-01\ANSWER-SAMPLES.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-ANSWER-SAMPLES-01\RESULT.txt
+- C:\Coding\Main readme repo\README.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\data
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+
+acceptance:
+- Create or update `README.md` so a new repo reader can understand the product goal, canonical game source, current proven capabilities, repository map, key validation entrypoints, and known limitations.
+- Update `docs\project\PRODUCT_BRIEF.md` and `docs\project\PRODUCT_SPEC.md` so they reflect the accepted five MVP request classes and no longer read like pre-discovery placeholders.
+- Docs must explicitly preserve these boundaries: only `https://www.naruto-arena.site/` is canonical, runtime answers use the skill-local reference bundle, hidden/unknown mission objectives stay explicit unknowns, and the product does not hardcode best teams.
+- Docs must state current limitations honestly, including accepted data-quality warnings, unknown mission objectives, and the still-blocked fresh authenticated refresh validation.
+- Do not claim exhaustive strategic correctness, solved hidden mission text, or completed authenticated-refresh validation.
+- Keep the task docs-only. Do not modify scripts, schemas, normalized data, skill reference files, task artifacts outside this task folder, or control-plane state docs owned by the orchestrator.
+
+validation:
+- Inspect the edited docs against `TASK-E2E-ANSWER-SAMPLES-01` artifacts and `skills\naruto-arena-team-builder\SKILL.md`.
+- In `RESULT.txt`, list the exact doc surfaces updated and record checks for canonical-source boundary, request-class coverage, honest limitations, and absence of overclaiming.
+- If a public claim cannot be supported by the accepted evidence, remove or narrow it instead of inventing proof.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DOCS-FINALIZE-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

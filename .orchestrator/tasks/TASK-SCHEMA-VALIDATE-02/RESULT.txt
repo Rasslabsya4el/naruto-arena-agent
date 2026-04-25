@@ -1,0 +1,40 @@
+task_id: TASK-SCHEMA-VALIDATE-02
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\schemas\fixtures\character.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\ladder-entry.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\profile-public.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\clan-public.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\user-progress.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-VALIDATE-02\RESULT.txt
+
+validation:
+- command: python scripts\validate_schemas.py
+  result: Validated 7 schema files and 6 fixture files successfully.
+- command: python -m py_compile scripts\validate_schemas.py
+  result: Succeeded with no output.
+- command: git status --short -- schemas\fixtures scripts\validate_schemas.py .orchestrator\tasks\TASK-SCHEMA-VALIDATE-02\RESULT.txt
+  result: Reported only write-scope paths: .orchestrator/tasks/TASK-SCHEMA-VALIDATE-02/RESULT.txt, schemas/fixtures/, and scripts/validate_schemas.py.
+
+completed_acceptance:
+- Created representative fixture JSON files for every current schema family using the current raw snapshot plus the accepted schema set.
+- Added a narrow Python validator that loads local schema files, resolves cross-file refs, checks schema validity, and validates all fixture payloads.
+- Proved cross-file JSON Schema ref resolution by running the validator successfully across all seven schema files and six fixture files.
+- Kept public-fact fixtures separate from the session-aware user-progress fixture.
+
+limitations:
+- The mission fixture leaves levelRequirement unmodeled because mission.schema.json currently has no dedicated field for that raw snapshot value.
+- The clan fixture is ladder-derived and keeps member_groups empty because the current raw snapshot does not include a dedicated clan page payload.
+- The character fixture omits image_refs because the captured image URLs are off-domain Imgur assets and the current schema only accepts canonical or relative URLs.
+- The user-progress fixture keeps unlock_state empty because no separate unlock inventory payload exists in the current capture.
+- Validation in this run depended on installing the Python jsonschema package into the local environment because it was not preinstalled.
+
+follow_up_needed: yes
+follow_up:
+- Decide whether mission levelRequirement should be added to mission.schema.json before normalization starts.
+- Decide whether image_ref URL policy should admit the site's off-domain image hosts or continue requiring canonical/relative URLs only.
+- Capture a dedicated clan page payload and a dedicated unlock-state payload if future normalization needs roster and unlock evidence beyond ladder/session summaries.
+- Add repo-managed dependency declaration or wrapper docs for jsonschema so schema validation does not rely on a manual local install.

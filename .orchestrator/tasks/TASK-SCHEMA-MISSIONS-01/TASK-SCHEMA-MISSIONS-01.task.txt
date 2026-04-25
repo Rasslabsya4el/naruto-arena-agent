@@ -1,0 +1,76 @@
+task_id: TASK-SCHEMA-MISSIONS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Refine the mission schema so it can represent the confirmed public mission level requirement from the current canonical snapshot.
+- Keep mission public facts separate from viewer-specific availability and completion state.
+
+why_now:
+- Schema proof succeeded, but it exposed one real public mission field that would otherwise be lost during normalization.
+- Mission normalization should not start while a known progression gate is missing from the schema contract.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-VALIDATE-02\RESULT.txt
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\groups
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\details
+
+write_scope:
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-MISSIONS-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- Any raw snapshot files under C:\Coding\Naruto arena agent\snapshots\raw
+
+acceptance:
+- Add mission-schema support for the confirmed public mission level requirement present in the current raw snapshot.
+- Update the mission fixture so the level requirement is represented and validated.
+- Keep viewer-specific availability, completion, or current-account state out of the public mission schema.
+- Keep the schema validator green after the refinement.
+
+validation:
+- Run `python scripts\validate_schemas.py`.
+- Run `python -m py_compile scripts\validate_schemas.py`.
+- Report the exact new mission field name introduced by the refinement.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-MISSIONS-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

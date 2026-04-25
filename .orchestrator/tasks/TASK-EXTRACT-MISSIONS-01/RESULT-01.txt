@@ -1,0 +1,40 @@
+task_id: TASK-EXTRACT-MISSIONS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT-01.txt
+
+validation:
+- command: python -m py_compile scripts\normalize_missions.py
+  result: Succeeded with no output.
+- command: python scripts\normalize_missions.py
+  result: Generated 179 mission records at `data/normalized/missions.json` with detail states mission_status=57, redirect=71, error_page=50, unexpected_home=1.
+- command: python - <targeted JSON Schema validation of data/normalized/missions.json against schemas/mission.schema.json>
+  result: Validated 179 mission records against `mission.schema.json` with 0 errors.
+- command: python - <level requirement and schema-safe id audit>
+  result: `record_count=179`, `level_requirement_missing_count=0`, `invalid_id_count=0`; the six previously invalid mission ids now normalize to `mission:fuu-the-path-of-pain`, `mission:s-rank-criminal-itachi`, `mission:s-rank-criminal-kisame`, `mission:there-wont-be-a-next-time`, `mission:yagura-the-path-of-pain`, and `mission:yugito-the-path-of-pain`.
+- command: rg -n 'isAvailable|isCompleted|isLevelAvailable|userPlayer|username|completedRequeriments' data/normalized/missions.json
+  result: No matches; viewer-specific availability/completion fields are absent from the normalized bundle.
+- command: rg -n '"level_requirement"|level_requirement_unmodeled|preserved only in raw_text because mission schema has no structured level field' data/normalized/missions.json
+  result: `level_requirement` is present in the normalized records and the old unmodeled-level markers are absent from regenerated output.
+- command: git status --short -- scripts/normalize_missions.py data/normalized/missions.json .orchestrator/tasks/TASK-EXTRACT-MISSIONS-01/RESULT-01.txt
+  result: Reported only the expected write-scope files as untracked in this bootstrap repository.
+
+completed_acceptance:
+- Regenerated `data/normalized/missions.json` into conformance with the refined mission schema and kept the full 179-record first-pass mission coverage.
+- Added structured public `level_requirement` data to normalized mission records instead of leaving the level gate only in `raw_text` or parse notes.
+- Switched normalized mission ids, requirement ids, and detail source ids to schema-safe deterministic ids derived from sanitized canonical route slugs.
+- Preserved unknown or hidden mission objectives as explicit `unknown` requirements with ambiguity flags when the captured detail payload does not reveal objective text.
+- Kept viewer-specific availability, completion, and current-account progression state out of the normalized mission bundle.
+
+limitations:
+- 122 of 179 mission detail routes still do not expose `missionStatus` in the current snapshot, so those records continue to rely on source-backed unknown placeholder requirements.
+- Canonical route punctuation remains visible in `source_refs.url` and some placeholder `condition_text` strings by design because those fields preserve source provenance, but the normalized ids themselves are now schema-safe.
+- This follow-up intentionally did not change the schema layer or raw snapshots; it only repaired mission normalization and the generated mission bundle.
+
+follow_up_needed: yes
+follow_up:
+- Harden or refresh mission-detail capture so more routes expose `missionStatus`, then rerun `python scripts\normalize_missions.py` to replace unknown placeholder requirements with structured objective text.
+- If downstream acceptance wants automated normalized-bundle schema checks, add a repo-managed validation wrapper for array payloads in a separate task without expanding this write-scope.

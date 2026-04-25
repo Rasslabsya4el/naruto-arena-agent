@@ -1,0 +1,46 @@
+task_id: TASK-DOCS-FINALIZE-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DOCS-FINALIZE-01\TASK-DOCS-FINALIZE-01.task.txt
+
+summary:
+- Created the repo-facing README.md for new readers.
+- Updated PRODUCT_BRIEF.md and PRODUCT_SPEC.md from pre-discovery placeholder language to the current accepted near-MVP evidence surface.
+- Kept the task docs-only and did not modify scripts, schemas, data, references, skill reference files, or orchestrator-owned roadmap/control-plane docs.
+
+changed_files:
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DOCS-FINALIZE-01\RESULT.txt
+
+validation:
+- command: git status --short --branch
+  result: ran before edits; repo is on master with no commits yet and the expected bootstrap tree is untracked.
+- command: rg -n "https://www\\.naruto-arena\\.site|skill-local reference bundle|skills/naruto-arena-team-builder/references|hidden|unknown mission|hardcode|best-team|fresh authenticated|exhaustive strategic correctness|representative" README.md docs/project/PRODUCT_BRIEF.md docs/project/PRODUCT_SPEC.md
+  result: success. Confirmed the edited docs explicitly preserve the canonical-source boundary, skill-local runtime boundary, hidden/unknown mission handling, no-hardcoded-best-team boundary, fresh authenticated refresh blocker, representative-proof wording, and no-exhaustive-strategy wording.
+- command: rg -n "Build Around A Character|Build For A Mission|Optimize A Mission Pool|Diagnose Or Improve An Existing Team|Explain Mechanics|Build around a character|Build for a mission|Optimize a mission pool|Diagnose or improve an existing team|Explain mechanics" skills/naruto-arena-team-builder/SKILL.md .orchestrator/tasks/TASK-E2E-ANSWER-SAMPLES-01/ANSWER-SAMPLES.md docs/project/PRODUCT_SPEC.md
+  result: success. Confirmed PRODUCT_SPEC.md request classes align with the accepted SKILL.md response contract and TASK-E2E-ANSWER-SAMPLES-01 sample headings for all five MVP request classes.
+- command: rg -n "placeholder|pre-discovery|to be decided|TBD|TODO|guaranteed coverage|solved hidden|solved metagame|static best-team tables as product logic" README.md docs/project/PRODUCT_BRIEF.md docs/project/PRODUCT_SPEC.md
+  result: success with inspected matches. No placeholder/TBD/TODO wording remained. Matches for "solved hidden", "solved metagame", and "static best-team tables as product logic" are negated boundary statements, not positive overclaims.
+- command: git status --short --branch -- README.md docs/project/PRODUCT_BRIEF.md docs/project/PRODUCT_SPEC.md .orchestrator/tasks/TASK-DOCS-FINALIZE-01/RESULT.txt
+  result: success. Scope check showed only README.md, PRODUCT_BRIEF.md, PRODUCT_SPEC.md, and this RESULT.txt in the task-relevant changed surface.
+- command: python -m py_compile
+  result: not run; no Python files changed in this docs-only task.
+
+completed_acceptance:
+- README.md now explains the product goal, canonical game source, current proven capabilities, grounding model, repository map, key validation entrypoints, accepted answer-surface evidence, known limitations, and product boundaries.
+- PRODUCT_BRIEF.md now reflects all five accepted MVP request classes: build around a character, build for a mission, optimize a mission pool, diagnose/improve an existing team, and explain mechanics or character differences.
+- PRODUCT_SPEC.md now defines concrete behavior contracts for all five request classes and ties them to the accepted SKILL.md, helper/planner validators, and answer-sample artifact.
+- Edited docs explicitly preserve these boundaries: only https://www.naruto-arena.site/ is canonical; runtime answers use the skill-local reference bundle; hidden/unknown mission objectives remain explicit unknowns; and the product does not hardcode best teams.
+- Edited docs state current limitations honestly, including accepted data-quality warnings, 122 unknown mission objective records, excluded disabled zero-skill character entries, representative-not-exhaustive proof, and still-blocked fresh authenticated refresh validation.
+- Edited docs avoid claiming exhaustive strategic correctness, solved hidden mission text, completed authenticated-refresh validation, or guaranteed coverage for unknown/soft-fit mission objectives.
+
+limitations:
+- Validation was focused doc inspection, not a markdown linter or automated transcript harness.
+- Root AGENTS.md still contains older bootstrap-era Product Reality wording because it was outside this task write_scope; this result does not change root policy docs.
+- The docs cite accepted representative answer samples, not exhaustive strategic validation for every roster/mission combination.
+
+follow_up_needed: yes
+follow_up:
+- Consider a separate docs-policy alignment task if the orchestrator wants AGENTS.md Product Reality wording updated to match the now-accepted near-MVP state.

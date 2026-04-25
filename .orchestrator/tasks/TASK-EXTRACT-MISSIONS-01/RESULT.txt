@@ -1,0 +1,36 @@
+﻿task_id: TASK-EXTRACT-MISSIONS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\normalize_missions.py
+  result: passed (exit 0)
+- command: python scripts\normalize_missions.py
+  result: passed; generated 179 records with detail states mission_status=57, redirect=71, error_page=50, unexpected_home=1
+- command: python -c "import json, pathlib; data = json.loads(pathlib.Path(r'C:\\Coding\\Naruto arena agent\\data\\normalized\\missions.json').read_text(encoding='utf-8')); print(len(data))"
+  result: passed; JSON loaded successfully with 179 records
+- command: rg "\([0-9]+/[0-9]+\)" data\normalized\missions.json
+  result: no matches; viewer progress counters are absent from normalized output
+- command: rg "isAvailable|isCompleted|isLevelAvailable|userPlayer|username|completedRequeriments" data\normalized\missions.json
+  result: no matches; session-aware availability/completion fields are absent from normalized output
+
+completed_acceptance:
+- Generated C:\Coding\Naruto arena agent\data\normalized\missions.json with 179 normalized records, one for every captured mission detail slug in the manifest.
+- Each record keeps deterministic mission ids, source_refs, sanitized raw_text, and parse/confidence metadata.
+- Viewer-specific availability, completion, and progress counters were excluded from normalized output.
+- Records without mission objective text in the snapshot encode explicit unknown placeholder requirements with ambiguity flags instead of invented mechanics.
+- Reward character refs and prerequisite mission refs are mapped deterministically where the snapshot exposed them.
+
+limitations:
+- 122 of 179 mission detail routes did not expose missionStatus in the current snapshot, so those records rely on mission-group facts plus unknown requirement placeholders.
+- 3 missions did not expose a reward character or border in the captured sources, so their rewards arrays remain empty and the parse metadata flags the gap.
+- The current mission schema does not provide structured fields for numeric rank or level requirement; numeric rank remains null and level requirement is preserved only in raw_text/parse notes.
+
+follow_up_needed: yes
+follow_up:
+- Harden mission-detail capture so the 122 missing routes expose objective text, then rerun scripts\normalize_missions.py to replace placeholder requirements.
+- If downstream consumers need structured level requirement data, extend the mission schema in a separate schema task before modifying this normalizer.

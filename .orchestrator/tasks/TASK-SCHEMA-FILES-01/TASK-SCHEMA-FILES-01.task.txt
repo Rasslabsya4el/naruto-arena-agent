@@ -1,0 +1,77 @@
+task_id: TASK-SCHEMA-FILES-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Materialize concrete schema files for Naruto Arena data based on the accepted schema proposal and accepted site parse recon.
+- Keep public facts separate from session-aware user state.
+
+why_now:
+- Schema planning is accepted.
+- Accepted site parse recon now confirms route families, expected prop shapes, and the need to separate public facts from user-specific progression state.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- C:\Coding\Naruto arena agent\.orchestrator\site-parse-recon-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\ladder-entry.schema.json
+- C:\Coding\Naruto arena agent\schemas\profile-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\clan-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\user-progress.schema.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-FILES-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-PARSE-03
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04
+- Any scraper, normalizer, raw ingestion script, validator runtime, skill runtime, or product implementation file outside the declared schema write scope.
+
+acceptance:
+- Create concrete schema files for public character facts, mission facts, ladder entries, public profile facts, public clan facts, and session-aware user progression.
+- Include shared provenance/confidence/ambiguity structures in a common schema file.
+- Keep session-aware fields out of public-fact schemas.
+- Mark fields that remain provisional after parse recon as optional or nullable instead of inventing stronger guarantees.
+- Reflect canonical source/provenance requirements in the schemas.
+- Do not implement scraper, raw capture, validator runtime, or skill logic in this task.
+
+validation:
+- Confirm all declared schema files exist and are valid JSON.
+- Confirm changed files are only within write_scope.
+- Summarize where public-fact and user-state boundaries are enforced.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-FILES-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena Shared Schema Definitions",
+  "description": "Shared JSON Schema definitions for provenance, confidence, ambiguity, and reusable public-data structures.",
+  "type": "object",
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nullableInteger": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "nullableNumber": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "stringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "recordId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://www\\.naruto-arena\\.site(?:/|$)"
+    },
+    "nullableCanonicalUrl": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/canonicalUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "ambiguityFlag": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "field": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "ambiguityList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ambiguityFlag"
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/recordId"
+        },
+        "url": {
+          "$ref": "#/$defs/canonicalUrl"
+        },
+        "canonical_domain": {
+          "const": "www.naruto-arena.site"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "public",
+            "session_aware",
+            "unknown"
+          ]
+        },
+        "capture_mode": {
+          "type": "string",
+          "enum": [
+            "html",
+            "next_data",
+            "browser_rendered",
+            "authenticated_browser",
+            "manual_capture",
+            "unknown"
+          ]
+        },
+        "retrieved_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "snapshot_path": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "raw_text_hash": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "section": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "version_label": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "source_id",
+        "url",
+        "canonical_domain",
+        "visibility"
+      ],
+      "additionalProperties": false
+    },
+    "sourceRefList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceRef"
+      },
+      "minItems": 1
+    },
+    "rawTextFragment": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "text": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source_ref_id": {
+          "$ref": "#/$defs/recordId"
+        }
+      },
+      "required": [
+        "field",
+        "text",
+        "source_ref_id"
+      ],
+      "additionalProperties": false
+    },
+    "rawTextBlock": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "fragments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rawTextFragment"
+          }
+        }
+      },
+      "required": [
+        "primary",
+        "fragments"
+      ],
+      "additionalProperties": false
+    },
+    "parseMeta": {
+      "type": "object",
+      "properties": {
+        "parser_version": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "confidence_reasons": {
+          "$ref": "#/$defs/stringList"
+        },
+        "ambiguity_flags": {
+          "$ref": "#/$defs/ambiguityList"
+        },
+        "unsupported_version": {
+          "type": "boolean"
+        },
+        "normalized_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "provisional_fields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "notes": {
+          "$ref": "#/$defs/stringList"
+        }
+      },
+      "required": [
+        "confidence",
+        "confidence_reasons",
+        "ambiguity_flags",
+        "unsupported_version"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "confidence": {
+                "exclusiveMaximum": 1
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence_reasons": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "classLabel": {
+      "type": "object",
+      "properties": {
+        "class_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "label": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source_ref_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/recordId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      },
+      "required": [
+        "label",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "tagAssignment": {
+      "type": "object",
+      "properties": {
+        "tag_id": {
+          "$ref": "#/$defs/recordId"
+        },
+        "assigned_by": {
+          "type": "string",
+          "enum": [
+            "parser",
+            "curator",
+            "taxonomy_rule",
+            "manual",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "evidence_field": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "tag_id",
+        "assigned_by",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "imageRef": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "avatar",
+            "portrait",
+            "skill",
+            "icon",
+            "banner",
+            "unknown"
+          ]
+        },
+        "url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/canonicalUrl"
+            },
+            {
+              "type": "string",
+              "pattern": "^/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_ref_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/recordId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "chakraCostComponent": {
+      "type": "object",
+      "properties": {
+        "chakra_type": {
+          "type": "string",
+          "enum": [
+            "tai",
+            "nin",
+            "gen",
+            "bloodline",
+            "random",
+            "unknown"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "raw_text": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      },
+      "required": [
+        "chakra_type",
+        "amount",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "statsBlock": {
+      "type": "object",
+      "properties": {
+        "rank": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "level": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "xp": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "wins": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "losses": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "streak": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "fame": {
+          "$ref": "#/$defs/nullableInteger"
+        },
+        "member_count": {
+          "$ref": "#/$defs/nullableInteger"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

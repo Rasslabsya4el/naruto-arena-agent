@@ -1,0 +1,29 @@
+task_id: TASK-EXTRACT-MISSIONS-VALIDATE-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-VALIDATE-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\validate_mission_bundle.py
+  result: passed (exit 0)
+- command: python scripts\validate_mission_bundle.py
+  result: passed; status=ok; included_record_count=179; manifest_detail_count=179; group_item_count=179; detail_file_count=179; detail_state_counts={mission_status:57, redirect:71, error_page:50, unexpected_home:1}; unknown_requirement_record_count=122; supported_unknown_requirement_count=122; missing_level_requirement_count=0; silent_drops=0; unexpected_included_records=0; source_ref/raw_text/parse/id checks all clean
+
+completed_acceptance:
+- Confirmed the reusable validator path at C:\Coding\Naruto arena agent\scripts\validate_mission_bundle.py is present and proves future reruns of data\normalized\missions.json against the accepted raw mission snapshot set.
+- Confirmed final mission coverage is honest: normalized bundle count, manifest detail slugs, group mission rows, and detail files all resolve to 179 with no silent drops, no unexpected included records, and no duplicate normalized/group slugs.
+- Confirmed explicit unknown-objective handling is source-backed rather than silent parsing loss: all 122 normalized unknown-requirement records map to raw detail snapshots that do not expose missionStatus, specifically 71 redirect payloads, 50 error pages, and 1 unexpected-home fallback.
+- Confirmed structured level_requirement coverage is complete: missing_level_requirement_count=0 across all 179 normalized mission records.
+- Confirmed schema-safe record-related ids and provenance readiness: no record/requirement/source/fragment id issues, no source_ref gaps, no raw_text issues, no parse-meta issues, and source_ref snapshot hashes/paths/fragment linkage validated cleanly.
+
+limitations:
+- No code change was required in C:\Coding\Naruto arena agent\scripts\validate_mission_bundle.py because the existing validator already satisfied the task contract and passed the required rerun checks.
+- The validator does not change data\normalized\missions.json; it only audits the current normalized bundle and raw snapshot set.
+- 122 mission records still carry explicit unknown requirements because the current captured detail payloads do not reveal objective text; this is a source-coverage limit, not a validator defect.
+- The current raw group surface includes a redirect payload for snapshots\raw\site_capture\latest\missions\groups\special-missions.json, so the validator tolerates redirect-shaped group payloads instead of treating them as a normalization failure.
+
+follow_up_needed: yes
+follow_up:
+- Re-run python scripts\validate_mission_bundle.py after any future mission recapture or mission normalization rerun to preserve the same coverage/provenance audit path.
+- If downstream work needs fewer unknown-objective records, handle that in a separate capture-hardening task that improves mission detail exposure before regenerating data\normalized\missions.json.

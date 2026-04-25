@@ -1,0 +1,76 @@
+﻿task_id: TASK-REPO-PUBLISH-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Prepare and optionally publish the initialized Naruto Arena agent repository baseline.
+- Do not implement product/runtime code.
+
+why_now:
+- Repo bootstrap is accepted and the project has a local git repo, origin remote, AGENTS.md, canonical docs, and .gitignore.
+- The baseline can be committed/pushed before data pipeline implementation begins, but publish must be explicitly authorized.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-BOOTSTRAP-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.git
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-PUBLISH-01\RESULT.txt
+
+do_not_touch:
+- Any scraper, normalizer, validator, skill runtime, or product implementation files.
+- Any credentials, cookies, tokens, browser session stores, or auth files.
+
+confirmation_policy:
+- Git commit and git push are repository-publishing actions.
+- Ask the user for explicit confirmation inside the worker thread immediately before commit/push.
+- If confirmation is not available, do not commit and do not push; return status blocked with exact commands recommended.
+- If user authorizes, prefer branch main unless user explicitly wants master.
+
+acceptance:
+- Show current git status and remote.
+- Confirm no secrets or runtime/generated artifacts are staged.
+- If authorized, rename initial branch to main, commit initialized baseline, and push to origin.
+- If not authorized, do not commit/push and return exact next commands.
+- Do not create implementation/runtime code.
+
+validation:
+- git status --short --branch
+- git remote -v
+- If commit/push authorized: git log --oneline -1 and git status --short --branch after push.
+- Confirm changed files are only git metadata and RESULT.txt unless user explicitly authorized commit/push.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-PUBLISH-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

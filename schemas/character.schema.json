@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena Character Public Fact Record",
+  "description": "Public character and skill facts from the canonical site. Session-aware unlock and progression state must not be stored here.",
+  "type": "object",
+  "$defs": {
+    "availability": {
+      "type": "object",
+      "properties": {
+        "unlock_state": {
+          "type": "string",
+          "enum": [
+            "starter",
+            "mission_unlock",
+            "unknown"
+          ]
+        },
+        "unlock_mission_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "unlock_mission_name": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "raw_unlock_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "unlock_state",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "skillCost": {
+      "type": "object",
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/chakraCostComponent"
+          }
+        },
+        "total": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "components",
+        "total",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "cooldown": {
+      "type": "object",
+      "properties": {
+        "turns": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "turns",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "effectTargeting": {
+      "type": "object",
+      "properties": {
+        "target_type": {
+          "type": "string",
+          "enum": [
+            "enemy",
+            "ally",
+            "self",
+            "all_enemies",
+            "all_allies",
+            "any",
+            "unknown"
+          ]
+        },
+        "target_count": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "target_type",
+        "target_count",
+        "raw_text"
+      ],
+      "additionalProperties": false
+    },
+    "effectMagnitude": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "$ref": "./_common.schema.json#/$defs/nullableNumber"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "health",
+            "chakra",
+            "turns",
+            "percent",
+            "unknown"
+          ]
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "up_to",
+            "at_least",
+            "per_turn",
+            "unknown"
+          ]
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "operator",
+        "raw_text"
+      ],
+      "additionalProperties": false
+    },
+    "effectDuration": {
+      "type": "object",
+      "properties": {
+        "turns": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "timing": {
+          "type": "string",
+          "enum": [
+            "instant",
+            "this_turn",
+            "next_turn",
+            "ongoing",
+            "unknown"
+          ]
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "turns",
+        "timing",
+        "raw_text"
+      ],
+      "additionalProperties": false
+    },
+    "effectCondition": {
+      "type": "object",
+      "properties": {
+        "condition_type": {
+          "type": "string",
+          "enum": [
+            "requires_state",
+            "target_class",
+            "previous_skill",
+            "mission_context",
+            "team_context",
+            "unknown"
+          ]
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "normalized_ref": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        }
+      },
+      "required": [
+        "condition_type",
+        "raw_text",
+        "normalized_ref",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "effect_id": {
+          "$ref": "./_common.schema.json#/$defs/recordId"
+        },
+        "effect_type": {
+          "type": "string",
+          "enum": [
+            "damage",
+            "heal",
+            "stun",
+            "protect",
+            "reduce_damage",
+            "increase_damage",
+            "drain",
+            "gain",
+            "apply_state",
+            "remove_state",
+            "conditional",
+            "unknown"
+          ]
+        },
+        "targeting": {
+          "$ref": "#/$defs/effectTargeting"
+        },
+        "magnitude": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "duration": {
+          "$ref": "#/$defs/effectDuration"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effectCondition"
+          }
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "effect_id",
+        "effect_type",
+        "targeting",
+        "magnitude",
+        "duration",
+        "conditions",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "skillRecord": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "skill"
+        },
+        "record_family": {
+          "const": "public_fact"
+        },
+        "skill_id": {
+          "$ref": "./_common.schema.json#/$defs/recordId"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "description": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "cost": {
+          "$ref": "#/$defs/skillCost"
+        },
+        "cooldown": {
+          "$ref": "#/$defs/cooldown"
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/classLabel"
+          }
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          },
+          "minItems": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/tagAssignment"
+          }
+        },
+        "image_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/imageRef"
+          }
+        },
+        "source_refs": {
+          "$ref": "./_common.schema.json#/$defs/sourceRefList"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+        },
+        "parse": {
+          "$ref": "./_common.schema.json#/$defs/parseMeta"
+        }
+      },
+      "required": [
+        "record_type",
+        "record_family",
+        "skill_id",
+        "slot",
+        "name",
+        "description",
+        "cost",
+        "cooldown",
+        "classes",
+        "effects",
+        "source_refs",
+        "raw_text",
+        "parse"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "record_type": {
+      "const": "character"
+    },
+    "record_family": {
+      "const": "public_fact"
+    },
+    "name": {
+      "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+    },
+    "display_name": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "description": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "availability": {
+      "$ref": "#/$defs/availability"
+    },
+    "classes": {
+      "type": "array",
+      "items": {
+        "$ref": "./_common.schema.json#/$defs/classLabel"
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/skillRecord"
+      },
+      "minItems": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "./_common.schema.json#/$defs/tagAssignment"
+      }
+    },
+    "image_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "./_common.schema.json#/$defs/imageRef"
+      }
+    },
+    "source_refs": {
+      "$ref": "./_common.schema.json#/$defs/sourceRefList"
+    },
+    "raw_text": {
+      "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+    },
+    "parse": {
+      "$ref": "./_common.schema.json#/$defs/parseMeta"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "record_family",
+    "name",
+    "availability",
+    "classes",
+    "skills",
+    "source_refs",
+    "raw_text",
+    "parse"
+  ],
+  "additionalProperties": false
+}

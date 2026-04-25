@@ -1,0 +1,80 @@
+task_id: TASK-AGENTS-ALIGN-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Align the root `AGENTS.md` policy wording with the accepted current repo state so future worker tasks inherit accurate project reality.
+- Keep the canonical-source, security, validation, and no-hardcoded-best-team boundaries intact while removing stale bootstrap/discovery-only claims.
+
+why_now:
+- Repo-facing docs are now aligned to the accepted answer-surface proof.
+- The root policy still says the repo is in bootstrap/discovery and that no implementation/runtime exists, which is now false and can mislead later workers.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DOCS-FINALIZE-01\RESULT.txt
+
+write_scope:
+- C:\Coding\Naruto arena agent\AGENTS.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\data
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+
+acceptance:
+- Update root `AGENTS.md` so `Repository Map` and `Product Reality` describe the accepted current repo state rather than a bootstrap/discovery-only placeholder.
+- Preserve all durable boundaries already enforced by root policy: canonical source is only `https://www.naruto-arena.site/`, no fabricated mechanics, no non-canonical gameplay sources, no hardcoded best-team core logic, no credentials/session artifacts in repo state, and smallest-targeted validation.
+- Keep `AGENTS.md` concise and policy-oriented. Do not turn it into a duplicate of the roadmap, validation log, or README.
+- Do not weaken the statement that runtime artifacts, caches, snapshots, logs, sessions, and credentials are not project memory.
+- Docs-only task: do not modify README, docs/project files, scripts, schemas, data, references, task queue, validation log, or roadmap docs.
+
+validation:
+- Inspect the edited `AGENTS.md` against `README.md`, `docs/project/PRODUCT_BRIEF.md`, `docs/project/PRODUCT_SPEC.md`, and `docs/project/CURRENT_STATE.md`.
+- In `RESULT.txt`, record checks for stale bootstrap wording removal, preserved boundary statements, and absence of new overclaims.
+- If a statement cannot be supported by accepted repo evidence, narrow or remove it instead of inventing a stronger policy claim.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-AGENTS-ALIGN-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

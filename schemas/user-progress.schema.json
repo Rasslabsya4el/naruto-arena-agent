@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena User Progress Record",
+  "description": "Session-aware progression and unlock state for a specific account. Public character, mission, profile, and clan facts must stay in separate public-fact records.",
+  "type": "object",
+  "$defs": {
+    "requirementProgress": {
+      "type": "object",
+      "properties": {
+        "requirement_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "description": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "is_completed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "description",
+        "is_completed"
+      ],
+      "additionalProperties": false
+    },
+    "missionState": {
+      "type": "object",
+      "properties": {
+        "mission_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "mission_name": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "availability_state": {
+          "type": "string",
+          "enum": [
+            "available",
+            "locked",
+            "hidden",
+            "unknown"
+          ]
+        },
+        "completion_state": {
+          "type": "string",
+          "enum": [
+            "completed",
+            "in_progress",
+            "not_completed",
+            "unknown"
+          ]
+        },
+        "completed_requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirementProgress"
+          }
+        },
+        "total_requirement_count": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "completed_requirement_count": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "mission_name",
+        "availability_state",
+        "completion_state",
+        "completed_requirements",
+        "total_requirement_count",
+        "completed_requirement_count",
+        "raw_text"
+      ],
+      "additionalProperties": false
+    },
+    "unlockState": {
+      "type": "object",
+      "properties": {
+        "character_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "mission_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "border_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        }
+      },
+      "required": [
+        "character_ids",
+        "mission_ids",
+        "border_ids",
+        "raw_text"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "record_type": {
+      "const": "user_progress"
+    },
+    "record_family": {
+      "const": "user_state"
+    },
+    "account_id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "account_name": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "capture_scope": {
+      "type": "string",
+      "enum": [
+        "missions",
+        "unlocks",
+        "mixed",
+        "unknown"
+      ]
+    },
+    "observed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "mission_states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missionState"
+      }
+    },
+    "unlock_state": {
+      "$ref": "#/$defs/unlockState"
+    },
+    "source_refs": {
+      "$ref": "./_common.schema.json#/$defs/sourceRefList"
+    },
+    "raw_text": {
+      "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+    },
+    "parse": {
+      "$ref": "./_common.schema.json#/$defs/parseMeta"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "record_family",
+    "account_id",
+    "capture_scope",
+    "mission_states",
+    "unlock_state",
+    "source_refs",
+    "raw_text",
+    "parse"
+  ],
+  "additionalProperties": false
+}

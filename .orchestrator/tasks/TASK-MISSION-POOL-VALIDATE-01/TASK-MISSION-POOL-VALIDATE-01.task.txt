@@ -1,0 +1,95 @@
+task_id: TASK-MISSION-POOL-VALIDATE-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Add a dedicated validator for the accepted mission-pool planner so later e2e work can depend on frozen grouped-coverage behavior instead of manual inspection.
+- Prove that grouped buckets, forced splits, soft-fit-only missions, unknown-objective carry-through, helper-boundary reuse, and conservative no-best-team behavior stay intact.
+
+why_now:
+- The mission-pool planner now exists and behaves correctly in representative runs, but the project still lacks a cheap regression-check for that contract.
+- This task freezes the multi-mission planning surface before end-to-end validation starts.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+
+acceptance:
+- Implement `scripts\validate_mission_pool.py` as a dedicated validator for `scripts\optimize_mission_pool.py`.
+- The validator must prove grouped exact requirements can collapse into one bucket when actually compatible, and must prove incompatible mission pools split honestly across multiple buckets when the exact required characters exceed one practical team.
+- The validator must prove unknown-objective missions remain uncertain and are not counted as covered, and that soft-fit-only missions remain soft-fit warnings instead of fake exact coverage.
+- The validator must prove unresolved mission queries return blocked payloads instead of guessed matches.
+- The validator must prove the mission-pool planner still reuses the accepted helper/runtime boundary and does not introduce authoritative score fields, best-team fields, or other opaque ranking surfaces.
+- Do not rewrite `scripts\optimize_mission_pool.py` in this task; validate the accepted planner contract as-is.
+
+validation:
+- Run `python -m py_compile scripts\validate_mission_pool.py`.
+- Run `python scripts\validate_mission_pool.py --help`.
+- Run `python scripts\validate_mission_pool.py`.
+- Report exact grouped, split, unknown-objective, soft-fit-only, and blocked-query checks, plus the helper-boundary and forbidden-field checks.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

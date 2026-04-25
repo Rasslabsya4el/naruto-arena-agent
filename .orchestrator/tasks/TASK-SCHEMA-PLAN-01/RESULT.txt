@@ -1,0 +1,34 @@
+﻿task_id: TASK-SCHEMA-PLAN-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01\TASK-SCHEMA-PLAN-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01\RESULT.txt
+
+validation:
+- command: git status --short --branch
+  result: failed because C:\Coding\Naruto arena agent is not currently a git repository; this matches orchestrator decision context and prevented git-based diff inspection.
+- command: Select-String coverage check over C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md for required acceptance terms: characters, skills, cost, cooldown, classes, effects, tags, missions, source_refs, raw_text, confidence, ambiguity_flags, unsupported_version, silent parse drops, undefined tags, team recommendation reasoning, site reconnaissance.
+  result: passed; all required acceptance terms were present after one terminology patch.
+- command: write-scope existence and forbidden-context inspection check for proposal/result paths plus product-source-of-truth.md, roadmap.md, and decisions.md.
+  result: passed; only files in declared write_scope were created/modified during the task, while source-of-truth, roadmap, and decisions were read only.
+
+completed_acceptance:
+- Proposed normalized JSON record shapes for characters, skills, costs, cooldowns, classes, effects, tags, missions, source references, raw text, parse confidence, and ambiguity flags.
+- Proposed conservative effect taxonomy and tag definition strategy using controlled vocabulary plus unknown/ambiguous states instead of inventing unsupported Naruto Arena mechanics.
+- Proposed validators for missing source URLs, unsupported versions, silent parse drops, undefined tags, invalid costs/cooldowns, low-confidence records, cross-reference integrity, and taxonomy consistency.
+- Identified post-site-recon refinements: page inventory, selectors, chakra icon representation, actual class vocabulary, mission wording/reward structure, version/build label availability, and ambiguity calibration examples.
+- Kept normalized data model separate from team recommendation reasoning; proposal states that best teams, opening plans, synergy scores, and matchup advice belong to later helper/recommendation artifacts, not normalized source records.
+
+limitations:
+- Proposal is intentionally draft-only and does not implement JSON schema files, validators, scrapers, runtime code, or skill code.
+- No live canonical-site reconnaissance was performed in this task; site-dependent fields remain provisional until TASK-DISCOVERY-SITE-01 output is accepted.
+- Git validation is limited because the workspace is not initialized as a git repository.
+
+follow_up_needed: yes
+follow_up:
+- Refine schema after canonical-site reconnaissance confirms page structure, selectors, chakra/icon encoding, class labels, mission wording, and source version indicators.
+- Convert this proposal into concrete schema files and validator tests only after orchestrator accepts schema planning and site discovery results.
+- Initialize or link the local workspace git repository in a separate repo-bootstrap task before relying on git diff/status for future worker acceptance.

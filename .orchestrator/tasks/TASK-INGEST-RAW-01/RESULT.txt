@@ -1,0 +1,34 @@
+task_id: TASK-INGEST-RAW-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-INGEST-RAW-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\capture_site.py
+  result: Exit code 0.
+- command: python scripts\capture_site.py --help
+  result: Exit code 0; help now documents required env vars, canonical authenticated capture flow, required snapshot families, optional profile/clan boundary, route fallback behavior, safe inspection commands, and runtime-path output policy.
+- command: python scripts\capture_site.py --print-contract
+  result: Exit code 0; printed JSON operator contract without requiring login credentials, including required env vars, snapshot families, browser-only ladder routes, and fallback metadata fields.
+- command: python scripts\capture_site.py --print-contract --skip-profile
+  result: Exit code 0; printed JSON contract with snapshotFamilies.profile_and_clan=skipped_by_operator, proving the optional profile/clan boundary is explicit without a live capture run.
+- command: python scripts\capture_site.py --print-contract --out-dir data\normalized
+  result: Exit code 1; rejected tracked-path output with "--out-dir must stay under snapshots/raw to avoid writing live captures into tracked source paths."
+
+completed_acceptance:
+- Kept the capture path limited to the canonical domain https://www.naruto-arena.site/ and the existing authenticated Playwright login plus Next-data/browser fallback approach.
+- Made the authenticated operator contract explicit in the CLI via expanded --help text and a safe --print-contract path that does not require credentials.
+- Preserved the current snapshot families used by downstream normalizers and made the optional profile/clan boundary explicit in both the printed contract and the manifest/profile status written on future runs.
+- Added explicit route-level capture metadata to saved route records under capture.* and to future manifests under routeCapture, including requested URL, Next-data URL, strategy, fallbackUsed, and fallbackReason.
+- Added an output-path guard so live captures stay under snapshots/raw instead of arbitrary repo paths.
+
+limitations:
+- No live capture rerun was performed in this task, so existing files under C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest remain on the older manifest/record shape until the next operator refresh.
+- Current validation proves the hardened CLI contract and safety guards, not a fresh authenticated round-trip against the live site.
+
+follow_up_needed: yes
+follow_up:
+- On the next scheduled snapshot refresh, run the authenticated capture into snapshots/raw/site_capture/latest (or another snapshots/raw subpath) so manifest.captureContract, manifest.routeCapture, and per-record capture metadata are materialized in new raw artifacts.
+- If downstream workers need to audit fallback frequency or route-level inconsistencies, read manifest.routeCapture from the next refreshed snapshot instead of inferring fallback use from file families.

@@ -1,0 +1,74 @@
+{
+  "id": "clan_public_elite_four",
+  "record_type": "clan_public",
+  "record_family": "public_fact",
+  "name": "Elite Four",
+  "abbreviation": "E4",
+  "clan_url": null,
+  "ladder_rank": 10,
+  "stats": {
+    "rank": 10,
+    "level": 122,
+    "xp": 269028,
+    "wins": 20448,
+    "losses": 9060,
+    "streak": null,
+    "fame": null,
+    "member_count": null
+  },
+  "member_groups": [],
+  "source_refs": [
+    {
+      "source_id": "src_clan_ladder_elite_four",
+      "url": "https://www.naruto-arena.site/clan-ladder",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "browser_rendered",
+      "retrieved_at": "2026-04-24T17:07:13.245458+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/ladders/clan.json",
+      "raw_text_hash": null,
+      "section": "pageProps.topPlayers[9]",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "Elite Four (E4) | level 122 | xp 269028 | wins 20448 | losses 9060",
+    "fragments": [
+      {
+        "field": "name",
+        "text": "Elite Four",
+        "source_ref_id": "src_clan_ladder_elite_four"
+      },
+      {
+        "field": "stats",
+        "text": "win: 20448, lose: 9060, xp: 269028, level: 122",
+        "source_ref_id": "src_clan_ladder_elite_four"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.74,
+    "confidence_reasons": [
+      "The clan ladder row exposes clan name, abbreviation, xp, level, wins, and losses.",
+      "No dedicated clan page snapshot is present in the current capture, so roster fields remain empty."
+    ],
+    "ambiguity_flags": [
+      {
+        "code": "clan_route_not_captured",
+        "field": "member_groups",
+        "detail": "The current snapshot lacks a dedicated clan page payload, so the sample cannot prove member grouping structure.",
+        "severity": "warning"
+      }
+    ],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "clan_url",
+      "member_groups"
+    ],
+    "notes": [
+      "The ladder rank is derived from the row index because the clan-ladder payload does not expose an explicit numeric rank field."
+    ]
+  }
+}

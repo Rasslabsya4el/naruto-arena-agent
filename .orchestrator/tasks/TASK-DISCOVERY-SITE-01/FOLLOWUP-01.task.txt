@@ -1,0 +1,94 @@
+﻿task_id: TASK-DISCOVERY-SITE-01-FOLLOWUP-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+parent_task_id: TASK-DISCOVERY-SITE-01
+
+correction_reason:
+- Previous site reconnaissance approach triggered platform safety checks while probing manifests/routes/API-like surfaces.
+- User clarified full required data may require authenticated access.
+- Continue with browser-first authenticated reconnaissance instead of endpoint probing.
+
+goal:
+- Use the Codex in-app browser to inspect the canonical Naruto Arena site through normal browser navigation and authenticated pages if needed.
+- Identify a safe, complete acquisition plan for all MVP data required by the product source of truth.
+- Do not implement scraper, normalizer, validator, skill code, or bypass tooling.
+
+why_now:
+- The project needs all character/skill/mission data required by the TЗ, but the acquisition method must avoid platform safety flags and avoid bypassing access controls.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+canonical_site:
+https://www.naruto-arena.site/
+
+auth_policy:
+- User authorized use of their own account for normal authenticated access.
+- Do not write username, password, cookies, tokens, session storage, local storage, or screenshots containing secrets into any file.
+- Prefer interactive/manual login in the in-app browser when authentication is required.
+- If authentication cannot be completed safely, write a blocked result with exact blocker and required user action.
+
+browser_policy:
+- Use the Codex in-app browser / Browser Use plugin workflow, not shell endpoint probing.
+- Navigate the site like a normal user.
+- Record page names, visible navigation paths, data surfaces, and whether each MVP data type is visible after login.
+- Do not brute force routes, enumerate hidden APIs, bypass Cloudflare, evade rate limits, or probe unrelated endpoints.
+- Stay on https://www.naruto-arena.site/ only.
+
+context_files:
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01\TASK-DISCOVERY-SITE-01.task.txt
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01\RESULT-01.txt
+- C:\Coding\Naruto arena agent\.orchestrator\site-browser-recon-report.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-BOOTSTRAP-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01
+- Any scraper, normalizer, validator, skill runtime, or product implementation files.
+- Any credential, cookie, token, or browser session export file.
+
+acceptance:
+- Report whether login is required for characters, skills, missions, ladders, clans, profile/unlock data, or other MVP-relevant data.
+- Report which MVP data surfaces are accessible through authenticated normal browser navigation.
+- Report page/navigation paths and canonical URLs inspected, without secrets.
+- Propose a safe acquisition plan for all required TЗ data: browser-assisted snapshot, manual export, authenticated fetch performed by user-owned session, or documented blocker.
+- Identify which data can be captured as raw rendered HTML/text and which still needs a later implementation decision.
+- Document any legal/access/rate-limit/Cloudflare constraints as constraints, not bypass targets.
+- Do not use non-canonical Naruto Arena sources.
+
+validation:
+- Browser Use / Codex in-app browser session evidence summarized without secrets.
+- Confirm output files contain no password, cookies, tokens, or session values.
+- Confirm changed files are only within write_scope.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01\RESULT-01.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

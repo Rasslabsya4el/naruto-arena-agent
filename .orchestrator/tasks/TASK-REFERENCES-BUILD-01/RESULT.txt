@@ -1,0 +1,41 @@
+task_id: TASK-REFERENCES-BUILD-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-BUILD-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\build_skill_references.py
+  result: success; exit code 0 with no output.
+- command: python scripts\build_skill_references.py --help
+  result: success; CLI exposed --characters, --missions, --tags, --effect-taxonomy, --character-validation-result, --mission-validation-result, and --out-dir options.
+- command: python scripts\build_skill_references.py
+  result: success; wrote C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md, C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json, C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json, C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json, C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json, C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json, and C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md with summary character_count=196, mission_count=179, skill_count=877, unknown_mission_objective_count=122, excluded_disabled_zero_skill_character_count=2.
+- command: python - <<artifact inspection>>
+  result: success; loaded generated artifacts and confirmed characters.summary={record_count:196, skill_count:877, tagged_record_count:196, records_with_data_quality_tags:194}, missions.summary={record_count:179, unknown_requirement_record_count:122, tagged_record_count:179, records_with_data_quality_tags:147}, source-map.summary={character_record_count:196, mission_record_count:179, source_ref_count:1260, excluded_disabled_zero_skill_character_count:2, unknown_mission_objective_record_count:122}, and generated records now carry source_ref_ids plus tag_ids/data_quality_tag_ids.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\build_skill_references.py to regenerate the skill-local reference bundle from accepted normalized data, accepted taxonomy artifacts, and accepted validation-result facts instead of hand-maintained skill references.
+- Created C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md with canonical-source lock to https://www.naruto-arena.site/, local-reference-only mechanics rules, and explicit uncertainty handling guidance for future skill work.
+- Created skill-local C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json and missions.json as bundle-wrapped copies of the accepted normalized records enriched with tag_ids, data_quality_tag_ids, tag_evidence_counts, and source_ref_ids for later skill retrieval.
+- Copied accepted taxonomy artifacts into C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json and effect-taxonomy.json so the skill package can load local copies without reading project-root reference sources at runtime.
+- Created C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json with deduplicated source_refs, record-to-source_ref_id indexes, build input sha256 values, output artifact paths, and accepted validation facts to keep the emitted bundle source-backed and version-consistent.
+- Created C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md that keeps 122 unknown mission objectives explicit, surfaces the two excluded disabled zero-skill characters Edo Tensei Itachi (S) and Shinobi Alliance Kakashi (S), reports data-quality tag totals, and carries forward broad taxonomy guardrails instead of inventing narrower mechanics.
+
+limitations:
+- The build script parses accepted validation-result artifacts at C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-VALIDATE-01\RESULT.txt and C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-VALIDATE-01\RESULT.txt for exclusion and unknown-objective audit facts; if those result-file phrasings change materially, the parser will need a matching update.
+- This task created the initial reference bundle and a cheap artifact-inspection guard, but it did not add a dedicated reference-bundle validator or test suite beyond compile/help/build/inspection proof.
+- The emitted bundle intentionally preserves accepted broad effect buckets and accepted unknown mission objectives; downstream skill/runtime work must continue treating those as conservative mechanics boundaries rather than missing parser cleanup.
+
+follow_up_needed: yes
+follow_up:
+- Run TASK-REFERENCES-VALIDATE-01 to add a dedicated acceptance path for skill-local reference completeness, provenance carry-through, and report-surface invariants.
+- When TASK-SKILL-BASE-01 starts, wire the skill runtime to read source_ref_ids through source-map.json and to surface data_quality_tag_ids in user-facing uncertainty language instead of bypassing the new bundle contract.

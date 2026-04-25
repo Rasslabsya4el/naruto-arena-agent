@@ -1,0 +1,96 @@
+task_id: TASK-MISSION-POOL-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Implement the first deterministic mission-pool planner that groups a requested mission set into the fewest honest practical team buckets on top of the validated skill-local bundle and accepted helper layer.
+- Give the skill a grounded runtime surface for multi-mission planning without inventing hidden objectives or collapsing incompatible missions into one unsafe recommendation.
+
+why_now:
+- The skill contract already promises mission-pool optimization, and the helper layer is now validated, but the runtime still lacks grouped-coverage behavior behind that product promise.
+- This task turns validated mission data plus helper outputs into an auditable planning surface before e2e validation starts.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT-01.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+
+acceptance:
+- Implement `scripts\optimize_mission_pool.py` as a deterministic planner that resolves mission names or ids against the validated skill-local mission bundle and uses the accepted helper layer to reason about candidate team groupings.
+- The planner must distinguish hard constraints, soft-fit hints, and explicit unknown or hidden mission requirements instead of flattening them into one opaque verdict.
+- The planner must group missions into one or more practical team buckets only when the bundle-backed constraints are actually compatible; otherwise it must split them and explain the conflict reason.
+- The planner must emit a transparent coverage surface for the full requested pool, including which missions are covered by which recommended team bucket, which missions remain uncertain, and why.
+- The planner must keep data-quality and provenance honesty intact and must not introduce a static best-team database, opaque authoritative scoring, or invented mission coverage claims for the accepted 122 unknown-objective mission records.
+- Keep this task at the helper/runtime layer only; do not modify `SKILL.md`, e2e flows, or broader docs.
+
+validation:
+- Run `python -m py_compile scripts\optimize_mission_pool.py`.
+- Run `python scripts\optimize_mission_pool.py --help`.
+- Run at least two representative mission-pool commands against the accepted skill-local bundle: one case that can be grouped into fewer coherent teams and one case that forces either an explicit split or an uncertainty warning because of conflict or unknown requirements.
+- Report the exact input missions used, the resulting coverage buckets or split rationale, and the transparency fields that prove hard/soft/unknown handling.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

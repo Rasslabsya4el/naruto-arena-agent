@@ -1,0 +1,46 @@
+task_id: TASK-MISSION-POOL-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\TASK-MISSION-POOL-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\optimize_mission_pool.py
+  result: success; optimize_mission_pool.py compiled with no output.
+- command: python scripts\optimize_mission_pool.py --help
+  result: success; CLI exposes mission inputs, --team-size, and --references-dir over the validated skill-local bundle.
+- command: python scripts\optimize_mission_pool.py "Survival" "A Girl Grown Up" "Medical Training"
+  result: success; resolved 3 missions, exact_requirement_unit_count=4, coverage_bucket_count=1, uncertain_mission_count=0. bucket:01 required character:haruno-sakura, character:uchiha-sasuke, and character:uzumaki-naruto, and covered Survival, A Girl Grown Up, and Medical Training. Coverage matrix reported all three missions as fully_covered_by_one_bucket.
+- command: python scripts\optimize_mission_pool.py "Survival" "A Dishonored Shinobi" "A Cautious Blade in the Cloud"
+  result: success; resolved 3 missions, exact_requirement_unit_count=3, coverage_bucket_count=2, uncertain_mission_count=1. bucket:01 required character:haruno-sakura, character:uchiha-sasuke, and character:uzumaki-naruto, covering Survival plus the Uzumaki Naruto requirement from A Dishonored Shinobi. bucket:02 required character:umino-iruka with 2 flex slots, covering the Umino Iruka requirement from A Dishonored Shinobi. Coverage matrix reported Survival=fully_covered_by_one_bucket, A Dishonored Shinobi=fully_covered_split_across_buckets, and A Cautious Blade in the Cloud=uncertain_unknown_requirements with warning that hidden objectives are not counted as covered.
+- command: python scripts\optimize_mission_pool.py "A Blank Slate"
+  result: success; resolved 1 mission, exact_requirement_unit_count=0, coverage_bucket_count=0, uncertain_mission_count=1. Coverage matrix reported A Blank Slate=uncertain_soft_fit_only and surfaced mission:a-blank-slate:req:01 as a soft-fit requirement because the Team 7 group condition has no exact structured character refs.
+- command: python scripts\validate_team_helpers.py
+  result: success; validator returned status ok with no failures, preserving the accepted helper-layer runtime boundary and transparency surfaces used by optimize_mission_pool.py.
+- command: rg -n "best_team|best-team|authoritative_score|team_database|selected_team|recommended_team|\bscore\b|\bscores\b" scripts\optimize_mission_pool.py
+  result: success; no matches, so the new planner source does not introduce static best-team or opaque scoring markers.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py as a deterministic mission-pool planner that reads the accepted skill-local mission bundle and reuses the accepted helper layer from search_characters.py and team_candidate_report.py.
+- Mission inputs resolve by exact, prefix, token-subset, and contains matching against mission names, ids, and slugs; unresolved or ambiguous missions return a blocked JSON payload instead of guessing.
+- The planner separates hard_constraints, soft_fit_hints, and unknown_requirements in mission_analyses and carries those distinctions into coverage_matrix, uncertain_missions, and split_rationale.
+- Exact hard requirement units are grouped with an exact set-cover search over practical team buckets up to team_size=3, using only bundle-backed character refs or skill-owner refs.
+- Unknown objective records remain uncertain and are never counted as covered; text-only or unmodeled group requirements are surfaced as soft-fit hints rather than forced into unsafe recommendations.
+- Coverage output includes coverage_buckets, coverage_matrix, uncertain_missions, split_rationale, mission_analyses, helper-derived role/chakra/weakness/substitution/provenance surfaces, and explicit flex_slots where a bucket does not require all 3 team slots.
+- The implementation stays in the helper/runtime layer only and does not modify SKILL.md, docs, normalized data, schemas, reference artifacts, or existing helper scripts.
+
+limitations:
+- The planner recommends required team cores and leaves flex slots open; it does not invent filler characters for missions whose exact constraints do not require a full team.
+- Multi-character requirements with condition_text containing "or" and no same-team marker are treated as alternatives; the resulting interpretation is exposed in mission_analyses rather than hidden.
+- Text-only character groups such as "any Ninja of the Team 7" remain soft-fit only until the bundle gains structured group membership data.
+- The current mission bundle still has 122 accepted unknown-objective records; this planner surfaces them honestly but cannot optimize hidden objectives.
+- Validation was targeted through compile/help, representative grouped/split/unknown/soft CLI runs, and the existing helper validator; a dedicated mission-pool contract validator is still pending.
+
+follow_up_needed: yes
+follow_up:
+- Implement TASK-MISSION-POOL-VALIDATE-01 as a dedicated validator that asserts grouped coverage, split rationale, soft-fit handling, unknown-objective carry-through, helper-boundary reuse, and forbidden-field absence.
+- If future product scope needs fully filled 3-character teams, add a separate conservative filler-selection task that uses helper search surfaces and keeps filler rationale distinct from mission coverage claims.
+- If downstream users need fewer soft-only mission results, add structured group-membership extraction before changing planner behavior for text-only group requirements.

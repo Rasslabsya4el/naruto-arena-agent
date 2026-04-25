@@ -1,0 +1,43 @@
+task_id: TASK-DISCOVERY-REPO-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\.orchestrator\discovery-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-REPO-01\RESULT.txt
+
+validation:
+- command: git status --short --branch
+  result: Failed with `fatal: not a git repository (or any of the parent directories): .git`, confirming the workspace is not currently a Git repository.
+- command: git ls-remote --heads https://github.com/Rasslabsya4el/naruto-arena-agent.git
+  result: Exit code 0 with no heads returned; remote is reachable and appears empty/uninitialized.
+- command: git ls-remote https://github.com/Rasslabsya4el/naruto-arena-agent.git
+  result: Exit code 0 with no refs returned; remote is reachable and appears empty/uninitialized.
+- command: Get-ChildItem -Force -Recurse -LiteralPath 'C:\Coding\Naruto arena agent'
+  result: Workspace currently contains only `.orchestrator/` control-plane files and task specs; no application source/runtime files observed.
+- command: Get-ChildItem -Force -Recurse -Filter 'AGENTS.md' -LiteralPath 'C:\Coding\Naruto arena agent'; parent checks at C:\Coding and C:\
+  result: No applicable AGENTS.md files found.
+- command: Manual inspection of listed Main readme repo templates
+  result: Identified AGENTS and docs templates that should govern future repo bootstrap.
+- command: Focused changed-file inspection against write_scope
+  result: Changes are limited to `C:\Coding\Naruto arena agent\.orchestrator\discovery-report.md` and this result file.
+
+completed_acceptance:
+- Reported that `C:\Coding\Naruto arena agent` is not a Git repository.
+- Reported current files/directories: only `.orchestrator/` with product source, roadmap, decisions, and task specs existed before this task wrote its artifacts.
+- Reported that `https://github.com/Rasslabsya4el/naruto-arena-agent.git` is reachable but returns no heads/refs, so it appears empty or uninitialized.
+- Reported that no local or parent AGENTS.md currently applies.
+- Reported that future AGENTS.md should be based on `C:\Coding\Main readme repo\AGENTS_TEMPLATE.md`.
+- Reported that future docs should follow `C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_BRIEF.md`, `CURRENT_STATE.md`, `DECISION_LOG.md`, `PRODUCT_SPEC.md`, `docs\roadmap.md`, `docs\task-queue.md`, and `docs\validation-log.md`.
+- Recommended canonical project doc locations under root `AGENTS.md`, `docs/project/`, `docs/roadmap.md`, `docs/task-queue.md`, and `docs/validation-log.md`.
+- Recommended next bounded task to initialize/link the local repo before implementation.
+- Did not modify product/runtime source files.
+
+limitations:
+- Remote emptiness is inferred from successful `git ls-remote` calls returning no refs; provider UI was not opened.
+- No product/runtime code exists yet in the inspected workspace, so implementation layout recommendations are preparatory.
+- Existing `.orchestrator` files were inspected but not modified.
+
+follow_up_needed: yes
+follow_up:
+- Create a bounded repo-bootstrap task to run `git init`, add `origin`, create root `AGENTS.md`, create canonical docs from templates, add `.gitignore`, and optionally push the initialized baseline if authorized.
+- Run site/schema discovery tasks before creating ingestion or skill runtime code.

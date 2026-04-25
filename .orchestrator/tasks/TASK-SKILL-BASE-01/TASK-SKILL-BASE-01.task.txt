@@ -1,0 +1,87 @@
+task_id: TASK-SKILL-BASE-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Create the initial `naruto-arena-team-builder` skill package entrypoint so future team-building behavior reads one validated local reference bundle instead of mixing project-root sources or model memory.
+- Define the stable reference-loading and anti-hallucination contract for the skill without yet expanding into the full prompt/output surface.
+
+why_now:
+- The skill-local reference bundle is now validated and frozen, so the next blocker before actual product behavior is the absence of the skill entrypoint that tells Codex how to use that bundle.
+- Later prompt-format and helper tasks need one stable loading contract to build on.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-BUILD-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references
+- C:\Coding\Naruto arena agent\docs
+
+acceptance:
+- Create `skills\naruto-arena-team-builder\SKILL.md` as the initial skill entrypoint for Naruto Arena team-building and progression-planning requests.
+- The skill must instruct the future agent to load `references\rules.md` first, then use the validated bundle files under `skills\naruto-arena-team-builder\references\` as the only mechanics source at runtime.
+- The skill must explicitly require use of `source-map.json` for source/provenance lookups and `data-quality-report.md` / record-level data-quality markers for uncertainty handling.
+- The skill must explicitly forbid model-memory mechanics, non-canonical Naruto Arena sources, and bypassing the skill-local bundle by reading project-root `references\` or `data\normalized\` directly at runtime.
+- The skill must define the stable request classes and reasoning flow for at least: build around a character, build for a mission, optimize a mission pool, diagnose an existing team, and explain mechanics.
+- The skill must require candidate generation and rejection logic, mission/objective honesty, matchup/weakness analysis, and no hardcoded best-team database.
+- Do not expand this task into the full prompt/output formatting surface; that belongs to `TASK-SKILL-PROMPTS-01`.
+
+validation:
+- Run a targeted inspection that proves `skills\naruto-arena-team-builder\SKILL.md` exists and contains the required reference-loading contract and anti-hallucination guardrails.
+- Report exact checks for presence of `references\rules.md`, `source-map.json`, `data-quality-report.md`, canonical source lock, local-reference-only rule, and prohibition on model-memory / non-canonical mechanics sourcing.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

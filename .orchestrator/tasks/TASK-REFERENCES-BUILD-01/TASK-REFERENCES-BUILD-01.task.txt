@@ -1,0 +1,93 @@
+task_id: TASK-REFERENCES-BUILD-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Build the first skill-ready reference bundle from the accepted normalized data and accepted taxonomy artifacts so later skill work can answer from compact local sources instead of raw pipeline outputs.
+- Materialize a reproducible build path under the planned skill package without changing the accepted normalized or taxonomy inputs.
+
+why_now:
+- Taxonomy is now accepted, so the remaining blocker before skill implementation is a compact source-backed reference layer the skill can load directly.
+- This task converts audited pipeline outputs into the stable local bundle needed by later skill and helper tasks.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TAXONOMY-01\RESULT.txt
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\references\tags.json
+- C:\Coding\Naruto arena agent\references\synergy-patterns.md
+- C:\Coding\Naruto arena agent\docs\tagging-guide.md
+- C:\Coding\Naruto arena agent\scripts\infer_tags.py
+- C:\Coding\Naruto arena agent\scripts\validate_character_bundle.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_bundle.py
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-BUILD-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\references\tags.json
+- C:\Coding\Naruto arena agent\references\synergy-patterns.md
+- C:\Coding\Naruto arena agent\scripts\infer_tags.py
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- Any files under C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder outside the references subtree
+
+acceptance:
+- Implement `scripts\build_skill_references.py` so the skill-local reference bundle is regenerated from accepted normalized and taxonomy inputs instead of being hand-maintained.
+- Create `skills\naruto-arena-team-builder\references\rules.md`, `characters.json`, `missions.json`, `tags.json`, `effect-taxonomy.json`, `source-map.json`, and `data-quality-report.md`.
+- `rules.md` must lock the canonical source to `https://www.naruto-arena.site/`, state that local references are the only mechanics source for the future skill, and explain honest handling of missing or uncertain data.
+- Preserve source-backed uncertainty: keep the 122 unknown mission objectives explicit, surface the two excluded disabled zero-skill characters in data-quality reporting, and do not invent narrower mechanics than the accepted taxonomy supports.
+- Ensure the emitted bundle stays source-backed and version-consistent through embedded provenance fields and/or `source-map.json`.
+
+validation:
+- Run `python -m py_compile scripts\build_skill_references.py`.
+- Run `python scripts\build_skill_references.py --help`.
+- Run `python scripts\build_skill_references.py`.
+- Report exact artifact paths plus a concise count summary for characters, missions, and any surfaced data-quality totals.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-BUILD-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

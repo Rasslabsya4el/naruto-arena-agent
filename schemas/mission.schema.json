@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena Mission Public Fact Record",
+  "description": "Public mission facts from the canonical site. Availability and completion for a specific account belong in user-progress records instead.",
+  "type": "object",
+  "$defs": {
+    "rankRequirement": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "numeric_rank": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "label",
+        "numeric_rank",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "missionRequirement": {
+      "type": "object",
+      "properties": {
+        "requirement_id": {
+          "$ref": "./_common.schema.json#/$defs/recordId"
+        },
+        "step_index": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "requirement_type": {
+          "type": "string",
+          "enum": [
+            "win_with_character",
+            "win_against_character",
+            "use_skill",
+            "streak",
+            "unlock",
+            "collect",
+            "survive",
+            "unknown"
+          ]
+        },
+        "character_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "skill_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "character_choice": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/characterChoice"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "count": {
+          "$ref": "./_common.schema.json#/$defs/nullableInteger"
+        },
+        "condition_text": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "requirement_type",
+        "character_refs",
+        "skill_refs",
+        "character_choice",
+        "count",
+        "condition_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "characterChoice": {
+      "type": "object",
+      "properties": {
+        "choice_type": {
+          "type": "string",
+          "enum": [
+            "alternative_eligible_characters"
+          ]
+        },
+        "eligible_character_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          },
+          "minItems": 2
+        },
+        "progress_counting": {
+          "type": "string",
+          "enum": [
+            "per_eligible_character_present"
+          ]
+        },
+        "max_progress_per_qualifying_battle": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "choice_type",
+        "eligible_character_refs",
+        "progress_counting",
+        "max_progress_per_qualifying_battle",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "missionReward": {
+      "type": "object",
+      "properties": {
+        "reward_type": {
+          "type": "string",
+          "enum": [
+            "character_unlock",
+            "mission_unlock",
+            "border_unlock",
+            "currency",
+            "xp",
+            "unknown"
+          ]
+        },
+        "character_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "mission_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "border_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "reward_type",
+        "character_id",
+        "mission_id",
+        "border_id",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "missionPrerequisite": {
+      "type": "object",
+      "properties": {
+        "prerequisite_type": {
+          "type": "string",
+          "enum": [
+            "mission",
+            "character",
+            "rank",
+            "unknown"
+          ]
+        },
+        "ref_id": {
+          "$ref": "./_common.schema.json#/$defs/nullableString"
+        },
+        "raw_text": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "prerequisite_type",
+        "ref_id",
+        "raw_text",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    },
+    "missionStep": {
+      "type": "object",
+      "properties": {
+        "step_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "./_common.schema.json#/$defs/recordId"
+          }
+        },
+        "confidence": {
+          "$ref": "./_common.schema.json#/$defs/confidence"
+        },
+        "ambiguity_flags": {
+          "$ref": "./_common.schema.json#/$defs/ambiguityList"
+        }
+      },
+      "required": [
+        "step_index",
+        "text",
+        "requirement_refs",
+        "confidence",
+        "ambiguity_flags"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "record_type": {
+      "const": "mission"
+    },
+    "record_family": {
+      "const": "public_fact"
+    },
+    "name": {
+      "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+    },
+    "section_id": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "section_name": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "description": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "level_requirement": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Public minimum player level shown on mission group rows. Viewer-specific availability and completion state belong in user-progress records."
+    },
+    "rank_requirement": {
+      "$ref": "#/$defs/rankRequirement"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missionRequirement"
+      },
+      "minItems": 1
+    },
+    "rewards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missionReward"
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missionPrerequisite"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missionStep"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "./_common.schema.json#/$defs/tagAssignment"
+      }
+    },
+    "source_refs": {
+      "$ref": "./_common.schema.json#/$defs/sourceRefList"
+    },
+    "raw_text": {
+      "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+    },
+    "parse": {
+      "$ref": "./_common.schema.json#/$defs/parseMeta"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "record_family",
+    "name",
+    "level_requirement",
+    "rank_requirement",
+    "requirements",
+    "rewards",
+    "prerequisites",
+    "source_refs",
+    "raw_text",
+    "parse"
+  ],
+  "additionalProperties": false
+}

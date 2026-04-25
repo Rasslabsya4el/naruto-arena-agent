@@ -1,0 +1,86 @@
+{
+  "id": "profile_public_rasslabsya4el",
+  "record_type": "profile_public",
+  "record_family": "public_fact",
+  "username": "Rasslabsya4el",
+  "display_name": null,
+  "profile_url": "https://www.naruto-arena.site/profile/Rasslabsya4el",
+  "clan": null,
+  "stats": {
+    "rank": 8100,
+    "level": 26,
+    "xp": 14890,
+    "wins": 43,
+    "losses": 29,
+    "streak": 1,
+    "fame": 0,
+    "member_count": null
+  },
+  "recent_matches": [
+    {
+      "match_id": null,
+      "mode": "quick",
+      "result": "loss",
+      "opponent_id": null,
+      "opponent_name": "william505051",
+      "played_at": "2026-04-24T15:25:44.757Z",
+      "replay_available": null,
+      "raw_text": "Quick | Rasslabsya4el vs william505051 | winner william505051 | 2026-04-24T15:25:44.757Z"
+    }
+  ],
+  "source_refs": [
+    {
+      "source_id": "src_profile_rasslabsya4el",
+      "url": "https://www.naruto-arena.site/profile/Rasslabsya4el",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:07:13.784182+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/profiles/rasslabsya4el.json",
+      "raw_text_hash": null,
+      "section": "pageProps.userInfor",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "Rasslabsya4el | rank Jounin | level 26 | xp 14890 | wins 43 | losses 29 | streak 1 | one recent quick match against william505051",
+    "fragments": [
+      {
+        "field": "username",
+        "text": "Rasslabsya4el",
+        "source_ref_id": "src_profile_rasslabsya4el"
+      },
+      {
+        "field": "recent_matches[0].raw_text",
+        "text": "Quick | Rasslabsya4el vs william505051 | winner william505051 | 2026-04-24T15:25:44.757Z",
+        "source_ref_id": "src_profile_rasslabsya4el"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.87,
+    "confidence_reasons": [
+      "The public profile snapshot exposes target account stats and recent quick games directly.",
+      "The recent game entry does not include an opponent id or per-match replay flag."
+    ],
+    "ambiguity_flags": [
+      {
+        "code": "recent_match_opponent_id_missing",
+        "field": "recent_matches[0].opponent_id",
+        "detail": "The profile payload names the opponent but does not expose a dedicated profile id in the captured row.",
+        "severity": "info"
+      }
+    ],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "display_name",
+      "recent_matches[0].opponent_id",
+      "recent_matches[0].replay_available"
+    ],
+    "notes": [
+      "The sample keeps clan=null because the captured target account has no clanInfor object."
+    ]
+  }
+}

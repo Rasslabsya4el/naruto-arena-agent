@@ -1,0 +1,89 @@
+task_id: TASK-TEAM-HELPERS-VALIDATE-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Add a dedicated validator for the accepted helper layer so later mission-pool and e2e work can depend on frozen transparent helper outputs instead of manual inspection.
+- Prove that helper scripts keep their runtime bundle boundaries, transparency fields, and conservative no-hardcode behavior.
+
+why_now:
+- The helper scripts now exist, but the project still lacks a regression-checkable contract for their output fields and runtime boundaries.
+- This task freezes the helper substrate before mission-pool logic builds on it.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+
+acceptance:
+- Implement `scripts\validate_team_helpers.py` as a dedicated validator for `scripts\search_characters.py` and `scripts\team_candidate_report.py`.
+- The validator must prove that the search helper preserves transparent query-match, tag/effect/chakra/data-quality/provenance surfaces and reads the validated skill-local bundle rather than project-root sources.
+- The validator must prove that the team report preserves resolved-member surfaces, role-shell hints, chakra-pressure notes, strength notes, weakness notes, substitution hooks, data-quality warnings, and provenance hooks.
+- The validator must prove helper behavior remains conservative: no static best-team database, no opaque authoritative score requirement, and no silent suppression of data-quality or provenance markers in representative outputs.
+- Do not rebuild or rewrite the helper scripts in this task; validate the current accepted helper contract as-is.
+
+validation:
+- Run `python -m py_compile scripts\validate_team_helpers.py`.
+- Run `python scripts\validate_team_helpers.py --help`.
+- Run `python scripts\validate_team_helpers.py`.
+- Report exact checks for search-helper fields, team-report fields, runtime-boundary guarantees, and representative transparency surfaces.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

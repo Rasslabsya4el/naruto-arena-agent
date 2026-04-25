@@ -1,0 +1,85 @@
+﻿task_id: TASK-DISCOVERY-REPO-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Inspect the Naruto Arena Team Builder Skill workspace and document repo/doc-template constraints.
+- Do not implement product/runtime code.
+
+why_now:
+- Implementation must wait until repo style, AGENTS policy, templates, GitHub remote state, and safe project root conventions are known.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+remote_repository:
+https://github.com/Rasslabsya4el/naruto-arena-agent.git
+
+known_repo_state:
+- Local workspace is not currently a git repository.
+- GitHub remote exists but git ls-remote returned no heads during orchestrator inspection, so it appears empty or uninitialized.
+
+context_files:
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Main readme repo\AGENTS_TEMPLATE.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\CURRENT_STATE.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\DECISION_LOG.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\roadmap.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\task-queue.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\validation-log.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-REPO-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\discovery-report.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01
+- Any application source/runtime files.
+
+acceptance:
+- Report whether the workspace is a git repo and what files/directories currently exist.
+- Report whether the GitHub remote https://github.com/Rasslabsya4el/naruto-arena-agent.git is reachable, empty, initialized, or needs local linkage.
+- Report whether any AGENTS.md files apply.
+- Report which main README repo templates should govern future docs and AGENTS.md creation.
+- Recommend canonical project doc locations and any immediate repo setup tasks, including whether the next bounded task should initialize/link/push the local repo.
+- Do not modify source/runtime files.
+
+validation:
+- Manual inspection of C:\Coding\Naruto arena agent and C:\Coding\Main readme repo templates.
+- Git inspection of local workspace and remote repository URL.
+- Confirm changed files are only within write_scope.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-REPO-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.
+

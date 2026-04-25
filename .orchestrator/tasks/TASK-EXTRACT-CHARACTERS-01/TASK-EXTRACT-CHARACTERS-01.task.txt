@@ -1,0 +1,78 @@
+task_id: TASK-EXTRACT-CHARACTERS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Normalize public character and skill facts from the latest canonical raw snapshot into `data/normalized/characters.json`.
+- Preserve provenance and raw text; use explicit unknown/ambiguity instead of invented mechanics.
+
+why_now:
+- The team-building MVP cannot move without structured character records.
+- A usable raw capture already exists, so character normalization can start now.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\manifest.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\overview.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\index.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\details
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\overview.json
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\schemas
+- Any taxonomy, reference-build, skill-runtime, or team-helper files.
+
+acceptance:
+- Generate `data/normalized/characters.json` with one normalized record per captured character unless an exclusion is explicitly documented.
+- Every normalized record must keep source refs, raw text, and parse/confidence metadata.
+- Keep session-aware progression or completion state out of this output.
+- When a structured field is not directly provable from the snapshot, encode explicit unknown/ambiguity instead of inventing a value.
+- Use deterministic ids derived from canonical names or routes so reruns are stable.
+
+validation:
+- Run `python -m py_compile scripts\normalize_characters.py`.
+- Run `python scripts\normalize_characters.py`.
+- Confirm `data/normalized/characters.json` is valid JSON and report the produced record count.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

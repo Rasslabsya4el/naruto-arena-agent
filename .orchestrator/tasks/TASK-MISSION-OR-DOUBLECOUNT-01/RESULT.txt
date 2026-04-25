@@ -1,0 +1,61 @@
+task_id: TASK-MISSION-OR-DOUBLECOUNT-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-OR-DOUBLECOUNT-01\TASK-MISSION-OR-DOUBLECOUNT-01.task.txt
+
+summary:
+- Added explicit machine-readable `character_choice` semantics for visible exact `A or B` mission requirements.
+- Added planner assumed-team progress audit support via `--assume-team`, preserving one progress unit per eligible named character present for structured alternative-character requirements.
+- Updated normalized missions and skill-local missions bundle so 9 visible exact alternative-character requirements carry `choice_type=alternative_eligible_characters`, `progress_counting=per_eligible_character_present`, and `max_progress_per_qualifying_battle=2`.
+- Kept unknown objectives and text-only character-group requirements conservative: unknown requirements have no `character_choice`, and soft-fit groups such as `A Blank Slate` remain unmodeled rather than guessed.
+
+changed_files:
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-OR-DOUBLECOUNT-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\normalize_missions.py scripts\optimize_mission_pool.py scripts\validate_mission_pool.py scripts\validate_skill_reference_bundle.py scripts\validate_schemas.py
+  result: passed; exit code 0.
+- command: python scripts\validate_schemas.py
+  result: passed; `Validated 7 schema files and 6 fixture files successfully.`
+- command: python scripts\validate_skill_reference_bundle.py
+  result: passed; status `ok`; `mission_alternative_character_choice_semantics_preserved=true`; record counts unchanged at 196 characters, 179 missions, 877 skills, 122 unknown mission objective records, 1260 source refs.
+- command: python scripts\validate_mission_pool.py
+  result: passed; status `ok`; added representative sections for `lone_swordsman_alternative_character_doublecount` and `second_alternative_character_doublecount`, both passed with `progress_units_for_qualifying_battle=2`.
+- command: python -X utf8 scripts\optimize_mission_pool.py --include-higher-rank --assume-team character:momochi-zabuza,character:hoshigaki-kisame "The Lone Swordsman"
+  result: passed; `mission:the-lone-swordsman:req:01` exposes `character_choice` with `eligible_character_refs=[character:momochi-zabuza, character:hoshigaki-kisame]`, `progress_counting=per_eligible_character_present`, and assumed-team progress matched both eligible ids for `progress_units_for_qualifying_battle=2`; req:02 remains `unmodeled_text_only_or_group`.
+- command: python -X utf8 scripts\optimize_mission_pool.py --include-higher-rank --assume-team character:rock-lee,character:kimimaro "The Drunken Master"
+  result: passed; `mission:the-drunken-master:req:01` exposes `character_choice` with `eligible_character_refs=[character:rock-lee, character:kimimaro]`, `progress_counting=per_eligible_character_present`, and assumed-team progress matched both eligible ids for `progress_units_for_qualifying_battle=2`.
+- command: focused structured inspection of data\normalized\missions.json and skills\naruto-arena-team-builder\references\missions.json
+  result: passed; both surfaces contain 9 `character_choice` requirements and 0 unknown requirements with `character_choice`.
+
+completed_acceptance:
+- Identified and structurally modeled visible exact alternative-character requirements in the accepted local data.
+- `The Lone Swordsman` now explicitly represents Momochi Zabuza and Hoshigaki Kisame as alternative eligible characters with per-eligible-character progress counting.
+- Planner/runtime audit surface now shows double progress when both eligible named characters are supplied in `--assume-team`.
+- `The Drunken Master` validates the same semantics as a second representative `A or B` case.
+- Unknown mission objectives remain unchanged and are not assigned character-choice semantics.
+- Text-only or group requirements remain conservative and visible as soft-fit/unmodeled rather than guessed.
+- Targeted validators now freeze schema, bundle, and planner behavior for this semantics.
+
+limitations:
+- `references\tags.json` and `references\effect-taxonomy.json` were outside write_scope, so legacy data-quality tags such as `mission.data.multi_character_condition_not_structured` remain in the tag bundle even though the affected requirements now also carry explicit `character_choice` semantics.
+- Full `python scripts\build_skill_references.py` was not run because it rewrites bundle artifacts outside this task's declared write_scope; the skill-local missions bundle and source-map normalized mission sha were updated directly within write_scope.
+- The new `--assume-team` audit proves exact named-character progress semantics; it intentionally does not infer progress for text-only groups like `any Ninja of the Mist Village`.
+
+follow_up_needed: no
+follow_up:
+- No follow-up required for this task contract.
+
+handoff_notes:
+- Use `python scripts\validate_mission_pool.py` for the cheapest full planner contract check; it now includes both alternative-character double-count cases.
+- For narrow manual repro, run `python -X utf8 scripts\optimize_mission_pool.py --include-higher-rank --assume-team character:momochi-zabuza,character:hoshigaki-kisame "The Lone Swordsman"` and inspect `assumed_team_progress.mission_progress[0].requirements`.
+- `character_choice` is nullable in the schema; only exact named `A or B` requirements should receive `choice_type=alternative_eligible_characters`.

@@ -1,0 +1,33 @@
+task_id: TASK-REFERENCES-VALIDATE-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-VALIDATE-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\validate_skill_reference_bundle.py
+  result: success; exit code 0 with no output.
+- command: python scripts\validate_skill_reference_bundle.py --help
+  result: success; CLI exposed --references-dir and described validation of the accepted skill-local bundle without rebuilding artifacts.
+- command: python scripts\validate_skill_reference_bundle.py
+  result: success; exit code 0 with status=ok and all checks true for required_artifact_surfaces_intact, canonical_rules_guardrails_intact, bundle_metadata_and_provenance_surfaces_intact, expected_record_and_skill_counts_preserved, unknown_objective_reporting_preserved, excluded_character_reporting_preserved, bundle_tag_and_data_quality_linkage_preserved, source_ref_resolution_and_record_index_linkage_preserved, and data_quality_report_surface_preserved.
+- command: python scripts\validate_skill_reference_bundle.py
+  result: pass summary; confirmed artifact completeness for rules.md/characters.json/missions.json/tags.json/effect-taxonomy.json/source-map.json/data-quality-report.md, summary counts character_record_count=196 mission_record_count=179 skill_count=877 unknown_mission_objective_record_count=122 excluded_disabled_zero_skill_character_count=2, data-quality linkage counts character_records_with_data_quality_tags=194 mission_records_with_data_quality_tags=147, and source_ref_count=1260 with bundle source_ref_ids resolving through source-map.json.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py as a dedicated acceptance path for the accepted skill-local reference bundle without rebuilding or mutating bundle artifacts.
+- Validated the required skill-local artifacts rules.md, characters.json, missions.json, tags.json, effect-taxonomy.json, source-map.json, and data-quality-report.md from the accepted references directory.
+- Proved the frozen bundle contract counts remain intact at 196 playable characters, 179 missions, 877 bundled skills, and 122 explicit unknown mission objective records.
+- Proved the two disabled zero-skill exclusions remain surfaced as Edo Tensei Itachi (S) and Shinobi Alliance Kakashi (S), stay absent from characters.json, and remain present in rules.md, source-map.json, and data-quality-report.md.
+- Proved bundle provenance linkage by checking source-map source_ref payload presence, source_ref_id resolution for character records, skill records, and mission records, record_index alignment, output artifact paths, and required source_inputs/summary surfaces.
+- Proved tag/data-quality linkage was not silently dropped by deriving expected tag_ids, data_quality_tag_ids, and tag_evidence_counts from tags.json and matching them against every character and mission bundle record.
+- Proved rules.md still locks mechanics to https://www.naruto-arena.site/, forbids mirror/model-memory mechanics sourcing, and keeps the local-reference-only/source-map resolution guardrails intact.
+
+limitations:
+- This validator accepts the current skill-local bundle contract and checks internal bundle/report/source-map consistency; it does not revalidate upstream normalized data or raw snapshot files in this task.
+- The validator intentionally freezes current accepted report phrasing and artifact metadata, so deliberate future bundle-contract changes will require updating this validator alongside the accepted contract.
+
+follow_up_needed: no
+follow_up:
+- None.

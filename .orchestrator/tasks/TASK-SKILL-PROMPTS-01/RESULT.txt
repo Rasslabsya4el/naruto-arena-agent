@@ -1,0 +1,29 @@
+task_id: TASK-SKILL-PROMPTS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+
+validation:
+- command: powershell targeted contract inspection of C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+  result: success; verified team recommendation sections, mission answer sections, mission-pool coverage surface, diagnosis structure, mechanics explanation split, and preservation of the accepted local-reference-only runtime guardrails.
+- command: rg -n "Concrete Response Contract For MVP Request Classes|Team Identity|Bad Matchups / What Beats This|Mission Resolution|Coverage Matrix|Verdict|Confirmed From Data|references/rules\.md|Do not use model memory as a mechanics source\." C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+  result: success; matched the concrete response-contract heading plus representative lines for team, mission, mission-pool, diagnosis, mechanics, and preserved rules.md-first/model-memory guardrail surfaces.
+
+completed_acceptance:
+- Extended C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md with concrete MVP answer-shape rules for build-around-a-character, mission, mission-pool, diagnosis, and mechanics-explanation requests.
+- Required practical team-answer sections covering recommendation, team identity, why the characters fit, game plan, first turns, good matchups, bad matchups or what beats this, failure modes, mission coverage, substitutions, and confidence or data gaps.
+- Required mission-specific outputs covering mission resolution, requirement summary, recommended team, why the mission is covered, play plan, and explicit honesty about unknown objectives or low-confidence requirements.
+- Required mission-pool outputs covering grouped plan, coverage explanation, conflict explanation, and an explicit coverage matrix or equivalent coverage surface.
+- Required diagnosis outputs covering verdict, biggest problem, minimal fix, broader rebuild when needed, and mission-fit commentary.
+- Required mechanics answers to separate confirmed-from-data facts, strategic inference, and data gaps, while preserving the already accepted load order and local-reference-only runtime contract.
+
+limitations:
+- Validation was targeted file-contract inspection only; no prompt execution or end-to-end skill run was performed in this task.
+- Downstream helper logic still needs to prove that runtime answers actually follow the new section contract consistently.
+
+follow_up_needed: yes
+follow_up:
+- Run representative prompt or e2e validation to prove the skill follows this response surface in actual execution.
+- Keep future helper/runtime tasks aligned with these section requirements so later edits do not regress into generic advice output.

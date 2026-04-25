@@ -1,0 +1,76 @@
+{
+  "id": "ladder_entry_ninja_ladder_plates",
+  "record_type": "ladder_entry",
+  "record_family": "public_fact",
+  "surface": "ninja_ladder",
+  "subject_type": "player",
+  "subject_id": null,
+  "subject_name": "Plates",
+  "subject_abbreviation": null,
+  "subject_url": null,
+  "season_slot": null,
+  "stats": {
+    "rank": 1,
+    "level": 54,
+    "xp": 57677,
+    "wins": 1320,
+    "losses": 402,
+    "streak": 5,
+    "fame": null,
+    "member_count": null
+  },
+  "source_refs": [
+    {
+      "source_id": "src_ninja_ladder_plates",
+      "url": "https://www.naruto-arena.site/ninja-ladder",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "browser_rendered",
+      "retrieved_at": "2026-04-24T17:07:12.886244+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/ladders/ninja.json",
+      "raw_text_hash": null,
+      "section": "pageProps.topPlayers[0]",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "Plates | level 54 | xp 57677 | wins 1320 | losses 402 | streak 5",
+    "fragments": [
+      {
+        "field": "subject_name",
+        "text": "Plates",
+        "source_ref_id": "src_ninja_ladder_plates"
+      },
+      {
+        "field": "stats",
+        "text": "win: 1320, lose: 402, streak: 5, xp: 57677, level: 54",
+        "source_ref_id": "src_ninja_ladder_plates"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.93,
+    "confidence_reasons": [
+      "The ladder row exposes level, xp, wins, losses, and streak directly.",
+      "The row ordering establishes the sample's ladder rank."
+    ],
+    "ambiguity_flags": [
+      {
+        "code": "profile_url_not_present",
+        "field": "subject_url",
+        "detail": "The ladder row does not include a direct profile link, so the subject URL remains null.",
+        "severity": "info"
+      }
+    ],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "subject_url",
+      "subject_id"
+    ],
+    "notes": [
+      "The sample uses the first row in the captured ladder snapshot."
+    ]
+  }
+}

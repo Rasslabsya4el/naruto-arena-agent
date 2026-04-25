@@ -1,0 +1,36 @@
+task_id: TASK-TAXONOMY-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\infer_tags.py
+- C:\Coding\Naruto arena agent\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\references\tags.json
+- C:\Coding\Naruto arena agent\references\synergy-patterns.md
+- C:\Coding\Naruto arena agent\docs\tagging-guide.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TAXONOMY-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\infer_tags.py
+  result: success; exit code 0 with no output.
+- command: python scripts\infer_tags.py --help
+  result: success; CLI exposed --characters, --missions, --taxonomy-out, and --tags-out options.
+- command: python scripts\infer_tags.py
+  result: success; wrote C:\Coding\Naruto arena agent\references\effect-taxonomy.json and C:\Coding\Naruto arena agent\references\tags.json with summary character_count=196, mission_count=179, skill_count=877, effect_count=1638, requirement_count=259, character_tagged_record_count=196, mission_tagged_record_count=179.
+
+completed_acceptance:
+- Created machine-readable C:\Coding\Naruto arena agent\references\effect-taxonomy.json with explicit definitions, observed counts, sample ids, and tag hooks for observed skill classes, effect types, condition types, mission requirement types, and supported ambiguity codes.
+- Created machine-readable C:\Coding\Naruto arena agent\references\tags.json with explicit tag catalog entries plus evidence-backed character and mission tag assignments derived from the accepted normalized bundles.
+- Implemented reproducible generation at C:\Coding\Naruto arena agent\scripts\infer_tags.py so taxonomy/tag artifacts are regenerated from data\normalized\characters.json and data\normalized\missions.json instead of hand-maintained only.
+- Added C:\Coding\Naruto arena agent\references\synergy-patterns.md to describe downstream tag-driven synergy patterns without introducing hardcoded team picks.
+- Added C:\Coding\Naruto arena agent\docs\tagging-guide.md to document artifact purpose, regeneration, uncertainty handling, and extension rules.
+- Preserved mission uncertainty explicitly via mission objective/data tags backed by unknown requirement records and their captured ambiguity flags.
+
+limitations:
+- The current normalized parser buckets `protect`, `gain`, `drain`, `remove_state`, and `apply_state` remain broad; downstream consumers should inspect the recorded evidence before assuming a narrower mechanic than the normalized bucket guarantees.
+- Tag coverage reflects the current accepted normalized bundles only; future capture/normalization changes that introduce new skill classes, effect types, condition types, requirement types, or ambiguity codes will require an explicit registry update in scripts\infer_tags.py.
+- The task did not add a separate automated test suite for tag inference beyond py_compile, CLI contract, and a full regeneration run.
+
+follow_up_needed: yes
+follow_up:
+- Wire python scripts\infer_tags.py into a future repo-native validation or reference-build wrapper so taxonomy regeneration becomes part of the standard refresh path.
+- If downstream team-building logic needs finer-grained distinction inside broad effect buckets, schedule a separate parser-refinement task instead of overloading the current taxonomy with guessed subtypes.

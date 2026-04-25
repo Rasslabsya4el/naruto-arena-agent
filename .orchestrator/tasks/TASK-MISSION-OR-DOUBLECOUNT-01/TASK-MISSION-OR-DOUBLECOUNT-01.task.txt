@@ -1,0 +1,111 @@
+task_id: TASK-MISSION-OR-DOUBLECOUNT-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Close the mission-progress semantics gap for missions whose requirement names alternative eligible characters instead of a single fixed unit.
+- Make the local mission/runtime surface honest for cases like `The Lone Swordsman`, where one qualifying battle should advance progress once per eligible named character present on the team.
+
+why_now:
+- The current parsed bundle is already usable, but some `A or B` mission requirements are still preserved mostly as free text instead of explicit machine-readable semantics.
+- Without this follow-up, mission planning can undercount real progress and recommend the wrong roster shape for a subset of canonical missions.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT-01.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-OR-DOUBLECOUNT-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+
+acceptance:
+- Identify and structurally model mission requirements where the canonical requirement text names alternative eligible characters rather than a single fixed character.
+- Keep hidden or unknown mission objectives honest and unchanged; this task is only about the alternative-character subset that is already visible in the accepted local data.
+- Update the normalized/runtime surface so missions like `The Lone Swordsman` can explicitly represent both eligible characters and the planner/runtime can count one progress unit per eligible named character present on the team for a single qualifying battle.
+- When both named eligible characters are on the team for one of these missions, the mission-planning/runtime surface must show double progress instead of silently collapsing the battle to one unit of progress.
+- Validate at least `The Lone Swordsman` plus one second representative `A or B` mission case and report the concrete semantics and output fields that prove the rule is preserved end to end.
+- Keep the behavior conservative: do not invent stacked progress for missions whose text does not support this pattern, and if a case remains ambiguous, surface that ambiguity instead of guessing.
+- If schema or bundle contracts need refinement, update the targeted validators so this mission semantic is frozen by reproducible checks.
+
+validation:
+- Run `python -m py_compile` on every changed Python module in write scope.
+- Run `python scripts\validate_schemas.py` if any schema-layer files changed.
+- Run `python scripts\validate_skill_reference_bundle.py`.
+- Run `python scripts\validate_mission_pool.py`.
+- Run at least one targeted audit or representative command that proves `The Lone Swordsman` gains double progress when both `Momochi Zabuza` and `Hoshigaki Kisame` are present.
+- Run at least one second representative check for another visible `A or B` mission requirement and report whether it is exact, ambiguous, or still limited by source text.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-OR-DOUBLECOUNT-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

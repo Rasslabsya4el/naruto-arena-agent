@@ -1,0 +1,76 @@
+task_id: TASK-BOOTSTRAP-PRODUCT-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Bootstrap the project planning source of truth for the Naruto arena agent workspace.
+- Use the existing documentation templates from the main README repository as the structure source.
+- Do not implement product/runtime code.
+
+why_now:
+- The repository currently has no visible source files or orchestration state, so implementation tasks would be premature.
+- The orchestrator needs a product brief, MVP boundary, task queue, and validation log before dispatching build work.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\roadmap.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\task-queue.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\validation-log.md
+
+source_templates:
+- Copy/adapt structure from C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_BRIEF.md into docs/project/PRODUCT_BRIEF.md.
+- Copy/adapt structure from C:\Coding\Main readme repo\project-doc-templates\docs\roadmap.md into docs/roadmap.md.
+- Copy/adapt structure from C:\Coding\Main readme repo\project-doc-templates\docs\task-queue.md into docs/task-queue.md.
+- Copy/adapt structure from C:\Coding\Main readme repo\project-doc-templates\docs\validation-log.md into docs/validation-log.md.
+
+write_scope:
+- docs/project/PRODUCT_BRIEF.md
+- docs/roadmap.md
+- docs/task-queue.md
+- docs/validation-log.md
+
+do_not_touch:
+- .orchestrator/tasks/TASK-BOOTSTRAP-PRODUCT-01/TASK-BOOTSTRAP-PRODUCT-01.task.txt
+- Any application source/runtime files if they appear during inspection.
+
+acceptance:
+- Create docs/project/PRODUCT_BRIEF.md from the main README repo template, filled with concise product assumptions, user/operator value, MVP goal, and explicit unknowns.
+- Create docs/roadmap.md from the main README repo template, filled with MVP-first phases and no invented implementation details beyond workspace evidence.
+- Create docs/task-queue.md from the main README repo template, with the bootstrap task marked in progress or completed and next candidate bounded tasks.
+- Create docs/validation-log.md from the main README repo template, with current evidence, unproven assumptions, and validation gaps.
+- Keep all documents compact and useful for future dispatch decisions.
+
+validation:
+- Confirm the four documentation files exist.
+- Confirm each documentation file preserves the matching template structure from C:\Coding\Main readme repo\project-doc-templates\docs.
+- Confirm no product/runtime implementation files were created or modified.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BOOTSTRAP-PRODUCT-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

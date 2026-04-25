@@ -1,0 +1,41 @@
+task_id: TASK-TEAM-HELPERS-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\TASK-TEAM-HELPERS-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+
+validation:
+- command: python -m py_compile C:\Coding\Naruto arena agent\scripts\search_characters.py C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+  result: success; both helper modules compiled cleanly.
+- command: python C:\Coding\Naruto arena agent\scripts\search_characters.py --help
+  result: success; CLI contract exposes name/id query plus transparent filters for tag, effect_type, effect_family, skill_class, chakra_type, exclude_chakra_type, role_hint, and limit.
+- command: python C:\Coding\Naruto arena agent\scripts\team_candidate_report.py --help
+  result: success; CLI contract exposes candidate-team reporting for resolved members with role-shell, chakra-pressure, strength, weakness, substitution, data-quality, and provenance surfaces.
+- command: python C:\Coding\Naruto arena agent\scripts\search_characters.py "Haruno Sakura" --role-hint sustain --effect-type heal --tag character.capability.protect_effects --exclude-chakra-type bloodline --limit 5
+  result: success; helper read the skill-local bundle at C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references, returned 2 transparent candidates (exact Haruno Sakura plus prefix Haruno Sakura (S)), and surfaced query match kind, role hints, tags, effect families/types, chakra profile, data-quality warnings, and record provenance.
+- command: python C:\Coding\Naruto arena agent\scripts\team_candidate_report.py "Uzumaki Naruto" "Haruno Sakura" "Hatake Kakashi"
+  result: success; helper resolved all 3 exact members and emitted a transparent team report with role_matrix, team_identity_hints, chakra_curve notes, strength_notes, weakness_notes, data_quality_warnings, substitution_hooks, and provenance_hooks. Representative surfaced risks included shared nin/random/tai pressure plus accepted data-quality uncertainty on target/effect parsing.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\search_characters.py as a deterministic search layer that reads only the validated skill-local bundle under skills\naruto-arena-team-builder\references at runtime.
+- Search helper supports name/id discovery plus narrowing by bundle-backed tag_ids, effect_types, effect_families, skill_class_ids, chakra demand, and derived role_hints; it also supports exclude_chakra_type for substitution-oriented narrowing.
+- Search output stays transparent: no opaque ranking score, and every candidate surfaces exact/prefix/token match state, tag/effect summaries, chakra profile, data-quality warnings, and resolved provenance hooks.
+- Implemented C:\Coding\Naruto arena agent\scripts\team_candidate_report.py as a deterministic team-report helper over the same skill-local bundle and helper summaries.
+- Team report surfaces resolved members, role-shell/team-identity hints, visible chakra-pressure/curve notes, synergy/strength notes, weakness/risk notes, relevant data-quality warnings, substitution hooks, and record/skill provenance hooks.
+- Helper logic remains conservative and bundle-driven: no project-root references\data or data\normalized reads at runtime, no static best-team database, no invented mechanics, and no silent suppression of uncertainty markers.
+
+limitations:
+- team_candidate_report.py currently prefers a rich machine-readable JSON surface over a short human summary, so representative outputs are intentionally verbose.
+- Search and team-report heuristics are deterministic but still heuristic; they describe visible role/chakra/synergy patterns from tags/effects rather than proving matchup outcomes or mission coverage.
+- Substitution hooks currently surface search directions and executable filter examples, not a full automatic replacement recommender.
+- Validation covered py_compile, CLI help, one representative search query, and one representative team report; no dedicated contract tests or e2e prompt runs exist yet.
+
+follow_up_needed: yes
+follow_up:
+- Add targeted validator coverage in TASK-TEAM-HELPERS-VALIDATE-01 so helper output fields and runtime boundaries can be regression-checked without manual inspection.
+- Reuse these helper surfaces in later mission-pool and skill-runtime tasks instead of re-deriving ad hoc role/chakra/provenance logic.
+- Consider trimming or shaping the JSON report surface if later runtime consumers need a more compact artifact than the current fully transparent payload.

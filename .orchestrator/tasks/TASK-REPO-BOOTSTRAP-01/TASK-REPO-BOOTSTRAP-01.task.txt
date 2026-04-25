@@ -1,0 +1,102 @@
+﻿task_id: TASK-REPO-BOOTSTRAP-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Initialize the Naruto Arena Team Builder Skill repository baseline from accepted discovery findings.
+- Create repo policy and canonical docs from main README repo templates.
+- Do not implement scraper, normalizer, validator, skill runtime, or product logic.
+
+why_now:
+- Repo discovery confirmed local workspace is not a git repo, remote is empty/reachable, and no AGENTS.md or canonical docs exist.
+- Implementation tasks need stable repo policy, docs structure, .gitignore, and remote linkage first.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+remote_repository:
+https://github.com/Rasslabsya4el/naruto-arena-agent.git
+
+context_files:
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\discovery-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-REPO-01\RESULT.txt
+- C:\Coding\Main readme repo\AGENTS_TEMPLATE.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\CURRENT_STATE.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\DECISION_LOG.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\roadmap.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\task-queue.md
+- C:\Coding\Main readme repo\project-doc-templates\docs\validation-log.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.git
+- C:\Coding\Naruto arena agent\.gitignore
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-BOOTSTRAP-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01
+- C:\Coding\Naruto arena agent\.orchestrator\site-recon-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- Any scraper, normalizer, validator, skill runtime, or product implementation files.
+
+git_policy:
+- Run git init if needed.
+- Add origin remote if missing.
+- Do not commit.
+- Do not push.
+- Report exact recommended commit/push follow-up after files are created.
+
+acceptance:
+- Local workspace is a git repository after the task.
+- Origin remote points to https://github.com/Rasslabsya4el/naruto-arena-agent.git.
+- Root AGENTS.md exists and is adapted from C:\Coding\Main readme repo\AGENTS_TEMPLATE.md for this project.
+- Canonical docs exist under docs/project and docs root using main README repo templates and product facts from orchestrator state.
+- .gitignore exists and protects generated/runtime artifacts expected for scraping, snapshots, caches, virtualenvs, and test output without hiding source references that should be tracked.
+- No implementation/runtime code is created.
+- No commit or push is performed.
+
+validation:
+- git status --short --branch
+- git remote -v
+- Confirm required files exist.
+- Confirm no files outside write_scope were modified, except normal git metadata created by git init.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-BOOTSTRAP-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

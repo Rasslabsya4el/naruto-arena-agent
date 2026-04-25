@@ -1,0 +1,34 @@
+task_id: TASK-EXTRACT-CHARACTERS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT-01.txt
+
+validation:
+- command: python -m py_compile scripts\normalize_characters.py
+  result: success; exit code 0 with no output.
+- command: python scripts\normalize_characters.py
+  result: success; rewrote C:\Coding\Naruto arena agent\data\normalized\characters.json with 196 included records and 2 excluded raw entries: Shinobi Alliance Kakashi (S) and Edo Tensei Itachi (S).
+- command: python -c "import json, pathlib; records = json.loads(pathlib.Path(r'data/normalized/characters.json').read_text(encoding='utf-8')); excluded = {'Shinobi Alliance Kakashi (S)', 'Edo Tensei Itachi (S)'}; skillless = [record['name'] for record in records if not record['skills']]; present = sorted(excluded.intersection(record['name'] for record in records)); print(json.dumps({'record_count': len(records), 'skillless_records': skillless, 'excluded_still_present': present}, ensure_ascii=False))"
+  result: success; reported {"record_count": 196, "skillless_records": [], "excluded_still_present": []}.
+- command: python - <<'PY' [per-record Draft 2020-12 validation of each bundle item against schemas/character.schema.json with local ref resolution] PY
+  result: success; validated 196 included records against C:\Coding\Naruto arena agent\schemas\character.schema.json and reported zero validation errors.
+
+completed_acceptance:
+- Brought C:\Coding\Naruto arena agent\data\normalized\characters.json into schema-conforming state for included records by excluding the only raw entries that violated the current `skills.minItems` contract.
+- Did not invent placeholder skills or mechanics for the two zero-skill raw entries.
+- Explicitly documented excluded names and reason: Shinobi Alliance Kakashi (S) and Edo Tensei Itachi (S) were excluded because the canonical raw snapshot marks them as temporarily disabled and provides zero skills.
+- Kept deterministic ids, source refs, raw text, and parse/confidence metadata for all included records.
+- Kept session-aware progression or completion state out of the output.
+
+limitations:
+- The normalized bundle now excludes two temporarily disabled raw characters, so the file is schema-conforming for included records but is not a full 198-entry mirror of the raw capture.
+- The targeted schema validation was performed per record because `schemas/character.schema.json` defines a single character record, while `data/normalized/characters.json` is a bundle array.
+- Skill effect parsing remains heuristic and was not broadened in this follow-up.
+
+follow_up_needed: yes
+follow_up:
+- Add an explicit bundle schema or validator wrapper for `data/normalized/characters.json` so future validation does not rely on per-record interpretation.
+- Decide whether temporarily disabled zero-skill characters should live in a separate exclusion manifest or another normalized artifact if downstream consumers need roster completeness.

@@ -1,0 +1,31 @@
+task_id: TASK-SKILL-BASE-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\TASK-SKILL-BASE-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\RESULT.txt
+
+validation:
+- command: powershell targeted contract inspection of C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+  result: success; verified file existence plus required rules.md-first load order, source-map.json usage, data-quality-report.md usage, canonical-source lock, local-reference-only rule, project-root runtime read ban, model-memory ban, stable request classes, candidate generation/rejection flow, mission-objective honesty, matchup/weakness analysis, and no static best-team database.
+- command: rg -n "references/rules\.md|references/source-map\.json|references/data-quality-report\.md|model memory|Build a team around a character|Build a team for a mission|Optimize a pool of missions|Diagnose or improve an existing team|Explain mechanics" C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+  result: success; matched the expected contract lines in SKILL.md for required load-order, anti-hallucination, and request-class surfaces.
+
+completed_acceptance:
+- Created C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md as the initial skill entrypoint for Naruto Arena team-building and progression-planning requests.
+- Required the skill to read references\rules.md first, then use only the validated bundle under skills\naruto-arena-team-builder\references\ as the runtime mechanics source.
+- Required references\source-map.json for provenance and source_ref_id resolution plus references\data-quality-report.md and record-level uncertainty markers for confidence handling.
+- Explicitly forbade model-memory mechanics, non-canonical Naruto Arena sources, and bypassing the skill-local bundle by reading project-root references\ or data\normalized\ at runtime.
+- Defined stable request classes and reasoning flow for building around a character, building for a mission, optimizing a mission pool, diagnosing an existing team, and explaining mechanics.
+- Required multi-candidate generation, rejection of incoherent teams, mission/objective honesty, matchup and weakness analysis, substitutions, and no hardcoded best-team database.
+
+limitations:
+- This base task intentionally stops at the stable loading/runtime contract and high-level reasoning flow; it does not define the full prompt/output formatting surface reserved for TASK-SKILL-PROMPTS-01.
+- Validation in this task was targeted file-contract inspection only; no end-to-end prompt execution was run because later skill behavior tasks are still pending.
+
+follow_up_needed: yes
+follow_up:
+- Implement TASK-SKILL-PROMPTS-01 on top of this entrypoint to define representative prompt handling and final response structure without weakening the local-reference-only contract.
+- Reuse this SKILL.md load order in later helper/runtime tasks and keep source provenance routed through references\source-map.json plus record-level uncertainty markers.

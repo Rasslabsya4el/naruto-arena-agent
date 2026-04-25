@@ -1,0 +1,48 @@
+task_id: TASK-AGENTS-ALIGN-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-AGENTS-ALIGN-01\TASK-AGENTS-ALIGN-01.task.txt
+
+summary:
+- Updated root AGENTS.md from bootstrap-era repository reality to the current accepted near-MVP surface.
+- Kept the update policy-oriented and limited to root instruction wording; no README, docs, data, references, schemas, scripts, skill bundle, or roadmap files were edited.
+- Preserved the canonical-source, anti-hallucination, no-hardcoded-best-team, source-provenance, validation, and runtime-artifact boundaries.
+
+changed_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-AGENTS-ALIGN-01\RESULT.txt
+
+validation:
+- command: git status --short --branch
+  result: ran before edits; repo is on master with no commits yet and the expected project tree is untracked.
+- command: rg -n "bootstrap/discovery|not yet implemented|planned Codex|planned normalized|planned ingestion|no scraper|MVP must ingest" AGENTS.md
+  result: success through guarded no-match check. No stale bootstrap/discovery-only wording remains in AGENTS.md.
+- command: rg -n "https://www\\.naruto-arena\\.site|model memory|hardcode|best teams|Runtime outputs|snapshots/raw|Missing or low-confidence|source URLs|not exhaustive|authenticated environment variables" AGENTS.md README.md docs/project/PRODUCT_BRIEF.md docs/project/PRODUCT_SPEC.md docs/project/CURRENT_STATE.md
+  result: success. Confirmed AGENTS.md still preserves the canonical-source boundary, no-model-memory boundary, no-hardcoded-best-team boundary, runtime-artifact boundary, explicit uncertainty handling, representative-not-exhaustive wording, and the authenticated refresh blocker in alignment with accepted docs.
+- command: rg -n "196 playable|179 mission|877 bundled|1260 source|122 explicit unknown|representative|not exhaustive|skill-local runtime bundle|helper/planner|validators|answer-surface" AGENTS.md README.md docs/project/PRODUCT_BRIEF.md docs/project/PRODUCT_SPEC.md docs/project/CURRENT_STATE.md
+  result: success. Confirmed AGENTS.md current-state claims align with accepted README/project docs for bundle counts, helper/planner/validator surface, and representative answer-surface proof.
+- command: rg -n "guaranteed mission coverage|solved metagame|solved hidden|complete account-specific|all matchups are proven|exhaustive strategic correctness is proven" AGENTS.md
+  result: success through guarded no-match check. No positive overclaim wording was found in AGENTS.md.
+- command: rg -n "Project Memory And Control Plane|Repository Map|Product Reality|skill-local runtime bundle|data/normalized|schemas/|scripts/|snapshots/raw|representative, not exhaustive|authenticated environment variables" AGENTS.md
+  result: success. Focused line inspection confirmed the edited sections describe the accepted repo map and product reality without expanding into roadmap or README detail.
+- command: git status --short --branch -- AGENTS.md
+  result: success. Scope check for the edited policy file shows only AGENTS.md in the task-relevant working tree slice before writing this result file.
+- command: python -m py_compile
+  result: not run; this is a docs-only task and no Python files changed.
+
+completed_acceptance:
+- Updated root AGENTS.md Repository Map so the skill package, skill-local references, normalized data, schemas, scripts, and raw snapshot space reflect the accepted current repo state.
+- Updated root AGENTS.md Product Reality so future workers inherit the accepted normalized data, schema, skill-local bundle, skill entrypoint, helper/planner, validator, and representative answer-surface state instead of bootstrap-only claims.
+- Preserved canonical game source as only https://www.naruto-arena.site/.
+- Preserved no model-memory mechanics, no third-party gameplay sources, no hardcoded best-team core logic, source URL grounding, explicit missing/low-confidence data handling, and smallest-targeted validation policy.
+- Preserved the statement that runtime outputs, caches, logs, raw generated snapshots, and test output are not project memory; added that snapshots/raw is ignored runtime capture space, not durable project memory.
+- Kept the root policy concise and did not duplicate roadmap, validation log, README, or product docs.
+
+limitations:
+- Validation was focused text inspection and cross-doc grep, not a markdown linter.
+- The repository has no commits yet, so git diff against HEAD is not meaningful for untracked files; scope was checked by exact-path status and focused content inspection.
+- The accepted proof remains representative and not exhaustive strategic validation, as AGENTS.md now states.
+
+follow_up_needed: no
+follow_up:
+- None.

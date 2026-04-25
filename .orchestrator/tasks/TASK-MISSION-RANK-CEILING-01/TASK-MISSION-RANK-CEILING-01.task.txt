@@ -1,0 +1,121 @@
+task_id: TASK-MISSION-RANK-CEILING-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Make mission-team recommendations progression-safe by default instead of recommending characters from ranks the player has not plausibly unlocked yet.
+- Treat mission requests as implying a conservative roster ceiling from the requested mission rank band unless the user explicitly asks for forward-looking or already-unlocked higher-rank options.
+
+why_now:
+- The local bundle already carries mission rank and level requirements, but the current runtime contract still leaves mission-team recommendations free to jump ahead of the player progression implied by the mission itself.
+- Without this correction, requests like opening `Choji (C)` can produce unusable teams built around later-rank characters, which breaks the actual player workflow the skill is supposed to support.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-TEAM-HELPERS-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\character.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\character.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-RANK-CEILING-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+
+acceptance:
+- Define and implement the default progression rule for mission-team requests: if the user asks for teams for one mission or a mission pool, the allowed roster must be bounded by the highest requested mission rank band unless the user explicitly says higher-rank characters are already unlocked or wants future-planning teams.
+- Requests like opening `Choji (C)` must not produce teams built around later-rank units such as `Sannin+` by default.
+- Preserve an explicit override path: if the user clearly says they already own higher-rank characters or wants aspirational planning, the runtime may widen the roster and must say that it did so.
+- Apply the same conservative rule to both single-mission recommendations and mission-pool planning wherever mission rank is available from the accepted local bundle.
+- If the current character/runtime surface lacks enough explicit unlock-band structure, add the smallest durable data or validator refinement needed instead of leaving the rule as prompt-only prose.
+- Keep the behavior honest: if the mission rank is unavailable or ambiguous, surface that limit instead of silently using unrestricted late-rank characters.
+- Validate with at least one `C`-rank or `D/C`-band example and at least one higher-rank example, reporting the concrete outputs that prove the recommendation set stays inside the inferred roster ceiling unless an override is supplied.
+
+validation:
+- Run `python -m py_compile` on every changed Python module in write scope.
+- Run `python scripts\validate_schemas.py` if any schema-layer files changed.
+- Run `python scripts\validate_skill_reference_bundle.py` if bundle artifacts changed.
+- Run `python scripts\validate_team_helpers.py`.
+- Run `python scripts\validate_mission_pool.py`.
+- Run at least one representative mission recommendation or planner check that proves a `C`-rank or `D/C`-band request does not recommend `S`, `Sannin`, or later-rank characters by default.
+- Run at least one representative higher-rank case that proves the ceiling expands only when the mission band supports it or when an explicit override is provided.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-RANK-CEILING-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

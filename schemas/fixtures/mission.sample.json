@@ -1,0 +1,182 @@
+{
+  "id": "mission_a_blank_slate",
+  "record_type": "mission",
+  "record_family": "public_fact",
+  "name": "A Blank Slate",
+  "section_id": "shippuuden-missions",
+  "section_name": "Shippuuden Missions",
+  "description": null,
+  "level_requirement": 21,
+  "rank_requirement": {
+    "label": "Anbu",
+    "numeric_rank": null,
+    "raw_text": "Anbu",
+    "confidence": 0.9,
+    "ambiguity_flags": [
+      {
+        "code": "rank_numeric_not_exposed",
+        "field": "rank_requirement.numeric_rank",
+        "detail": "The snapshot exposes the rank label but not a separate numeric rank value.",
+        "severity": "info"
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "requirement_id": "req_mission_a_blank_slate_1",
+      "step_index": 1,
+      "requirement_type": "unknown",
+      "character_refs": [],
+      "skill_refs": [],
+      "character_choice": null,
+      "count": 10,
+      "condition_text": "Win 10 battles with any Ninja of the Team 7.",
+      "confidence": 0.72,
+      "ambiguity_flags": [
+        {
+          "code": "viewer_progress_removed_from_text",
+          "field": "requirements[0].condition_text",
+          "detail": "The detail payload includes a '(10/10)' progress suffix; the fixture keeps only the invariant requirement text.",
+          "severity": "info"
+        },
+        {
+          "code": "team_reference_not_normalized",
+          "field": "requirements[0].character_refs",
+          "detail": "The requirement refers to Team 7 as a group rather than explicit character ids in this sample set.",
+          "severity": "warning"
+        }
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "reward_type": "character_unlock",
+      "character_id": null,
+      "mission_id": null,
+      "border_id": null,
+      "raw_text": "Sai (S)",
+      "confidence": 0.92,
+      "ambiguity_flags": [
+        {
+          "code": "reward_character_not_linked",
+          "field": "rewards[0].character_id",
+          "detail": "The unlocked character name is visible in the snapshot, but the current fixture set does not include a normalized Sai record.",
+          "severity": "info"
+        }
+      ]
+    }
+  ],
+  "prerequisites": [
+    {
+      "prerequisite_type": "mission",
+      "ref_id": null,
+      "raw_text": "The Prodigal Son Returns",
+      "confidence": 0.74,
+      "ambiguity_flags": [
+        {
+          "code": "prerequisite_id_not_normalized",
+          "field": "prerequisites[0].ref_id",
+          "detail": "The group payload provides the prerequisite mission name but not a normalized mission id.",
+          "severity": "info"
+        }
+      ]
+    },
+    {
+      "prerequisite_type": "mission",
+      "ref_id": null,
+      "raw_text": "A Girl Grown Up",
+      "confidence": 0.74,
+      "ambiguity_flags": [
+        {
+          "code": "prerequisite_id_not_normalized",
+          "field": "prerequisites[1].ref_id",
+          "detail": "The group payload provides the prerequisite mission name but not a normalized mission id.",
+          "severity": "info"
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_index": 1,
+      "text": "Win 10 battles with any Ninja of the Team 7.",
+      "requirement_refs": [
+        "req_mission_a_blank_slate_1"
+      ],
+      "confidence": 0.74,
+      "ambiguity_flags": [
+        {
+          "code": "viewer_progress_removed_from_step",
+          "field": "steps[0].text",
+          "detail": "The detail payload includes progress markup '(10/10)', which the public-fact fixture strips from the step text.",
+          "severity": "info"
+        }
+      ]
+    }
+  ],
+  "source_refs": [
+    {
+      "source_id": "src_mission_group_a_blank_slate",
+      "url": "https://www.naruto-arena.site/missions/shippuuden-missions",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:10.320412+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/missions/groups/shippuuden-missions.json",
+      "raw_text_hash": null,
+      "section": "pageProps.animeMissions[?linkTo='a-blank-slate']",
+      "version_label": null
+    },
+    {
+      "source_id": "src_mission_detail_a_blank_slate",
+      "url": "https://www.naruto-arena.site/mission/a-blank-slate",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "public",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:10.977337+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/missions/details/a-blank-slate.json",
+      "raw_text_hash": null,
+      "section": "pageProps.missionStatus",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "A Blank Slate | level requirement: 21 | rank requirement: Anbu | unlocked character: Sai (S) | progress: Win 10 battles with any Ninja of the Team 7. (10/10)",
+    "fragments": [
+      {
+        "field": "level_requirement",
+        "text": "21",
+        "source_ref_id": "src_mission_group_a_blank_slate"
+      },
+      {
+        "field": "rewards[0].raw_text",
+        "text": "Sai (S)",
+        "source_ref_id": "src_mission_group_a_blank_slate"
+      },
+      {
+        "field": "steps[0].text",
+        "text": "Win 10 battles with any Ninja of the Team 7. (10/10)",
+        "source_ref_id": "src_mission_detail_a_blank_slate"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.76,
+    "confidence_reasons": [
+      "The current snapshot provides a mission group row and a detail payload for this mission.",
+      "The requirement text is present only in a session-aware detail payload that includes viewer progress markup."
+    ],
+    "ambiguity_flags": [],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "description",
+      "requirements[0].character_refs",
+      "rank_requirement.numeric_rank"
+    ],
+    "notes": [
+      "Prerequisite mission names are preserved as raw text because the sample set does not include normalized mission ids for those references."
+    ]
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "id": "user_progress_rasslabsya4el_missions",
+  "record_type": "user_progress",
+  "record_family": "user_state",
+  "account_id": "rasslabsya4el",
+  "account_name": "Rasslabsya4el",
+  "capture_scope": "missions",
+  "observed_at": "2026-04-24T17:06:10.977337+00:00",
+  "mission_states": [
+    {
+      "mission_id": "mission_a_blank_slate",
+      "mission_name": "A Blank Slate",
+      "availability_state": "available",
+      "completion_state": "completed",
+      "completed_requirements": [
+        {
+          "requirement_id": "req_mission_a_blank_slate_1",
+          "description": "Win 10 battles with any Ninja of the Team 7. (10/10)",
+          "is_completed": true
+        }
+      ],
+      "total_requirement_count": 1,
+      "completed_requirement_count": 1,
+      "raw_text": "A Blank Slate | isAvailable=true | isCompleted=true | progress: Win 10 battles with any Ninja of the Team 7. (10/10)"
+    },
+    {
+      "mission_id": "mission_a_new_found_skin",
+      "mission_name": "A New-Found Skin",
+      "availability_state": "available",
+      "completion_state": "not_completed",
+      "completed_requirements": [],
+      "total_requirement_count": null,
+      "completed_requirement_count": null,
+      "raw_text": "A New-Found Skin | isAvailable=true | isCompleted=false"
+    }
+  ],
+  "unlock_state": {
+    "character_ids": [],
+    "mission_ids": [],
+    "border_ids": [],
+    "raw_text": null
+  },
+  "source_refs": [
+    {
+      "source_id": "src_user_progress_a_blank_slate_detail",
+      "url": "https://www.naruto-arena.site/mission/a-blank-slate",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "session_aware",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:10.977337+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/missions/details/a-blank-slate.json",
+      "raw_text_hash": null,
+      "section": "pageProps.missionStatus.progress",
+      "version_label": null
+    },
+    {
+      "source_id": "src_user_progress_a_blank_slate_group",
+      "url": "https://www.naruto-arena.site/missions/shippuuden-missions",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "session_aware",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:10.320412+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/missions/groups/shippuuden-missions.json",
+      "raw_text_hash": null,
+      "section": "pageProps.animeMissions[?linkTo='a-blank-slate']",
+      "version_label": null
+    },
+    {
+      "source_id": "src_user_progress_a_new_found_skin_group",
+      "url": "https://www.naruto-arena.site/missions/d-and-c-rank-missions",
+      "canonical_domain": "www.naruto-arena.site",
+      "visibility": "session_aware",
+      "capture_mode": "next_data",
+      "retrieved_at": "2026-04-24T17:06:09.434218+00:00",
+      "snapshot_path": "snapshots/raw/site_capture/latest/missions/groups/d-and-c-rank-missions.json",
+      "raw_text_hash": null,
+      "section": "pageProps.animeMissions[?linkTo='a-new-found-skin']",
+      "version_label": null
+    }
+  ],
+  "raw_text": {
+    "primary": "Mission-state sample for Rasslabsya4el extracted from session-aware mission payloads.",
+    "fragments": [
+      {
+        "field": "mission_states[0].raw_text",
+        "text": "A Blank Slate | isAvailable=true | isCompleted=true | progress: Win 10 battles with any Ninja of the Team 7. (10/10)",
+        "source_ref_id": "src_user_progress_a_blank_slate_detail"
+      },
+      {
+        "field": "mission_states[1].raw_text",
+        "text": "A New-Found Skin | isAvailable=true | isCompleted=false",
+        "source_ref_id": "src_user_progress_a_new_found_skin_group"
+      }
+    ]
+  },
+  "parse": {
+    "parser_version": "task-schema-validate-02-fixture",
+    "confidence": 0.73,
+    "confidence_reasons": [
+      "The mission group and detail payloads expose account-specific availability and completion state for the captured user.",
+      "The current snapshot does not include a separate unlock inventory payload, so unlock_state remains empty."
+    ],
+    "ambiguity_flags": [
+      {
+        "code": "unlock_inventory_not_captured",
+        "field": "unlock_state",
+        "detail": "No dedicated unlock-state payload is present in the current raw snapshot.",
+        "severity": "warning"
+      }
+    ],
+    "unsupported_version": false,
+    "normalized_at": "2026-04-24T19:45:00+02:00",
+    "provisional_fields": [
+      "unlock_state"
+    ],
+    "notes": [
+      "This fixture intentionally keeps user-state data separate from mission.public_fact records."
+    ]
+  }
+}

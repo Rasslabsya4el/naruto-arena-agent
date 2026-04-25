@@ -1,0 +1,62 @@
+task_id: TASK-MISSION-RANK-CEILING-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-RANK-CEILING-01\TASK-MISSION-RANK-CEILING-01.task.txt
+
+summary:
+- Implemented default progression-safe mission and mission-pool planning by deriving character unlock bands from accepted mission rewards and bounding eligible roster by the highest resolved mission rank.
+- Added explicit higher-rank override support through optimize_mission_pool.py --include-higher-rank, with the override surfaced in the JSON payload.
+- Added runtime progression surfaces to character search, team report members, mission-pool buckets, and mission-pool validation.
+
+changed_files:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\scripts\search_characters.py
+- C:\Coding\Naruto arena agent\scripts\team_candidate_report.py
+- C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py
+- C:\Coding\Naruto arena agent\scripts\validate_team_helpers.py
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-RANK-CEILING-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\search_characters.py scripts\team_candidate_report.py scripts\optimize_mission_pool.py scripts\validate_team_helpers.py scripts\validate_mission_pool.py
+  result: success; all changed Python modules compiled with no output.
+- command: python scripts\validate_team_helpers.py
+  result: success; status ok, failures=[], and representative search/team payloads now include derived progression surfaces while preserving skill-local runtime boundaries and no static best-team fields.
+- command: python scripts\validate_mission_pool.py
+  result: success; status ok, failures=[]. New progression_ceiling section proved low-rank Genin ceiling, higher-rank Sannin ceiling expansion, and explicit override behavior.
+- command: python scripts\optimize_mission_pool.py "A Girl Grown Up"
+  result: success; compact evidence: mode=conservative_mission_rank_ceiling, ceiling=Genin, allowed_rank_labels=[Academy Student, Genin], allowed_character_count=33, blocked_later_rank_count=163, bucket_members=[[character:haruno-sakura]], bucket_fits_roster_ceiling=[true].
+- command: python scripts\optimize_mission_pool.py "A Cautious Blade in the Cloud"
+  result: success; compact evidence: mode=conservative_mission_rank_ceiling, ceiling=Sannin, allowed_rank_labels=[Academy Student, Genin, Chuunin, Missing-Nin, Anbu, Jounin, Sannin], allowed_character_count=190, blocked_later_rank_count=6, and Jinchuuriki stays excluded by default.
+- command: python scripts\optimize_mission_pool.py --include-higher-rank "A Girl Grown Up"
+  result: success; compact evidence: mode=explicit_higher_rank_override, ceiling=Genin, allowed_rank_labels=[Academy Student, Genin, Chuunin, Missing-Nin, Anbu, Jounin, Sannin, Jinchuuriki], allowed_character_count=196, blocked_later_rank_count=0.
+- command: python scripts\search_characters.py "" --max-unlock-rank Genin --limit 200
+  result: success; total_matches=33, displayed_count=33, allowed_rank_labels_in_results=[Academy Student, Genin], proving the character search helper can supply progression-bounded filler/substitution candidates.
+- command: python scripts\optimize_mission_pool.py --help
+  result: success; help exposes --include-higher-rank with default conservative ceiling wording.
+- command: python scripts\search_characters.py --help
+  result: success; help exposes --max-unlock-rank and --include-unknown-unlock-rank.
+- command: python scripts\validate_schemas.py
+  result: not run; schema-layer files were not changed.
+- command: python scripts\validate_skill_reference_bundle.py
+  result: not run; skill-local bundle artifacts were not changed.
+
+completed_acceptance:
+- Default mission-team and mission-pool planning now builds a progression_contract from resolved mission rank_requirement values and the accepted mission reward unlock graph.
+- Low-rank mission requests do not silently open Sannin or later units by default; the Genin proof for A Girl Grown Up allows only Academy Student/Genin mission rewards plus base/unlisted characters and blocks 163 later-rank mission rewards.
+- Higher-rank mission requests expand only to the requested mission band; the Sannin proof allows Sannin rewards but still blocks Jinchuuriki rewards.
+- The explicit override path is implemented and visible: --include-higher-rank sets mode=explicit_higher_rank_override and reports that no conservative ceiling was applied.
+- Single-mission and mission-pool paths share the same progression_contract in optimize_mission_pool.py.
+- Search and team-report helper output now includes derived progression metadata so runtime recommendations, substitutions, and flex-slot choices can be bounded without relying only on prompt prose.
+- If mission rank cannot be recognized, the planner records rank_ceiling_unavailable_base_only and avoids silently widening to the full late-rank roster.
+- The skill entrypoint now requires a Progression Scope section for mission and mission-pool answers and documents the override rule.
+
+limitations:
+- The accepted local mission bundle uses rank labels such as Academy Student, Genin, Chuunin, Missing-Nin, Anbu, Jounin, Sannin, and Jinchuuriki; it does not expose C/D mission-rank labels, so the low-rank proof used Genin A Girl Grown Up.
+- Character availability in character records remains unknown from the character snapshot. The new progression surface is derived from mission reward unlocks; characters not listed as mission rewards are treated as base or unlisted mission-reward roster for conservative planning.
+- optimize_mission_pool.py still does not invent full three-member teams for open flex slots. It leaves flex slots open and exposes a bounded search/filter surface for progression-safe filler or substitution selection.
+- No normalized data, schema files, or skill-local reference bundle artifacts were changed.
+
+follow_up_needed: no
+follow_up:
+- No follow-up is required for this task. Future work that wants fully filled three-member mission teams should add a separate conservative filler-selection task that consumes search_characters.py --max-unlock-rank and keeps filler rationale distinct from exact mission coverage.

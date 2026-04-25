@@ -1,0 +1,76 @@
+task_id: TASK-E2E-MVP-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-MVP-01\TASK-E2E-MVP-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-E2E-MVP-01\RESULT.txt
+
+validation:
+- command: git status --short --branch
+  result: ran before validation/edit; repo is on master with no commits yet and the expected bootstrap tree is untracked.
+- command: python scripts\validate_skill_reference_bundle.py
+  result: success; status ok. Confirmed skill-local reference bundle at C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references has 196 character records, 179 mission records, 877 skills, 122 explicit unknown mission-objective records, 2 excluded disabled zero-skill characters, 1260 source refs, preserved canonical guardrails, source-map linkage, and data-quality reporting.
+- command: python scripts\validate_team_helpers.py
+  result: success; status ok. Confirmed search/team helpers use the skill-local bundle, preserve role/chakra/strength/weakness/substitution/data-quality/provenance surfaces, and omit authoritative score or best-team fields.
+- command: python scripts\validate_mission_pool.py
+  result: success; status ok. Confirmed grouped exact coverage, forced split behavior, soft-fit-only uncertainty, unknown-objective carry-through, blocked unresolved-query behavior, helper-boundary reuse, and no opaque ranking fields.
+- command: python scripts\search_characters.py "Uzumaki Naruto" --limit 8
+  result: success; resolved 2 local candidates: Uzumaki Naruto and Uzumaki Naruto (S), both sourced to https://www.naruto-arena.site/characters-and-skills and carrying visible data-quality tags. This proves character identity ambiguity and uncertainty can be surfaced instead of silently guessed.
+- command: python scripts\team_candidate_report.py "Uzumaki Naruto" "Uchiha Sasuke" "Haruno Sakura"
+  result: success; resolved all 3 members. Output exposed role_matrix, Control-Pressure Shell / Pressure With Stabilizers / Setup-Support Shell identity hints, medium tai/nin/random chakra-pressure weaknesses, substitution hooks, data-quality warnings, and provenance hooks. This is the best representative build-around and grouped-mission team surface.
+- command: python scripts\team_candidate_report.py "Uzumaki Naruto" "Uchiha Sasuke (S)" "Haruno Sakura"
+  result: success; resolved all 3 members and exposed a high nin chakra-pressure weakness caused by Uchiha Sasuke (S), plus a 3-cost nin/random expensive skill. This gives a concrete rejected-candidate/diagnosis failure mode.
+- command: python scripts\optimize_mission_pool.py "A Dishonored Shinobi"
+  result: success; mission resolved exactly. Requirements were "Win 8 battles with Uzumaki Naruto." and "Win 3 battles in a row with Umino Iruka." Planner returned one fully covered bucket with Umino Iruka + Uzumaki Naruto and 1 flex slot, coverage_matrix status fully_covered_by_one_bucket, no unknown requirements, and canonical mission URLs.
+- command: python scripts\team_candidate_report.py "Uzumaki Naruto" "Umino Iruka" "Haruno Sakura"
+  result: success; validates a concrete full-team option for the A Dishonored Shinobi required core plus a Sakura flex. Output exposed control/pressure/protection/setup/sustain roles, medium chakra-pressure weaknesses, substitution hooks, data-quality warnings, and provenance hooks.
+- command: python scripts\optimize_mission_pool.py "Survival" "A Girl Grown Up" "Medical Training"
+  result: success; all 3 missions resolved exactly. Planner returned 1 bucket with Haruno Sakura + Uchiha Sasuke + Uzumaki Naruto, covering all 4 exact requirement units. Coverage matrix marked Survival, A Girl Grown Up, and Medical Training as fully_covered_by_one_bucket; this proves grouped-coverage output rather than vague "one team covers most" language.
+- command: python scripts\optimize_mission_pool.py "A Blank Slate"
+  result: success; mission resolved, but exact_requirement_unit_count=0 and coverage_bucket_count=0. Coverage matrix status was uncertain_soft_fit_only with soft_fit_requirement_ids=[mission:a-blank-slate:req:01] and warning "Mission has text-only or unmodeled soft-fit hints that cannot be proven as exact coverage." This proves soft/uncertain mission data is not falsely converted into exact coverage.
+- command: python scripts\search_characters.py --role-hint control --exclude-chakra-type nin --limit 5
+  result: success; returned 63 possible no-nin control candidates and displayed examples including Aburame Shino (S), Akadou Yoroi, Akatsuchi (S), Chiyo (S), and Demon Brothers, each with visible data-quality and provenance fields. This supports a minimal-fix path for the high-nin diagnosis prompt without inventing substitutions.
+
+completed_acceptance:
+- Delegation instruction honored: delegation_inside_task was "No", so NO_VALID_SUBAGENT_SPLIT was used and no subagents were spawned.
+- Representative prompt class: build around a character.
+  prompt: "Build a practical ladder team around Uzumaki Naruto."
+  observation: pass with caveat. Search resolves both Uzumaki Naruto and Uzumaki Naruto (S), so a compliant answer must state the ambiguity and proceed with the exact base character if chosen. Team 7 helper output supports Recommendation, Team Identity, Why These Characters Fit, Mission Coverage, Substitutions, and Confidence / Data Gaps. First Turns, Good Matchups, and Bad Matchups can be produced as strategic inference from role/chakra/effect surfaces, but are not direct fields in the helper output.
+- Representative prompt class: build for a mission.
+  prompt: "Build a team for A Dishonored Shinobi."
+  observation: pass with caveat. Planner resolves the mission, exact requirements, coverage basis, coverage matrix, and source URLs. It correctly leaves one flex slot open. A concrete Naruto + Iruka + Sakura team report can ground a full recommended team, but the Sakura flex choice is strategic inference and must be labeled as such.
+- Representative prompt class: optimize a mission pool.
+  prompt: "Optimize teams for Survival, A Girl Grown Up, and Medical Training."
+  observation: pass. The planner returns the accepted grouped-coverage surface: one bucket, Team 7 exact core, per-mission coverage_matrix rows, exact requirement counts, source URLs, weakness/data-quality surfaces, and no vague aggregate coverage claim.
+- Representative prompt class: diagnose or improve an existing team.
+  prompt: "Diagnose Uzumaki Naruto / Uchiha Sasuke (S) / Haruno Sakura and suggest the smallest fix."
+  observation: pass with caveat. Team report identifies the main structural issue as high nin chakra pressure, while still acknowledging the team has control/pressure/protection/resource surfaces. Search helper can produce no-nin control replacement candidates. The final answer must choose or present substitutions as inference from the search output, not as an authoritative best-team list.
+- Representative prompt class: explain mechanics or character difference.
+  prompt: "What is the practical difference between Uzumaki Naruto and Uzumaki Naruto (S)?"
+  observation: pass with caveat. Search output separates confirmed bundle facts: base Naruto has pressure/control/sustain/setup/protection role hints; Naruto (S) adds resource in role hints; both share random/nin/tai top chakra types and both carry effect_target_unknown and effect_type_heuristic tags. Provenance resolves to the canonical characters-and-skills source. Any claim about "better" version or matchup use must be framed as strategic inference, not confirmed mechanics.
+- Grounding check across all prompt classes: pass. Every mechanics-bearing command reported C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references as the source directory or used helper/planner code already validated to use that directory.
+- Uncertainty check across all prompt classes: pass. Character data-quality tags, mission soft-fit warnings, unknown-objective policy, and source URLs stayed visible in the evidence surfaces.
+- Mission-pool grouped-coverage check: pass. The grouped prompt produced explicit bucket and per-mission matrix rows.
+- Diagnosis structural-issue check: pass. The high-nin candidate produced a concrete biggest issue instead of a fake rebuild.
+- Mechanics provenance check: pass. Character and mission evidence resolved to canonical naruto-arena.site URLs through helper/planner provenance surfaces.
+
+mvp_status_conclusion:
+- The project is genuinely close to MVP. The validated local bundle, helper layer, and mission-pool planner can ground every declared MVP request class without model-memory mechanics or static best-team tables.
+- Ready/proven now: skill-local bundle integrity, character search, candidate team reports, mission requirement resolution, grouped mission-pool coverage, split/unknown/soft-fit handling, provenance hooks, data-quality surfacing, and practical weakness/substitution surfaces.
+- Still weak: final natural-language answer composition is not regression-tested as a transcript harness. The helper/planner evidence supports the required sections, but sections like First Turns, Good Matchups, Bad Matchups, and exact flex-slot choice still require model inference and discipline from SKILL.md.
+- TASK-DOCS-FINALIZE-01 is justified next only if the docs state this exact proven scope and residual risks. It is not justified if it would claim exhaustive strategic correctness, fully automated prompt regression, or guaranteed coverage for unknown/soft-fit mission objectives.
+
+limitations:
+- This task was validation-only and did not modify runtime code, skill docs, references, scripts, or project docs.
+- No external Naruto Arena pages or model-memory mechanics were used as evidence.
+- No full natural-language answer transcript fixture was created, because write_scope allowed only this RESULT.txt.
+- Prompt checks prove that the local evidence surfaces can support compliant answers; they do not prove every future Codex response will preserve the required sections without a transcript/checklist harness.
+- Many character records carry accepted data-quality tags, and 122 mission records still have explicit unknown objectives, so broad mission/meta claims remain unsafe.
+- Initial manual CLI attempts using --query and --mission failed because the helpers use positional arguments; those failed invocations were not counted as product validation evidence.
+
+follow_up_needed: yes
+follow_up:
+- Add a narrow TASK-E2E-ANSWER-SAMPLES-01 or equivalent prompt-transcript/checklist task if the orchestrator wants regression evidence for final prose sections before declaring MVP complete.
+- If mission answers need fully concrete three-member teams every time, add a bounded planner/helper follow-up for transparent flex-slot suggestion; current behavior correctly leaves flex slots open unless exact requirements prove a member.
+- In TASK-DOCS-FINALIZE-01, document that unknown-objective and soft-fit missions are supported as uncertainty surfaces, not guaranteed solved mission plans.

@@ -1,0 +1,68 @@
+task_id: TASK-SCHEMA-PLAN-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Draft normalized data schema and validator plan for Naruto Arena team-building references.
+- Do not implement schema files, validators, scraper, or skill code.
+
+why_now:
+- Product requirements already define the needed reasoning surfaces, and implementation needs a schema direction before extraction code starts.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-REPO-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-01
+- Any application source/runtime files.
+
+acceptance:
+- Propose JSON record shapes for characters, skills, costs, cooldowns, classes, effects, tags, missions, source references, raw text, parse confidence, and ambiguity flags.
+- Propose effect taxonomy and tag definition strategy without inventing game mechanics.
+- Propose validators that catch missing source URLs, unsupported versions, silent parse drops, undefined tags, invalid costs/cooldowns, and low-confidence records.
+- Identify what must be refined after site reconnaissance.
+- Keep data model separate from team recommendation reasoning.
+
+validation:
+- Compare proposal against product source of truth and source prompt requirements.
+- Confirm changed files are only within write_scope.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-PLAN-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

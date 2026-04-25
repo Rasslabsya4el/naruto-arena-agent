@@ -1,0 +1,83 @@
+task_id: TASK-BROWSER-RUNTIME-FIX-01-FOLLOWUP-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+parent_task_id: TASK-BROWSER-RUNTIME-FIX-01
+
+correction_reason:
+- Runtime diagnosis is complete.
+- The next step is to apply the least-risk `nvm` fix path and verify Browser Use bootstrap.
+
+goal:
+- Apply a compatible Node runtime for Browser Use / `node_repl` and verify that Browser Use can bootstrap.
+- Do not inspect or navigate the Naruto Arena site in this task.
+
+why_now:
+- Public browser validation is blocked solely by the local Node runtime.
+- Schema work can continue in parallel, but browser acquisition cannot proceed until this runtime blocker is removed.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\browser-runtime-fix-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Users\user\.codex\plugins\cache\openai-bundled\browser-use\0.1.0-alpha1\skills\browser\SKILL.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01\RESULT-01.txt
+- C:\Coding\Naruto arena agent\.orchestrator\browser-runtime-fix-report-01.md
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04
+- Any Naruto Arena site data files, scraper, normalizer, validator, skill runtime, or product implementation files.
+- Any credentials, cookies, tokens, browser session stores, or auth files.
+
+confirmation_policy:
+- Installing Node, switching the active `nvm` version, or setting `NODE_REPL_NODE_PATH` requires explicit user confirmation inside the worker thread immediately before the change.
+- If confirmation is not present, do not change the system; return blocked with the exact commands needed.
+
+allowed_runtime_changes:
+- `nvm install 22.22.0`
+- `nvm use 22.22.0`
+- if still needed after verification, set `NODE_REPL_NODE_PATH` to the compatible `nvm` path
+
+acceptance:
+- Ask for explicit confirmation in the worker thread immediately before any runtime/system change.
+- If confirmed, install/use Node `22.22.0` or newer through `nvm`.
+- Verify `node --version` resolves to a compatible version.
+- Verify Browser Use / `node_repl` `iab` bootstrap starts successfully.
+- If bootstrap still fails, document the exact remaining blocker.
+- Do not navigate to `https://www.naruto-arena.site/` in this task.
+
+validation:
+- `node --version`
+- minimal Browser Use / `node_repl` `iab` bootstrap check
+- confirm changed files are only within write_scope unless the user explicitly confirmed the runtime change
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01\RESULT-01.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

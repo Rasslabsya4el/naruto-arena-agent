@@ -1,0 +1,31 @@
+task_id: TASK-EXTRACT-CHARACTERS-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\normalize_characters.py
+  result: success; exit code 0 with no output.
+- command: python scripts\normalize_characters.py
+  result: success; wrote C:\Coding\Naruto arena agent\data\normalized\characters.json with 198 records. Raw snapshot entries without skill data were preserved for Shinobi Alliance Kakashi (S) and Edo Tensei Itachi (S).
+- command: python -c "import json, pathlib; records = json.loads(pathlib.Path(r'data/normalized/characters.json').read_text(encoding='utf-8')); print(json.dumps({'record_count': len(records), 'skillless_records': [record['name'] for record in records if not record['skills']]}, ensure_ascii=False))"
+  result: success; JSON loaded and reported {"record_count": 198, "skillless_records": ["Shinobi Alliance Kakashi (S)", "Edo Tensei Itachi (S)"]}.
+
+completed_acceptance:
+- Generated C:\Coding\Naruto arena agent\data\normalized\characters.json with 198 normalized character records, matching the captured character count from the listed raw snapshot.
+- Each normalized record keeps canonical source refs, raw text fragments, parse/confidence metadata, and deterministic ids derived from canonical names.
+- Availability remains explicitly unknown where the listed snapshot does not prove unlock data, and noisy class tokens are preserved via raw text plus ambiguity metadata instead of invented mechanics.
+- Session-aware progression or completion state was not included in the output.
+
+limitations:
+- Two raw snapshot entries are temporarily disabled characters and contain zero skills: Shinobi Alliance Kakashi (S) and Edo Tensei Itachi (S). They were preserved as-is, so these records do not satisfy the current character schema expectation of at least one skill.
+- Character availability and unlock-mission linkage are not provable from the listed character snapshot or mission overview, so availability stays unknown for all records.
+- Skill effect records are sentence-level heuristic parses from raw descriptions and may need tighter downstream validation/taxonomy work.
+
+follow_up_needed: yes
+follow_up:
+- Decide whether the current schema/validator should allow zero-skill temporarily disabled characters or treat them as documented exceptions.
+- Add a later schema-validation or fixture-review task for the generated character bundle, especially around heuristic effect parsing and future unlock-data enrichment.

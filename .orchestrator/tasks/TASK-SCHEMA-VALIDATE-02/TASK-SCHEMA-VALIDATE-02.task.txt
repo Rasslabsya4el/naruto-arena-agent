@@ -1,0 +1,86 @@
+task_id: TASK-SCHEMA-VALIDATE-02
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Validate the new Naruto Arena schema set with cross-file reference resolution and representative fixture payloads derived from the current raw snapshot.
+- Do not implement ingestion, scraper, or skill runtime code.
+
+why_now:
+- Concrete schema files are accepted as the baseline, but their cross-file behavior and representative payload fit against the current raw snapshot are not yet proven.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\ladder-entry.schema.json
+- C:\Coding\Naruto arena agent\schemas\profile-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\clan-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\user-progress.schema.json
+- C:\Coding\Naruto arena agent\.orchestrator\schema-proposal.md
+- C:\Coding\Naruto arena agent\.orchestrator\site-parse-recon-report.md
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\manifest.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\overview.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\overview.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\groups
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\details
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\ladders\ninja.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\profiles\rasslabsya4el.json
+
+write_scope:
+- C:\Coding\Naruto arena agent\schemas\fixtures\character.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\mission.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\ladder-entry.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\profile-public.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\clan-public.sample.json
+- C:\Coding\Naruto arena agent\schemas\fixtures\user-progress.sample.json
+- C:\Coding\Naruto arena agent\scripts\validate_schemas.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-VALIDATE-02\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01
+- Any scraper, normalizer, raw ingestion script, skill runtime, or product implementation files outside the declared write scope.
+
+acceptance:
+- Create representative fixture JSON files for each current schema family using only fields justified by the current raw snapshot and schema definitions.
+- Add a small validation script that resolves the schema files and validates the fixture files against them.
+- Prove cross-file refs resolve successfully.
+- Keep public-fact fixtures separate from the user-progress fixture.
+- Do not invent stronger site guarantees than the captured snapshot supports.
+
+validation:
+- Run the schema validation script successfully against all fixture files.
+- Confirm changed files are only within write_scope.
+- Summarize any schema fields kept provisional because browser evidence is still missing.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-VALIDATE-02\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

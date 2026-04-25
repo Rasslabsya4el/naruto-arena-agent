@@ -1,0 +1,42 @@
+task_id: TASK-MISSION-POOL-VALIDATE-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\TASK-MISSION-POOL-VALIDATE-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-MISSION-POOL-VALIDATE-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\validate_mission_pool.py
+  result: success; validate_mission_pool.py compiled with no output.
+- command: python scripts\validate_mission_pool.py --help
+  result: success; CLI help exposes the dedicated grouped, split, unknown-objective, soft-fit-only, blocked-query, helper-boundary, and no-opaque-ranking validator purpose.
+- command: python scripts\validate_mission_pool.py
+  result: success; validator returned status ok with failures=[].
+  grouped_exact_coverage: Survival, A Girl Grown Up, and Medical Training resolved from C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references; exact_requirement_unit_count=4, coverage_bucket_count=1, uncertain_mission_count=0, required_member_ids=character:haruno-sakura, character:uchiha-sasuke, character:uzumaki-naruto, and all three coverage_matrix statuses were fully_covered_by_one_bucket.
+  split_and_unknown_objective: Survival, A Dishonored Shinobi, and A Cautious Blade in the Cloud resolved; exact_requirement_unit_count=3, coverage_bucket_count=2, required exact character union was character:haruno-sakura, character:uchiha-sasuke, character:umino-iruka, character:uzumaki-naruto, split_rationale reported required_character_count=4 with team_size=3, A Dishonored Shinobi was fully_covered_split_across_buckets, and A Cautious Blade in the Cloud stayed uncertain_unknown_requirements with no covered_requirement_ids.
+  soft_fit_only: A Blank Slate resolved with exact_requirement_unit_count=0, coverage_bucket_count=0, uncertain_mission_count=1, coverage_status=uncertain_soft_fit_only, and soft_fit_requirement_ids=[mission:a-blank-slate:req:01] without fake exact coverage.
+  blocked_query: Definitely Not A Mission returned planner exit code 2 with status=blocked, mission_resolutions[0].status=not_found, candidates=[], no guessed mission object, and no coverage_buckets/coverage_matrix/mission_analyses planning surfaces.
+  helper_boundary: validator confirmed optimize_mission_pool.DEFAULT_REFERENCES_DIR resolves to the skill-local bundle, imported helper function identity is shared with search_characters.py and team_candidate_report.py, representative output reports the skill-local references_dir, and bucket team_surface exposes role_matrix, chakra_curve, strength_notes, weakness_notes, substitution_hooks, data_quality_warnings, and provenance_hooks.
+  forbidden_fields: representative planner payloads and optimize_mission_pool.py source contained no authoritative_score, best_team, recommended_team, selected_team, team_database, score/scores, or team_score/team_scores markers; planning_contract.coverage_basis remains exact-ref based.
+
+completed_acceptance:
+- Implemented C:\Coding\Naruto arena agent\scripts\validate_mission_pool.py as a dedicated validator for C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py.
+- The validator proves grouped exact mission requirements collapse into one bucket when compatible.
+- The validator proves incompatible exact mission pools split across multiple buckets when the exact required character union exceeds the configured practical team size.
+- The validator proves unknown-objective missions remain uncertain, carry through mission_analyses and uncertain_missions, and are not counted as covered.
+- The validator proves soft-fit-only missions remain soft-fit warnings with no fake exact buckets or covered requirements.
+- The validator proves unresolved mission queries return blocked payloads instead of guessed matches.
+- The validator proves the planner still uses the accepted skill-local reference directory and helper/runtime boundary from search_characters.py and team_candidate_report.py.
+- The validator proves representative payloads and planner source do not expose authoritative score fields, best-team fields, or opaque ranking surfaces.
+- The task kept C:\Coding\Naruto arena agent\scripts\optimize_mission_pool.py and all reference/data/doc artifacts unchanged.
+
+limitations:
+- Validation is intentionally representative and contract-focused, not exhaustive over every mission combination in the bundle.
+- The forbidden ranking check is conservative: it checks representative payload keys plus current planner source markers, not a formal semantic proof.
+- The validator is standalone and is not yet wired into a repo-level validation wrapper.
+
+follow_up_needed: no
+follow_up:
+- None.

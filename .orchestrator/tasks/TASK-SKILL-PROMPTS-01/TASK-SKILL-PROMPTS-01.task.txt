@@ -1,0 +1,88 @@
+task_id: TASK-SKILL-PROMPTS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Extend the accepted base skill entrypoint with the concrete user-facing prompt/output behavior for the MVP request classes without weakening the already accepted local-reference-only runtime contract.
+- Make the skill answer shape specific enough that later helper logic and e2e validation can judge product quality instead of generic advice.
+
+why_now:
+- The base skill runtime contract is now accepted, so the next blocker before helper logic and e2e proof is the absence of a concrete response surface for the core user scenarios.
+- This task turns the validated data/runtime layer into an actual product-facing answering contract.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-BASE-01\RESULT.txt
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+- C:\Users\user\Documents\Codex\2026-04-24\new-chat-2\naruto_arena_orchestrator_prompt.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\SKILL.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references
+- C:\Coding\Naruto arena agent\docs
+
+acceptance:
+- Extend `skills\naruto-arena-team-builder\SKILL.md` with concrete answer-shape rules for the accepted MVP request classes: build around a character, build for a mission, optimize a mission pool, diagnose or improve a team, and explain mechanics.
+- Preserve the already accepted load order and local-reference-only runtime contract exactly; do not weaken or replace the base anti-hallucination guardrails.
+- For team recommendations, require practical answer sections covering recommendation, team identity, why the characters fit, game plan, first turns, good matchups, bad matchups/what beats this, failure modes, mission coverage, substitutions, and confidence/data gaps.
+- For mission-specific answers, require mission resolution, requirement summary, recommended team, why the mission is covered, play plan, and explicit honesty about unknown objectives or low-confidence requirements.
+- For mission-pool answers, require grouped plan output, coverage explanation, conflict explanation, and a coverage matrix or equivalent explicit coverage surface.
+- For diagnosis answers, require verdict, biggest problem, minimal fix, broader rebuild option when needed, and mission-fit commentary if missions are part of the request.
+- For mechanic explanations, require separation between confirmed-from-data facts, strategic inference, and data gaps.
+- Keep the skill explicit that generic advice is insufficient; the answer must include practical play pattern, weaknesses, and substitutions where relevant.
+
+validation:
+- Run a targeted inspection that proves `skills\naruto-arena-team-builder\SKILL.md` now contains the concrete response-shape rules and required section surfaces for the MVP request classes.
+- Report exact checks for team recommendation sections, mission answer sections, mission-pool coverage surface, diagnosis structure, mechanics explanation split, and preservation of the local-reference-only/runtime guardrails.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SKILL-PROMPTS-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

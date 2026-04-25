@@ -1,0 +1,78 @@
+task_id: TASK-EXTRACT-MISSIONS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Normalize public mission facts from the latest canonical raw snapshot into `data/normalized/missions.json`.
+- Preserve provenance and raw text; keep user-specific availability/completion state out of the mission output.
+
+why_now:
+- Mission planning and unlock reasoning depend on structured mission records.
+- The current raw capture already includes mission groups and mission detail pages, so mission normalization can start now.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\manifest.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\overview.json
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\groups
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\details
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\overview.json
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+
+write_scope:
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\schemas
+- Any taxonomy, reference-build, skill-runtime, or team-helper files.
+
+acceptance:
+- Generate `data/normalized/missions.json` with one normalized record per captured mission detail unless an exclusion is explicitly documented.
+- Every normalized record must keep source refs, raw text, and parse/confidence metadata.
+- Keep viewer-specific availability, completion, or current-account progression state out of this output.
+- When a structured field is not directly provable from the snapshot, encode explicit unknown/ambiguity instead of inventing a value.
+- Use deterministic ids derived from canonical mission names or routes so reruns are stable.
+
+validation:
+- Run `python -m py_compile scripts\normalize_missions.py`.
+- Run `python scripts\normalize_missions.py`.
+- Confirm `data/normalized/missions.json` is valid JSON and report the produced record count.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

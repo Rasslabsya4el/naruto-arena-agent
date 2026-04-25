@@ -1,0 +1,30 @@
+task_id: TASK-EXTRACT-CHARACTERS-VALIDATE-01
+status: completed
+
+changed_files:
+- C:\Coding\Naruto arena agent\scripts\validate_character_bundle.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-VALIDATE-01\RESULT.txt
+
+validation:
+- command: python -m py_compile scripts\validate_character_bundle.py
+  result: success; exit code 0 with no output.
+- command: python scripts\validate_character_bundle.py
+  result: success; reported included_record_count=196, raw_record_count=198, excluded_raw_names=["Edo Tensei Itachi (S)", "Shinobi Alliance Kakashi (S)"], silent_drops=[], unexpected_included_names=[], duplicate_raw_names=[], duplicate_normalized_names=[], and all included record/source/raw-text checks true.
+
+completed_acceptance:
+- Added reusable validator entrypoint at C:\Coding\Naruto arena agent\scripts\validate_character_bundle.py for future reruns of C:\Coding\Naruto arena agent\data\normalized\characters.json against the raw character overview snapshot.
+- Validator cross-checks raw `pageProps.chars` names from C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\overview.json against the normalized bundle and distinguishes intentional exclusions from silent drops.
+- Confirmed the accepted normalized bundle contains 196 included records while the raw overview exposes 198 raw characters.
+- Confirmed the only excluded raw names are Edo Tensei Itachi (S) and Shinobi Alliance Kakashi (S), and raw overview evidence shows both have `raw_skill_count=0`.
+- Confirmed no silent drops were found.
+- Confirmed every included record has non-empty `skills`, usable `source_refs`, usable `raw_text`, and parse confidence, with no skill-level source-ref or raw-text gaps reported by the validator.
+
+limitations:
+- This validator proves bundle coverage and provenance readiness against the raw overview surface; it does not revalidate deeper semantic correctness of heuristic effect parsing.
+- Exclusion intent is inferred from raw overview `pageProps.chars[*].skills` counts; if the canonical overview payload shape changes, the validator will need a matching update.
+- This task did not add a bundle-level JSON Schema wrapper for the top-level array artifact; validation is implemented directly in Python.
+
+follow_up_needed: yes
+follow_up:
+- Consider wiring `python scripts\validate_character_bundle.py` into a future repo-native validation wrapper or acceptance checklist for snapshot refreshes.
+- If downstream consumers need stricter contract enforcement, add an explicit bundle-level schema or validator wrapper for the array artifact.

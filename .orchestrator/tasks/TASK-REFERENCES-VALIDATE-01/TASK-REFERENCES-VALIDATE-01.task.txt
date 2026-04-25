@@ -1,0 +1,89 @@
+task_id: TASK-REFERENCES-VALIDATE-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Add a dedicated validation path for the accepted skill-local reference bundle so later skill/runtime work depends on a proven contract instead of only a successful build run.
+- Prove that provenance, unknown-objective honesty, exclusion reporting, and required artifact surfaces remain intact inside the skill-local bundle.
+
+why_now:
+- The skill-local bundle now exists, but the project still lacks a dedicated acceptance path that freezes its contract before skill instructions start depending on it.
+- This task reduces the risk of later skill work bypassing `source-map.json` or data-quality markers.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\product-source-of-truth.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-BUILD-01\RESULT.txt
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\rules.md
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\characters.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\missions.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\tags.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\effect-taxonomy.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\source-map.json
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references\data-quality-report.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\validate_skill_reference_bundle.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-VALIDATE-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\snapshots\raw
+- C:\Coding\Naruto arena agent\scripts\build_skill_references.py
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder\references
+- Any future skill instruction files under C:\Coding\Naruto arena agent\skills\naruto-arena-team-builder outside validation reporting to RESULT.txt
+
+acceptance:
+- Implement `scripts\validate_skill_reference_bundle.py` to validate the required skill-local artifacts: `rules.md`, `characters.json`, `missions.json`, `tags.json`, `effect-taxonomy.json`, `source-map.json`, and `data-quality-report.md`.
+- The validator must prove that record counts remain 196 playable characters and 179 missions, that 122 unknown mission objectives remain explicit, and that the 2 disabled zero-skill excluded characters remain surfaced in the bundle/report layer.
+- The validator must prove that `source_ref_ids` resolve through `source-map.json`, that required provenance summary totals exist, and that bundle records do not silently drop tag/data-quality linkage.
+- The validator must check that `rules.md` still locks the canonical source to `https://www.naruto-arena.site/` and preserves the local-reference-only mechanics rule.
+- Do not rebuild or rewrite the reference bundle in this task; validate the current accepted bundle contract as-is.
+
+validation:
+- Run `python -m py_compile scripts\validate_skill_reference_bundle.py`.
+- Run `python scripts\validate_skill_reference_bundle.py --help`.
+- Run `python scripts\validate_skill_reference_bundle.py`.
+- Report the exact checks performed and a concise pass summary for artifact completeness, provenance linkage, unknown-objective reporting, and exclusion reporting.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REFERENCES-VALIDATE-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

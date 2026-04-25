@@ -1,0 +1,76 @@
+task_id: TASK-INGEST-RAW-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Harden the current canonical-site capture runner into a clearer, safer, reusable raw-ingestion contract for future snapshot refreshes.
+- Preserve compatibility with the current normalizers and manifest layout while making authenticated operator use explicit.
+
+why_now:
+- The first accepted/near-accepted normalization passes now show which snapshot families the project actually depends on.
+- Future capture refreshes should not rely on one-off operator memory or ambiguous runtime behavior.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\manifest.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-BOOTSTRAP-01\RESULT.txt
+
+write_scope:
+- C:\Coding\Naruto arena agent\scripts\capture_site.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-INGEST-RAW-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data\normalized
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- Existing raw snapshot files under C:\Coding\Naruto arena agent\snapshots\raw
+- Any taxonomy, reference-build, skill-runtime, or team-helper files.
+
+acceptance:
+- Keep the capture path limited to the canonical domain and current authenticated Playwright approach.
+- Make the operator contract for authenticated capture explicit without persisting credentials or password material into repo-tracked artifacts.
+- Preserve the snapshot families required by the current normalizers: characters, missions, ladders, manual pages, and optional profile/clan capture boundaries.
+- Make route-level fallback behavior explicit and inspectable in the produced snapshot records or manifest.
+- Prove the hardened runner can at least be invoked safely for operator help/contract inspection even when a full live capture is not rerun during the task.
+
+validation:
+- Run `python -m py_compile scripts\capture_site.py`.
+- Run `python scripts\capture_site.py --help`.
+- If you perform a live capture rerun, report it clearly and keep any output under ignored runtime paths only.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-INGEST-RAW-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Arena Ladder Entry Public Fact Record",
+  "description": "Public ranking rows from home-page leaderboards, ladder tables, and hall-of-fame style surfaces.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "./_common.schema.json#/$defs/recordId"
+    },
+    "record_type": {
+      "const": "ladder_entry"
+    },
+    "record_family": {
+      "const": "public_fact"
+    },
+    "surface": {
+      "type": "string",
+      "enum": [
+        "ninja_ladder",
+        "clan_ladder",
+        "home_top_level",
+        "home_top_wins",
+        "home_top_streak",
+        "home_best_clans",
+        "hall_of_fame",
+        "season_slot",
+        "unknown"
+      ]
+    },
+    "subject_type": {
+      "type": "string",
+      "enum": [
+        "player",
+        "clan",
+        "season_slot",
+        "unknown"
+      ]
+    },
+    "subject_id": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "subject_name": {
+      "$ref": "./_common.schema.json#/$defs/nonEmptyString"
+    },
+    "subject_abbreviation": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "subject_url": {
+      "$ref": "./_common.schema.json#/$defs/nullableCanonicalUrl"
+    },
+    "season_slot": {
+      "$ref": "./_common.schema.json#/$defs/nullableString"
+    },
+    "stats": {
+      "$ref": "./_common.schema.json#/$defs/statsBlock"
+    },
+    "source_refs": {
+      "$ref": "./_common.schema.json#/$defs/sourceRefList"
+    },
+    "raw_text": {
+      "$ref": "./_common.schema.json#/$defs/rawTextBlock"
+    },
+    "parse": {
+      "$ref": "./_common.schema.json#/$defs/parseMeta"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "record_family",
+    "surface",
+    "subject_type",
+    "subject_name",
+    "stats",
+    "source_refs",
+    "raw_text",
+    "parse"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+task_id: TASK-SCHEMA-FILES-01
+status: completed
+role_skill: $universal-subtask-worker
+source_task_file: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-FILES-01\TASK-SCHEMA-FILES-01.task.txt
+
+changed_files:
+- C:\Coding\Naruto arena agent\schemas\_common.schema.json
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\schemas\ladder-entry.schema.json
+- C:\Coding\Naruto arena agent\schemas\profile-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\clan-public.schema.json
+- C:\Coding\Naruto arena agent\schemas\user-progress.schema.json
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-FILES-01\RESULT.txt
+
+validation:
+- command: python json.load syntax check across all declared schema files
+  result: passed; all seven declared schema files exist and parse as valid JSON.
+- command: PowerShell write-scope verification against declared schema paths
+  result: passed; created files are inside the declared write_scope.
+- command: python boundary guard for record_family and session-state isolation
+  result: passed; public schemas use record_family=public_fact, user-progress uses record_family=user_state, and mission_states/unlock_state remain isolated to the user-progress schema.
+
+completed_acceptance:
+- Created concrete schema files for public character facts, mission facts, ladder entries, public profile facts, public clan facts, and session-aware user progression.
+- Added shared provenance, confidence, ambiguity, tag, chakra-cost, stats, and raw-text structures in C:\Coding\Naruto arena agent\schemas\_common.schema.json.
+- Kept session-aware fields out of public-fact schemas by reserving mission progression and unlock state for C:\Coding\Naruto arena agent\schemas\user-progress.schema.json.
+- Marked provisional parse-recon fields as optional or nullable instead of forcing unsupported guarantees, including unlock refs, mission rank details, reward refs, stats, recent match timestamps, and clan/profile links.
+- Enforced canonical provenance requirements through shared source_ref URL/domain rules limited to https://www.naruto-arena.site/.
+
+limitations:
+- This task validated JSON syntax and schema boundary intent only; no runtime validator package or sample-instance suite exists yet.
+- Cross-file $ref resolution was not exercised with a dedicated JSON Schema validator in this task.
+- Character skill mechanics are embedded inside the character schema because the task write_scope did not include a separate skill schema file.
+
+follow_up_needed: yes
+follow_up:
+- Add schema fixtures plus a validator task that resolves cross-file refs and proves representative public-fact and user-state payloads.
+- Revisit field strictness after browser validation confirms exact non-home public route rendering and prop shapes.

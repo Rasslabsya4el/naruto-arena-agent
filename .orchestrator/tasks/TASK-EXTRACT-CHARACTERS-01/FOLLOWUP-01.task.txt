@@ -1,0 +1,78 @@
+task_id: TASK-EXTRACT-CHARACTERS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+parent_task_id: TASK-EXTRACT-CHARACTERS-01
+
+correction_reason:
+- The first normalization pass produced a useful character bundle, but the current output does not satisfy `schemas/character.schema.json`.
+- Two raw snapshot entries currently have zero skills, and the schema requires `skills` to be non-empty.
+
+goal:
+- Bring `data/normalized/characters.json` into conformance with the current character schema without inventing mechanics or skills.
+- Keep the output useful for downstream team-building work.
+
+why_now:
+- Character normalization is the mainline path for MVP data, but downstream tasks should not build on a bundle that already fails the current schema contract.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\schemas\character.schema.json
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\TASK-EXTRACT-CHARACTERS-01.task.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\characters\overview.json
+
+write_scope:
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT-01.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\snapshots\raw
+- Any taxonomy, reference-build, skill-runtime, or team-helper files.
+
+acceptance:
+- `data/normalized/characters.json` validates against the current `schemas/character.schema.json`.
+- Do not invent placeholder skills or mechanics for zero-skill raw entries.
+- If zero-skill raw entries are excluded to preserve schema conformance, explicitly document which names were excluded and why in the result file.
+- Keep deterministic ids, source refs, raw text, and parse/confidence metadata for included records.
+- Keep session-aware progression or completion state out of the output.
+
+validation:
+- Run `python -m py_compile scripts\normalize_characters.py`.
+- Run `python scripts\normalize_characters.py`.
+- Run a targeted JSON Schema validation of `data/normalized/characters.json` against `schemas/character.schema.json` and report the result.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-CHARACTERS-01\RESULT-01.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

@@ -1,0 +1,82 @@
+task_id: TASK-EXTRACT-MISSIONS-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+parent_task_id: TASK-EXTRACT-MISSIONS-01
+
+correction_reason:
+- The first mission normalization pass is useful, but the current output is not acceptable as the project-owned mission bundle yet.
+- The draft output still preserves public level requirements only inside raw text and parse notes, and six mission records currently violate the schema-safe id/source-id pattern because punctuation from route slugs leaked into normalized ids.
+
+goal:
+- Bring `data/normalized/missions.json` into conformance with the accepted mission schema after mission-schema refinement lands.
+- Preserve the useful first-pass mission coverage while surfacing structured public level requirements and schema-safe deterministic ids.
+
+why_now:
+- Mission planning depends on a trustworthy normalized bundle, but downstream work should not build on records that already drop a confirmed public progression gate or fail schema id constraints.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\schemas\mission.schema.json
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\TASK-EXTRACT-MISSIONS-01.task.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-SCHEMA-MISSIONS-01\RESULT.txt
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\groups
+- C:\Coding\Naruto arena agent\snapshots\raw\site_capture\latest\missions\details
+
+write_scope:
+- C:\Coding\Naruto arena agent\data\normalized\missions.json
+- C:\Coding\Naruto arena agent\scripts\normalize_missions.py
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT-01.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\data\normalized\characters.json
+- C:\Coding\Naruto arena agent\scripts\normalize_characters.py
+- C:\Coding\Naruto arena agent\snapshots\raw
+- Any taxonomy, reference-build, skill-runtime, or team-helper files.
+
+acceptance:
+- `data/normalized/missions.json` validates against the accepted current `schemas/mission.schema.json`.
+- Structured public level requirement data is preserved in the normalized mission records instead of being kept only in `raw_text` or parse notes.
+- Deterministic mission ids, requirement ids, and source ids are schema-safe for all records, including routes whose source slugs contain punctuation.
+- Keep viewer-specific availability, completion, and current-account progression state out of the output.
+- Keep explicit unknown or hidden requirements and ambiguity flags where the canonical source does not reveal mission objective text; do not invent mechanics and do not treat such records as automatic failures.
+
+validation:
+- Run `python -m py_compile scripts\normalize_missions.py`.
+- Run `python scripts\normalize_missions.py`.
+- Run a targeted JSON Schema validation of `data/normalized/missions.json` against `schemas/mission.schema.json` and report the result.
+- Explicitly report the final record count and whether the six previously invalid mission ids were normalized into schema-safe ids.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-EXTRACT-MISSIONS-01\RESULT-01.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.
