@@ -42,7 +42,6 @@ Canonical game source is `https://www.naruto-arena.site/`. Do not use other Naru
 - The skill-local runtime bundle currently reports 196 playable character records, 179 mission records, 877 bundled skills, 1260 source references, 122 explicit unknown mission objective records, and 2 excluded disabled zero-skill raw characters.
 - The current accepted answer surface covers building around a character, building for a mission, optimizing a mission pool, diagnosing or improving an existing team, and explaining mechanics or character differences.
 - The accepted proof is representative, not exhaustive strategic correctness across every roster, mission, matchup, or account state.
-- Fresh authenticated refresh validation for hardened capture metadata remains blocked until authenticated environment variables are available.
 - The skill must not hardcode best teams as the product core.
 - Every mechanics claim must be grounded in local references with source URLs.
 - Missing or low-confidence data must be surfaced explicitly instead of guessed.

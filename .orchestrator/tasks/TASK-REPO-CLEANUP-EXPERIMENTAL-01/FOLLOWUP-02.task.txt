@@ -1,0 +1,77 @@
+task_id: TASK-REPO-CLEANUP-EXPERIMENTAL-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Complete the cleanup by deleting the exact stale experimental browser/auth-refresh artifacts that remain in the local repo.
+
+why_now:
+- The previous pass already cleaned the doc references, but stopped before deletion.
+- The user already gave direct confirmation in chat that these artifacts should not stay in the repo because they are useless test debris.
+- Do not ask again for deletion confirmation. Treat the user's earlier chat statement as the required direct confirmation.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\FOLLOWUP-01.task.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-01.txt
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+
+write_scope:
+- C:\Coding\Naruto arena agent\.orchestrator\browser-runtime-fix-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\site-browser-public-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\site-browser-recon-report.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-02
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-02.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\snapshots
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-README-PUBLISH-01
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-PARSE-03
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-INGEST-RAW-01
+- C:\Coding\Naruto arena agent\.git
+
+acceptance:
+- Delete these exact stale report files: `.orchestrator\browser-runtime-fix-report.md`, `.orchestrator\site-browser-public-report.md`, `.orchestrator\site-browser-recon-report.md`.
+- Delete these exact stale task-family directories: `.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01`, `.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-02`, `.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04`.
+- Do not modify unrelated files.
+- Result validation must prove the files and directories are gone and that the git diff now shows deletion entries.
+
+validation:
+- Run `Test-Path .orchestrator\\browser-runtime-fix-report.md`, `Test-Path .orchestrator\\site-browser-public-report.md`, and `Test-Path .orchestrator\\site-browser-recon-report.md` and confirm they all return `False`.
+- Run `Get-ChildItem .orchestrator\\tasks | Select-Object -ExpandProperty Name` and confirm the three deleted task-family directories are absent.
+- Run `git diff --name-status` and confirm deletion entries for the removed artifacts are present.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-02.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

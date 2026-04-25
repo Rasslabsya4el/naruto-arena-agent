@@ -61,5 +61,4 @@
 - The accepted bundle includes 122 source-backed unknown mission objective records.
 - Many character records carry accepted data-quality warnings, including target uncertainty and heuristic effect typing.
 - Two disabled zero-skill raw character entries are excluded from the playable bundle with audit-backed reporting.
-- Fresh authenticated refresh validation for the hardened capture metadata is still blocked until authenticated environment variables are available in the worker shell.
 - Representative answer samples prove the current answer surface can be expressed honestly, but they are not an automated transcript regression harness.

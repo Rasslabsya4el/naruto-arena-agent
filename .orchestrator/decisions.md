@@ -108,63 +108,24 @@ Use this file for durable orchestration/product decisions only.
 - `TASK-SCHEMA-FILES-01` is planned but blocked.
 - Site reconnaissance must confirm actual page/data surfaces before schema fields become durable implementation contracts.
 
-## 2026-04-24 - Authenticated Browser Recon Required - accepted
-
-### Context
-
-- Canonical site reconnaissance through scripted endpoint probing triggered platform safety checks in the worker thread.
-- User clarified that full required Naruto Arena data likely requires authenticated access.
-- User authorized use of their own account for authenticated site access, but credentials must not be persisted into repository files, task files, result files, logs, or screenshots.
-
-### Decision
-
-- Stop endpoint-probing style reconnaissance for the site task.
-- Continue site discovery through the Codex in-app browser with a normal authenticated browser session.
-- If authentication is needed, use interactive/manual login in the browser session and do not store credentials on disk.
-- Data acquisition must remain limited to the canonical domain `https://www.naruto-arena.site/`.
-
-### Consequences
-
-- The site discovery handoff is replaced with a browser-first follow-up task.
-- Workers must collect page-level evidence and data-surface notes from normal navigation/exportable rendered state, not from aggressive API guessing or bypass techniques.
-- Any Cloudflare/rate-limit/auth barrier must be documented as a product ingestion constraint, not bypassed.
-
 ## 2026-04-24 - Site Recon Thread Lost - accepted
 
 ### Context
 
 - The site recon worker thread triggered another platform safety issue and then disappeared before returning a result file.
 - No `RESULT.txt` or `RESULT-01.txt` exists under `.orchestrator/tasks/TASK-DISCOVERY-SITE-01/`.
-- The project still needs canonical-site discovery, likely requiring authenticated normal browser access.
+- The project still needs canonical-site discovery with credential-safe handling if account access is required.
 
 ### Decision
 
 - Treat the previous site recon worker thread as lost with no accepted output.
 - Do not continue that thread.
-- Create a replacement new-thread task with stricter browser-only/manual-evidence constraints.
+- Create a replacement new-thread task with stricter credential and evidence constraints.
 
 ### Consequences
 
 - Any partial chat observations from the lost thread are not accepted as durable evidence.
 - New site discovery must return a result file and must avoid shell endpoint probing or API/route enumeration.
-
-## 2026-04-24 - Browser Recon Blocked By Node Runtime - blocked
-
-### Context
-
-- `TASK-DISCOVERY-SITE-BROWSER-02` followed the browser-only policy and avoided shell endpoint probing.
-- Browser Use / node_repl initialization failed before navigation because resolved Node was `v20.19.5` and the runtime requires `>= v22.22.0`.
-- No canonical site pages were inspected and no credentials/session data were accessed.
-
-### Decision
-
-- Do not accept browser recon as site discovery evidence.
-- Treat this as an environment blocker that must be fixed before rerunning authenticated browser recon.
-
-### Consequences
-
-- Create a bounded runtime fix task for Browser Use/node_repl Node version configuration.
-- Site data acquisition remains blocked until browser recon successfully runs.
 
 ## 2026-04-24 - Site Recon Should Run On GPT-5.4 Worker - accepted
 
@@ -172,19 +133,18 @@ Use this file for durable orchestration/product decisions only.
 
 - User identified that repeated false-positive cybersecurity blocking happens when using GPT-5.5 for site parsing tasks.
 - User will run the parsing worker on GPT-5.4 instead.
-- Previous browser-only recovery path is no longer the preferred path for the next attempt.
+- Previous rendered-route recovery path is no longer the preferred path for the next attempt.
 
 ### Decision
 
-- Supersede the browser-runtime-fix path for now.
+- Supersede the runtime-fix path for now.
 - Dispatch a new normal site parsing/recon task intended for a GPT-5.4 worker.
 - Keep canonical source restriction: only `https://www.naruto-arena.site/`.
 - Do not persist credentials, cookies, tokens, or auth session data in task files or reports.
 
 ### Consequences
 
-- `TASK-BROWSER-RUNTIME-FIX-01` is no longer the immediate next blocker task.
-- New site task may use normal public HTTP/HTML/Next artifact inspection and browser navigation as needed, but must not bypass auth/rate limits/Cloudflare or use non-canonical mirrors.
+- New site task may use normal public HTTP/HTML/Next artifact inspection and rendered navigation as needed, but must not bypass auth/rate limits/Cloudflare or use non-canonical mirrors.
 
 ## 2026-04-24 - Repository Bootstrap Completed - accepted
 
@@ -214,12 +174,12 @@ Use this file for durable orchestration/product decisions only.
 ### Decision
 
 - Accept the parse recon as discovery evidence.
-- Use it to unblock schema-file implementation and refine the next browser validation task.
+- Use it to unblock schema-file implementation and later capture planning.
 
 ### Consequences
 
 - Site discovery is no longer empty; schema work can proceed from accepted evidence.
-- Raw ingestion still waits for browser validation of non-home public routes.
+- Raw ingestion still needs a credential-safe acquisition path for non-home route data.
 
 ## 2026-04-24 - Separate Public Facts From Session-Aware User State - accepted
 
@@ -235,24 +195,6 @@ Use this file for durable orchestration/product decisions only.
 
 - Schema files must not mix per-account state into public-fact records.
 - Any authenticated capture becomes a separate follow-up track, not part of baseline public ingestion.
-
-## 2026-04-24 - Public Browser Validation Blocked By Local Runtime - blocked
-
-### Context
-
-- `TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04` failed before the first navigation step.
-- Browser Use / `node_repl` resolved Node `v20.19.5`, but the browser runtime requires `>= 22.22.0`.
-- No canonical browser evidence was collected.
-
-### Decision
-
-- Treat this as an environment blocker, not a site-access blocker.
-- Keep schema work moving while a separate runtime-fix task addresses the local browser branch.
-
-### Consequences
-
-- Browser validation must be rerun only after the local runtime is fixed.
-- Raw ingestion remains blocked on browser evidence, but schema work is not blocked by this environment issue.
 
 ## 2026-04-24 - Concrete Schema Files Accepted - accepted
 
@@ -270,24 +212,6 @@ Use this file for durable orchestration/product decisions only.
 
 - Schema work moves from file creation to validation.
 - Public-fact/user-state boundaries are now durable enough to guide downstream tasks.
-
-## 2026-04-24 - Browser Runtime Diagnosis Accepted - accepted
-
-### Context
-
-- `TASK-BROWSER-RUNTIME-FIX-01` confirmed that `node_repl` resolves `C:\nvm4w\nodejs\node.exe` at `v20.19.5`.
-- Browser Use requires `>= 22.22.0`.
-- Installed `22.20.0` is insufficient, and the bundled Codex Node path was not validated as an executable fallback.
-
-### Decision
-
-- Accept the runtime diagnosis as sufficient blocker evidence.
-- Use the existing `nvm` workflow as the least-risk fix path.
-
-### Consequences
-
-- The next runtime task should request explicit confirmation before applying `nvm install 22.22.0` and `nvm use 22.22.0`.
-- Browser validation remains blocked until that runtime change and a bootstrap recheck succeed.
 
 ## 2026-04-24 - Normalized Project Data Lives Under data/normalized - accepted
 
@@ -312,17 +236,14 @@ Use this file for durable orchestration/product decisions only.
 
 - A local authenticated capture run against `https://www.naruto-arena.site/` produced a usable raw snapshot bundle with characters, missions, ladders, manual pages, and public profile data.
 - The capture works by combining authenticated Next JSON reads with rendered-page fallback for routes where the canonical Next JSON path is inconsistent.
-- Browser Use remains blocked by the local Node runtime, but Python Playwright capture is already functioning.
 
 ### Decision
 
 - Treat authenticated Playwright capture as the current mainline raw acquisition path for the project.
-- Treat the Browser Use runtime issue as a secondary tooling branch, not the mainline ingestion blocker.
 
 ### Consequences
 
 - Mainline work can move to schema proof and normalization from the existing raw snapshot.
-- Browser Use runtime repair remains useful for optional in-app browser validation, but it no longer gates the next MVP tasks.
 - Session-aware user state still stays separate from public-fact normalization.
 
 ## 2026-04-24 - Schema Proof Accepted, Mission Level Requirement Must Be Modeled - accepted
@@ -407,7 +328,7 @@ Use this file for durable orchestration/product decisions only.
 
 ### Consequences
 
-- Fresh refresh validation should prove `manifest.captureContract`, `manifest.routeCapture`, and per-record `capture.*` fields only through runtime-path snapshots.
+- Capture-contract proof should use runtime-path snapshots when the capture runner is executed.
 - Worker tasks should treat writes into tracked source paths like `data/normalized` as a hard failure for live capture output.
 
 ## 2026-04-24 - Project-Owned Taxonomy Artifacts Live Under Top-Level references - accepted
@@ -444,24 +365,22 @@ Use this file for durable orchestration/product decisions only.
 - `TASK-REFERENCES-VALIDATE-01` should validate bundle completeness, provenance carry-through, and data-quality/report invariants against the skill-local bundle.
 - `TASK-SKILL-BASE-01` should load local bundle artifacts and must not bypass them by reading project-root `references/` or `data/normalized/` directly at runtime.
 
-## 2026-04-24 - Fresh Authenticated Refresh Validation Is Deferred Hardening, Not Current-Use Blocker - accepted
+## 2026-04-24 - Current Local Bundle Is Sufficient For Usable Agent Surface - accepted
 
 ### Context
 
 - The current repo already has an accepted raw snapshot, accepted normalized data, accepted validators, an accepted skill-local reference bundle, accepted helper/planner layers, and accepted representative answer samples.
 - User clarified that for the current working agent, no new site refresh is needed because the required data is already parsed and the product is already operating on that local bundle.
-- `TASK-INGEST-RAW-VALIDATE-01` would only prove a fresh rerun of the hardened capture contract on newly generated raw artifacts.
 
 ### Decision
 
-- Treat `TASK-INGEST-RAW-VALIDATE-01` as deferred ingestion hardening for future data refreshes, not as a blocker for the current usable agent surface.
-- Do not require authenticated env vars merely to declare the currently parsed local-data skill usable.
+- Do not require another capture run merely to declare the currently parsed local-data skill usable.
+- Keep the current accepted bundle as the grounding source for the working agent surface.
 
 ### Consequences
 
-- The current representative MVP surface is no longer blocked on fresh authenticated refresh validation.
-- If the project later needs to refresh site data, prove the new capture metadata contract on a fresh run, or resume ingestion maintenance, then `TASK-INGEST-RAW-VALIDATE-01` should be revived.
-- Current next steps become optional operational choices such as publish, integration, or future refresh work, not mandatory proof debt for current use.
+- The current representative MVP surface is complete enough for use without another capture run.
+- New capture maintenance should be opened only as a separate explicit task with a fresh contract.
 
 ## 2026-04-24 - Alternative-Character Mission Progress Must Be Modeled Explicitly - accepted
 
@@ -499,3 +418,57 @@ Use this file for durable orchestration/product decisions only.
 - Mission recommendation logic must not treat the full character bundle as freely available for every mission request.
 - If runtime data needs a small structural addition to represent unlock bands safely, add that durable structure rather than relying only on prompt wording.
 - If a mission rank is missing or ambiguous, the answer should surface that limit instead of silently widening the roster to late-rank characters.
+
+## 2026-04-25 - Discard Experimental Runtime And Capture Repo Debris - accepted
+
+### Context
+
+- User explicitly does not want old runtime, browser-validation recovery, and capture-rerun proof branches kept as tracked repo debt or optional backlog.
+- Those lines were exploratory/test branches and are no longer part of the intended public repo story.
+- The accepted product value already comes from the frozen local bundle, validated helper/planner layer, and published skill repo.
+
+### Decision
+
+- Treat the old runtime repair branch, browser-validation recovery branch, and capture-rerun proof branch as discarded experimental debris for the current repo state.
+- Remove their tracked reports, stale task artifacts, and doc/backlog references unless a file is still needed to preserve an accepted mainline fact that cannot be retained more cleanly elsewhere.
+
+### Consequences
+
+- Create one bounded cleanup task to scrub repo-facing docs, control-plane docs, and obsolete `.orchestrator` artifacts.
+- Keep honest product boundaries and representative-proof wording where they still describe the accepted current product, but stop advertising discarded experiments as active, deferred, conditional, or optional repo work.
+
+## 2026-04-25 - README Should Be Short, Casual, And Personal - accepted
+
+### Context
+
+- User explicitly rejected the current README tone as too AI-ish, too long, and too productized for this repo.
+- This repository is a personal test project, not a serious product surface.
+- User wants the README to sound like something they would write themselves: short, casual, simple, and slightly internet-slanted rather than formal.
+
+### Decision
+
+- Rewrite `README.md` in short first-person Russian.
+- Keep it casual and simple: explain the childhood Naruto Arena context, what the game is, why the Codex skill exists, and what the agent can do in practical terms.
+- Present the repo as a personal Codex skill/test project for the user, not as a polished product or formal platform.
+
+### Consequences
+
+- Remove long technical/product sections, heavy validation framing, and corporate-sounding wording from the README.
+- Keep only lightweight honest context that matters for someone opening the repo: what it is, why it was made, and what the skill helps with.
+
+## 2026-04-25 - Push Current Local Repo State To GitHub - accepted
+
+### Context
+
+- User explicitly approved pushing the current local repo state as-is.
+- The local worktree already contains the accepted README tone reset, accepted cleanup of stale experimental debris, and matching control-plane updates.
+- GitHub still shows the older publish commit because no follow-up commit/push has been performed after those local changes.
+
+### Decision
+
+- Create one bounded repo-sync task that stages the full current local tracked/untracked source-doc-task state, creates one commit on the current branch, and pushes it to `origin`.
+
+### Consequences
+
+- The worker should not reopen content decisions; it should sync the already accepted local state.
+- If GitHub should later exclude broader `.orchestrator/tasks` history entirely, that becomes a separate cleanup decision rather than a blocker for this push.

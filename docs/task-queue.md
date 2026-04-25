@@ -10,7 +10,7 @@ This file tracks the live operating queue. It is not a substitute for the full r
 
 ## Ready Now
 
-- `TASK-README-PUBLISH-01` - ready; do a repo-wide technical README overhaul, run a humanized final prose pass, and publish the repository to `origin`.
+- `TASK-REPO-SYNC-PUSH-01` - ready; stage the full current local repo state, create one sync commit on `master`, and push it to `origin` so GitHub matches the accepted local README/docs cleanup state.
 
 ## In Progress
 - None.
@@ -21,6 +21,4 @@ This file tracks the live operating queue. It is not a substitute for the full r
 
 ## Conditional Follow-Ups
 
-- `TASK-INGEST-RAW-VALIDATE-01` - only if the project needs a fresh authenticated data refresh or wants to prove the updated capture metadata contract on new raw artifacts.
-- `TASK-BROWSER-RUNTIME-FIX-01-FOLLOWUP-01` - only if the in-app browser branch is resumed.
-- `TASK-DISCOVERY-SITE-AUTH-STATE-05` - only if the product needs account-specific progression/unlock state after public browser validation.
+- `TASK-DISCOVERY-SITE-AUTH-STATE-05` - only if the product needs account-specific progression/unlock state and an authorized workflow is explicitly opened.

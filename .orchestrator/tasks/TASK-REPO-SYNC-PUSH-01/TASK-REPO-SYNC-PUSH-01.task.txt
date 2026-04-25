@@ -1,0 +1,83 @@
+task_id: TASK-REPO-SYNC-PUSH-01
+mode: manual_file_handoff
+role_skill: $universal-subtask-worker
+status: ready
+
+goal:
+- Push the full current local repo state to GitHub so `origin/master` matches the accepted local README/docs cleanup state.
+
+why_now:
+- User explicitly approved pushing everything that is currently in the local worktree.
+- GitHub still shows the older README because the accepted local changes have not yet been committed and pushed.
+
+repo_root:
+C:\Coding\Naruto arena agent
+
+context_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-README-TONE-RESET-01\RESULT.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-02.txt
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-README-PUBLISH-01\RESULT.txt
+
+write_scope:
+- C:\Coding\Naruto arena agent\.git
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\README.md
+- C:\Coding\Naruto arena agent\docs
+- C:\Coding\Naruto arena agent\.orchestrator
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-SYNC-PUSH-01\RESULT.txt
+
+do_not_touch:
+- C:\Coding\Naruto arena agent\data
+- C:\Coding\Naruto arena agent\schemas
+- C:\Coding\Naruto arena agent\scripts
+- C:\Coding\Naruto arena agent\skills
+- C:\Coding\Naruto arena agent\references
+- C:\Coding\Naruto arena agent\snapshots
+
+acceptance:
+- Stage the full current local source/doc/task-artifact state shown by `git status` at task start, including modified files, deletions, and the current untracked `.orchestrator/tasks` artifacts that belong to the accepted local state.
+- Create exactly one commit on the current checked-out branch with message `Sync local README and cleanup state`.
+- Push the current branch to `origin` and verify that the remote head advanced.
+- Do not introduce new content edits beyond what is required for the task result artifact.
+
+validation:
+- Run `git status --short --branch` before staging and again after push.
+- Run `git add -A`.
+- Run `git commit -m "Sync local README and cleanup state"`.
+- Run `git push origin master`.
+- Run `git log -1 --stat --oneline`.
+- Run `git ls-remote --heads origin master`.
+
+delegation_inside_task:
+No. NO_VALID_SUBAGENT_SPLIT.
+
+result_file:
+C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-SYNC-PUSH-01\RESULT.txt
+
+result_contract:
+- task_id
+- status: completed | partial | blocked | failed
+- changed_files
+- validation
+- completed_acceptance
+- limitations
+- follow_up_needed
+- follow_up
+
+chat_response_contract:
+- Write the result artifact to the exact result_file path.
+- Final chat response must be exactly the absolute result_file path.
+- No prose.
+- No markdown.
+- No summary.
+- No questions to user.
+- If blocked, still write result_file with status: blocked, then return only the path.

@@ -14,7 +14,7 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
 | `R0` | `completed` | Repo discovery and bootstrap baseline are complete; publish is optional. |
 | `R0b` | `completed` | Root policy wording is aligned to the accepted repo state and durable boundaries. |
 | `R1` | `completed` | Canonical site strategy is now proven well enough for MVP capture: authenticated Playwright plus route-level fallback. |
-| `R2` | `completed` | Raw capture MVP is accepted for the current parsed data; fresh refresh validation is deferred hardening for future refreshes. |
+| `R2` | `completed` | Raw capture MVP is accepted for the current parsed data. |
 | `R3` | `completed` | Character extraction and roster-coverage validation are accepted. |
 | `R3b` | `completed` | Mission extraction and mission-bundle coverage validation are accepted. |
 | `R4` | `completed` | Schema files and validator proof are accepted. |
@@ -26,7 +26,7 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
 | `R8b` | `completed` | Mission pool optimization and its contract validator are accepted. |
 | `R9b` | `completed` | Mission-runtime correction wave is accepted: progression-safe mission recommendations and visible `A or B` double-count semantics are now modeled on the local bundle. |
 | `R9` | `completed` | End-to-end proof and repo-facing docs finalization are accepted for the current representative MVP surface. |
-| `R10` | `in_progress` | User-requested publication wave is active: the repo needs a stronger public README and first push to GitHub. |
+| `R10` | `completed` | User-requested publication wave is accepted: the repo now has a public README and first GitHub push. |
 
 ## Phases
 
@@ -61,11 +61,7 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
 - Dependencies: canonical source decision.
 - Tasks:
   - `TASK-DISCOVERY-SITE-01` - superseded after the original thread was lost.
-  - `TASK-DISCOVERY-SITE-BROWSER-02` - blocked by Browser Use/node runtime; no site evidence accepted.
   - `TASK-DISCOVERY-SITE-PARSE-03` - completed; accepted parse recon from canonical public HTML/Next artifacts.
-  - `TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04` - blocked before navigation by local Browser Use/node runtime.
-  - `TASK-BROWSER-RUNTIME-FIX-01` - completed diagnosis; confirmed active Node is `v20.19.5` and incompatible with Browser Use.
-  - `TASK-BROWSER-RUNTIME-FIX-01-FOLLOWUP-01` - apply compatible Node runtime after explicit user confirmation, then verify Browser Use bootstrap.
   - Local authenticated Playwright capture has already proven a viable mainline acquisition path for characters, missions, ladders, manual pages, and public profile data.
 
 ### R2 - completed
@@ -76,8 +72,7 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
 - Exit criteria: raw snapshots are local, timestamped/versioned enough for reproducible normalization, and preserve source URLs.
 - Dependencies: `TASK-DISCOVERY-SITE-01`, repo tooling decision.
 - Tasks:
-  - `TASK-INGEST-RAW-01` - completed; capture runner now has a safe operator contract, output-path guard, and richer capture metadata contract for future refreshed snapshots.
-  - `TASK-INGEST-RAW-VALIDATE-01` - deferred; validate refreshed manifest/record metadata when a future authenticated capture refresh is actually needed.
+  - `TASK-INGEST-RAW-01` - completed; capture runner now has a safe operator contract, output-path guard, and capture metadata contract for runtime snapshots.
 
 ### R3 - completed
 
@@ -200,7 +195,7 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
   - `TASK-E2E-ANSWER-SAMPLES-01` - completed; accepted representative answer samples now prove required sections, explicit grouped mission coverage, provenance discipline, and confirmed-vs-inference separation across all five MVP request classes.
   - `TASK-DOCS-FINALIZE-01` - completed; repo-facing docs now reflect the accepted answer-surface proof, runtime grounding boundaries, and current limitations without overclaiming.
 
-### R10 - in_progress
+### R10 - completed
 
 *Publication polish and push*
 
@@ -208,18 +203,16 @@ This roadmap tracks the MVP dependency graph for the Naruto Arena Team Builder S
 - Exit criteria: `README.md` is publication-quality, accurately reflects the current repo and skill usage, receives a deliberate humanization pass, and the repository is committed and pushed to `origin` or blocked with exact git evidence.
 - Dependencies: accepted `R6` through `R9b`.
 - Tasks:
-  - `TASK-README-PUBLISH-01` - ready; perform repo-wide technical analysis, rewrite and humanize `README.md`, then stage, commit, and push the repository.
+  - `TASK-README-PUBLISH-01` - completed; repo-wide technical README rewrite, prose-humanization pass, and first upstream push were all accepted.
 
-## Deferred Or External Blockers
+## Current Boundaries
 
-- `TASK-INGEST-RAW-VALIDATE-01` - deferred future hardening if the project needs a fresh authenticated data refresh or wants to prove the updated capture metadata contract on new artifacts.
-- Public browser validation is blocked until local Browser Use/node runtime can start with a compatible Node version.
-- Authenticated browser capture may still be required for account-specific progression and unlock state.
+- Account-specific progression and unlock state remain outside the accepted public-fact bundle unless a separate authorized workflow is opened.
 - Any use of non-canonical Naruto Arena sources requires explicit user approval.
 
 ## Current Dispatch Batch
 
-- `TASK-README-PUBLISH-01` - next ready publication wave; rewrite the public README from a full repo audit, run a humanized prose pass, and push the repository to GitHub.
+- `TASK-REPO-SYNC-PUSH-01` - ready; stage the full current local repo state, create one sync commit on `master`, and push it to `origin` so GitHub matches the accepted local README/docs cleanup state.
 
 
 

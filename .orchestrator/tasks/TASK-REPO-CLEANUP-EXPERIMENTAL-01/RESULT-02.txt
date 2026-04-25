@@ -1,0 +1,41 @@
+task_id: TASK-REPO-CLEANUP-EXPERIMENTAL-01
+status: completed
+
+changed_files:
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\browser-runtime-fix-report.md
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\site-browser-public-report.md
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\site-browser-recon-report.md
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-02
+- deleted: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04
+- added: C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-02.txt
+
+validation:
+- command: Test-Path .orchestrator\browser-runtime-fix-report.md; Test-Path .orchestrator\site-browser-public-report.md; Test-Path .orchestrator\site-browser-recon-report.md
+  result: False, False, False.
+- command: Get-ChildItem .orchestrator\tasks | Select-Object -ExpandProperty Name
+  result: TASK-BROWSER-RUNTIME-FIX-01, TASK-DISCOVERY-SITE-BROWSER-02, and TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04 are absent from the local task directory listing.
+- command: rg -n "Browser Use|TASK-BROWSER-RUNTIME-FIX-01|TASK-DISCOVERY-SITE-BROWSER|TASK-INGEST-RAW-VALIDATE-01|authenticated refresh" README.md AGENTS.md docs\project docs\roadmap.md docs\task-queue.md docs\validation-log.md .orchestrator\decisions.md .orchestrator\roadmap.md
+  result: exit code 1; no matches remained in the requested repo-facing docs/control-plane scan.
+- command: git diff --name-status
+  result: deletion entries are present for the three stale report files and all tracked files under the three removed stale task-family directories; existing modified docs/control-plane files remain from the earlier cleanup pass.
+- command: git ls-tree -r --name-only origin/master .orchestrator/tasks | Measure-Object -Line
+  result: 71 tracked .orchestrator/tasks paths are present on origin/master.
+- command: git ls-files .orchestrator/tasks | Measure-Object -Line
+  result: 71 tracked .orchestrator/tasks paths are present in the local index before staging.
+
+completed_acceptance:
+- Deleted the exact stale report files named in FOLLOWUP-02.
+- Deleted the exact stale browser-related task-family directories named in FOLLOWUP-02.
+- Proved those local files/directories are gone.
+- Proved git diff now contains deletion entries for the removed artifacts.
+- Did not modify data, schemas, scripts, skills, references, snapshots, .git, or unrelated protected task directories during this follow-up.
+
+limitations:
+- The user's additional request to make sure GitHub has no task artifacts is broader than this file task write_scope. Inspection shows origin/master currently contains 71 tracked .orchestrator/tasks paths. Removing all task artifacts from GitHub would require a separate repo-wide cleanup, staging/commit, and push.
+- No commit or push was created. Remote GitHub cleanup is a cloud/repo-changing action and should be confirmed separately at action time after the exact deletion set is chosen.
+- README.md and other docs/control-plane modifications shown by git status were already present from the earlier cleanup/tone-reset work and were not changed by this follow-up.
+
+follow_up_needed: yes
+follow_up:
+- If the project should have no .orchestrator/tasks in the GitHub repo, open/authorize a separate cleanup to remove tracked .orchestrator/tasks from the repository, update .gitignore if desired, commit the deletion, and push to origin/master after explicit action-time confirmation.

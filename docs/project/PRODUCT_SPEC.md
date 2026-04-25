@@ -61,5 +61,4 @@ Use this file for product behavior contracts that are more specific than `PRODUC
 
 - The skill-local bundle currently reports 196 playable character records, 179 mission records, 877 bundled skills, 122 explicit unknown mission objective records, 2 excluded disabled zero-skill characters, and 1260 source refs.
 - Data-quality warnings remain part of the active contract and must be surfaced when relevant.
-- Fresh authenticated refresh validation for the hardened capture contract is still blocked until authentication environment variables are present for a new capture run.
 - Representative answer samples are accepted proof of answer-surface feasibility, not an automated transcript regression harness.

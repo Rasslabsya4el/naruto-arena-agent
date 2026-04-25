@@ -50,7 +50,7 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 - accepted as site discovery input.
 - Home-page public data is confirmed.
 - Route inventory and expected prop shapes for characters, missions, ladders, profiles, and clans are confirmed from canonical build artifacts.
-- Raw non-browser fetches of tested non-home routes currently redirect to `/`, so browser validation is still required.
+- Raw non-browser fetches of tested non-home routes currently redirect to `/`, so acquisition needed a safer route-aware path.
 
 ### Residual Risk
 
@@ -59,36 +59,7 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 
 ### Next Step
 
-- Run `TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04` for public browser validation.
 - Run `TASK-SCHEMA-FILES-01` in parallel to materialize public-fact and user-state schema boundaries.
-
-## 2026-04-24 - Public Browser Validation Attempt
-
-### Scope
-
-- Validate whether non-home canonical routes render publicly in a normal browser session without login.
-
-### Checks Run
-
-- Browser Use / `node_repl` initialization with the `iab` backend.
-- Local runtime check via the browser task.
-- Output safety check for credentials/session material.
-
-### Outcome
-
-- blocked by local environment.
-- Browser runtime did not start because resolved Node was `v20.19.5` and the browser workflow requires `>= 22.22.0`.
-- No canonical routes were opened and no browser evidence was collected.
-
-### Residual Risk
-
-- Public non-home route accessibility remains unverified in real browser mode.
-- Raw ingestion is still blocked on browser validation.
-
-### Next Step
-
-- Run `TASK-BROWSER-RUNTIME-FIX-01`.
-- Keep `TASK-SCHEMA-FILES-01` moving in parallel because its input assumptions are already stable enough.
 
 ## 2026-04-24 - Concrete Schema Files
 
@@ -116,39 +87,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-SCHEMA-VALIDATE-02`.
-- Keep `TASK-BROWSER-RUNTIME-FIX-01` moving in parallel.
-
-## 2026-04-24 - Browser Runtime Diagnosis
-
-### Scope
-
-- Determine why Browser Use / `node_repl` cannot start and identify the least-risk fix path.
-
-### Checks Run
-
-- `where.exe node`
-- `node --version`
-- `nvm list`
-- `nvm current`
-- `Env:NODE_REPL_NODE_PATH`
-- direct `node_repl` runtime repro
-
-### Outcome
-
-- accepted as blocker diagnosis.
-- Active runtime is `v20.19.5`.
-- Installed alternate `22.20.0` is still below the required `>= 22.22.0`.
-- Existing `nvm` workflow is the least-risk fix path.
-
-### Residual Risk
-
-- No runtime change was applied yet.
-- Browser Use bootstrap remains unverified after diagnosis.
-
-### Next Step
-
-- Run `TASK-BROWSER-RUNTIME-FIX-01-FOLLOWUP-01`.
-- Keep `TASK-SCHEMA-VALIDATE-02` moving in parallel.
 
 ## 2026-04-24 - Authenticated Raw Capture
 
@@ -168,7 +106,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 - accepted as mainline ingestion evidence.
 - Local raw snapshot bundle now exists with 198 characters, 9 mission groups, 179 mission detail pages, manual pages, both public ladders, and one public profile snapshot.
 - Mainline acquisition works by combining authenticated Next JSON reads with rendered-page fallback on routes where direct canonical Next JSON responses are inconsistent.
-- Browser Use remains blocked locally, but it is no longer the mainline ingestion blocker.
 
 ### Residual Risk
 
@@ -477,13 +414,12 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 
 ### Residual Risk
 
-- No fresh authenticated capture rerun was performed in this task, so existing raw artifacts under `snapshots/raw/site_capture/latest` still predate the richer metadata contract.
-- Current shell environment does not have `NARUTO_ARENA_USERNAME` or `NARUTO_ARENA_PASSWORD` set, so fresh refresh validation cannot be dispatched yet without external input.
+- The accepted raw artifacts under `snapshots/raw/site_capture/latest` predate the richer metadata contract, but remain the current local input for normalization and references.
+- No additional capture run is tracked for the current MVP line.
 
 ### Next Step
 
 - Run `TASK-EXTRACT-MISSIONS-VALIDATE-01`.
-- Defer `TASK-INGEST-RAW-VALIDATE-01` until authenticated env vars are available for a fresh capture refresh.
 
 ## 2026-04-24 - Mission Bundle Validation Accepted
 
@@ -511,7 +447,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-TAXONOMY-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Taxonomy And Tag Inference Accepted
 
@@ -543,7 +478,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-REFERENCES-BUILD-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Skill-Local Reference Build Accepted
 
@@ -579,7 +513,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-REFERENCES-VALIDATE-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Skill-Local Reference Validation Accepted
 
@@ -613,7 +546,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-SKILL-BASE-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Base Skill Entry Point Accepted
 
@@ -643,7 +575,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-SKILL-PROMPTS-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Skill Prompt Contract Accepted
 
@@ -673,7 +604,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-TEAM-HELPERS-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Team Helper Implementation Accepted
 
@@ -709,7 +639,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-TEAM-HELPERS-VALIDATE-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Team Helper Contract Validation Accepted
 
@@ -742,7 +671,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-MISSION-POOL-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Mission Pool Planner Accepted
 
@@ -784,7 +712,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-MISSION-POOL-VALIDATE-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Mission Pool Contract Validation Accepted
 
@@ -817,7 +744,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-E2E-MVP-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - E2E MVP First Pass Reviewed
 
@@ -851,7 +777,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-E2E-ANSWER-SAMPLES-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Representative Answer Samples Accepted
 
@@ -884,7 +809,6 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Next Step
 
 - Run `TASK-DOCS-FINALIZE-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Repo-Facing Docs Finalization Accepted
 
@@ -904,19 +828,18 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 
 - accepted as the current repo-facing documentation surface.
 - New readers can now see the canonical-source boundary, the skill-local runtime grounding model, the five accepted MVP request classes, key validation entrypoints, and current product limitations without reading control-plane artifacts first.
-- The docs stay honest about representative proof, unknown mission objectives, data-quality warnings, excluded disabled raw entries, and the still-blocked fresh authenticated refresh validation.
+- The docs stay honest about representative proof, unknown mission objectives, data-quality warnings, and excluded disabled raw entries.
 - The remaining docs mismatch is now narrower: root `AGENTS.md` still describes the repo as bootstrap/discovery-only and says no implementation exists.
 
 ### Residual Risk
 
 - This acceptance covers repo-facing docs, not root policy alignment.
 - The accepted docs still do not prove exhaustive strategic correctness or a transcript regression harness.
-- Fresh authenticated refresh validation remains blocked by missing auth env vars.
+- No additional capture proof is required for the current usable local-data surface.
 
 ### Next Step
 
 - Run `TASK-AGENTS-ALIGN-01`.
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
 
 ## 2026-04-24 - Root Policy Alignment Accepted
 
@@ -935,14 +858,117 @@ Do not use it as a roadmap, task queue, or per-command scratchpad.
 ### Outcome
 
 - accepted as the current root policy surface.
-- Future worker tasks now inherit the accepted repo map, current product reality, representative-not-exhaustive proof posture, and the still-blocked authenticated refresh fact instead of stale bootstrap-only guidance.
+- Future worker tasks now inherit the accepted repo map, current product reality, and representative-not-exhaustive proof posture instead of stale bootstrap-only guidance.
 - Durable boundaries remain intact: only the canonical source is allowed, model memory is forbidden as mechanics evidence, hidden/unknown mission objectives stay explicit unknowns, best-team hardcoding remains forbidden, and runtime artifacts remain outside project memory.
 
 ### Residual Risk
 
-- This acceptance aligns policy wording; it does not remove the external blocker on fresh authenticated refresh validation.
+- This acceptance aligns policy wording; it does not prove exhaustive strategic validation.
 - The accepted proof remains representative rather than exhaustive strategic validation.
 
 ### Next Step
 
-- Keep `TASK-INGEST-RAW-VALIDATE-01` waiting for authenticated env vars.
+
+## 2026-04-25 - README Publication And First Upstream Push Accepted
+
+### Scope
+
+- Verify that the public repository handoff is now real: the README must accurately describe the accepted product/runtime surface, cheap runtime validators must still pass, and the first upstream push must be visible on `origin/master`.
+
+### Checks Run
+
+- `git status --short --branch`
+- `git log -1 --stat --oneline`
+- `git remote -v`
+- `git ls-remote --heads origin`
+- `python scripts\validate_skill_reference_bundle.py`
+- `python scripts\validate_team_helpers.py`
+- `python scripts\validate_mission_pool.py`
+- `python scripts\search_characters.py --help`
+- `python scripts\team_candidate_report.py --help`
+- `python scripts\optimize_mission_pool.py --help`
+- Orchestrator review of `README.md`, `docs/task-queue.md`, `docs/roadmap.md`, `.orchestrator/roadmap.md`, and `docs/project/CURRENT_STATE.md`
+
+### Outcome
+
+- accepted as the publication-wave proof.
+- `README.md` is now a usable GitHub-facing entrypoint that stays honest about canonical-source boundaries, unknown mission objectives, progression-scoped mission planning, skill installation reality, and representative rather than exhaustive proof.
+- Cheap runtime guardrails still pass after the README rewrite: the skill-local bundle, helper layer, and mission-pool planner remain intact on the accepted counts and semantics.
+- The helper CLI surfaces still expose the intended public usage contract through `--help` without requiring runtime artifact generation.
+- `origin/master` now resolves to `06458e055c6493e8e78baa3cd1f3f34406385be8`, matching the claimed publication commit.
+
+### Residual Risk
+
+- `.orchestrator/tasks/TASK-README-PUBLISH-01/RESULT.txt` remains an uncommitted local task artifact because it was written after the publish commit to record final push evidence.
+- This wave does not add exhaustive gameplay validation; it accepts the current published MVP surface as representative.
+
+### Next Step
+
+- No mandatory dispatchable task remains on the current MVP line.
+- No mandatory dispatchable task remains on the current MVP line; new product scope should be opened explicitly.
+
+## 2026-04-25 - README Tone Reset Accepted
+
+### Scope
+
+- Verify that the public repo entrypoint is no longer overexplained product-doc prose and now matches the user's intended tone: short, casual, first-person, and clearly framed as a personal Codex test project.
+
+### Checks Run
+
+- `rg -n "Naruto Arena|Codex|3 на 3|команд|план|фокус|противник|хил|каунтер" README.md`
+- `rg -n "Current State|Validation|Repository Map|Maintenance Notes|MVP|representative|validated|runtime|provenance" README.md`
+- `git diff -- README.md`
+- `Get-Content README.md | Measure-Object -Line`
+- Orchestrator review of `README.md` against the accepted tone-reset task contract
+
+### Outcome
+
+- accepted as the current README surface.
+- `README.md` is now a short first-person Russian note instead of a long productized document.
+- The new text clearly says the user played Naruto Arena a lot as a kid, explains the game in simple 3v3 terms, and frames the repo as a personal Codex skill/test project.
+- The README now keeps the practical value up front: team building, character/team usage help, battle plans, and enemy-comp analysis with focus-target and threat callouts.
+- The old heavy sections and formal wording are gone from the README surface.
+
+### Residual Risk
+
+- The README now intentionally omits a lot of technical repo detail; that is a deliberate tone tradeoff, not a docs regression for this personal project.
+- This wave changes only repo-facing wording and does not revalidate runtime/gameplay behavior.
+
+### Next Step
+
+- Return the dispatch batch to `TASK-REPO-CLEANUP-EXPERIMENTAL-01` so the rest of the discarded experimental doc/debris can be removed from tracked repo state.
+
+## 2026-04-25 - Experimental Debris Cleanup Accepted
+
+### Scope
+
+- Verify that the discarded browser/auth-refresh branch is no longer kept alive in tracked repo-facing docs or in the stale local `.orchestrator` artifact set.
+
+### Checks Run
+
+- `Get-Content .orchestrator/tasks/TASK-REPO-CLEANUP-EXPERIMENTAL-01/RESULT-02.txt`
+- `git status --short --branch`
+- `git diff --name-status`
+- `Test-Path .orchestrator\browser-runtime-fix-report.md`
+- `Test-Path .orchestrator\site-browser-public-report.md`
+- `Test-Path .orchestrator\site-browser-recon-report.md`
+- `Get-ChildItem .orchestrator\tasks | Select-Object -ExpandProperty Name`
+- `rg -n "Browser Use|TASK-BROWSER-RUNTIME-FIX-01|TASK-DISCOVERY-SITE-BROWSER|TASK-INGEST-RAW-VALIDATE-01|authenticated refresh" README.md AGENTS.md docs\project docs\roadmap.md docs\task-queue.md docs\validation-log.md .orchestrator\decisions.md .orchestrator\roadmap.md`
+
+### Outcome
+
+- accepted as the current cleanup wave.
+- The stale browser/auth-refresh report files are gone from `.orchestrator/`.
+- The stale browser-task families are gone from `.orchestrator/tasks/`.
+- Repo-facing docs and active control-plane docs no longer advertise that discarded branch as backlog, blocker, or optional future work.
+- Accepted mainline facts remain intact: canonical-source boundary, accepted local bundle, representative-proof posture, unknown mission objective honesty, progression ceiling, and visible `A or B` double-count semantics.
+
+### Residual Risk
+
+- The deletions and related doc cleanup are still only local working-tree changes until a separate commit/push wave is explicitly authorized.
+- `origin/master` still contains older tracked `.orchestrator/tasks` artifacts from earlier history; removing all task artifacts from GitHub would be a separate broader repo-cleanup decision.
+
+### Next Step
+
+- No mandatory dispatchable task remains on the current MVP line.
+- If the user wants GitHub to match the current local cleanup state, open a separate authorized commit/push wave.

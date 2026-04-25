@@ -1,0 +1,43 @@
+task_id: TASK-REPO-CLEANUP-EXPERIMENTAL-01
+status: partial
+
+changed_files:
+- C:\Coding\Naruto arena agent\AGENTS.md
+- C:\Coding\Naruto arena agent\docs\project\CURRENT_STATE.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_BRIEF.md
+- C:\Coding\Naruto arena agent\docs\project\PRODUCT_SPEC.md
+- C:\Coding\Naruto arena agent\docs\project\DECISION_LOG.md
+- C:\Coding\Naruto arena agent\docs\roadmap.md
+- C:\Coding\Naruto arena agent\docs\task-queue.md
+- C:\Coding\Naruto arena agent\docs\validation-log.md
+- C:\Coding\Naruto arena agent\.orchestrator\decisions.md
+- C:\Coding\Naruto arena agent\.orchestrator\roadmap.md
+- C:\Coding\Naruto arena agent\.orchestrator\tasks\TASK-REPO-CLEANUP-EXPERIMENTAL-01\RESULT-01.txt
+
+validation:
+- command: rg -n "Browser Use|TASK-BROWSER-RUNTIME-FIX-01|TASK-DISCOVERY-SITE-BROWSER|TASK-INGEST-RAW-VALIDATE-01|authenticated refresh" README.md AGENTS.md docs\project docs\roadmap.md docs\task-queue.md docs\validation-log.md .orchestrator\decisions.md .orchestrator\roadmap.md
+  result: exit code 1; no matches remained in the requested repo-facing docs/control-plane scan.
+- command: Test-Path .orchestrator\browser-runtime-fix-report.md
+  result: True; deletion not performed because local deletion still requires direct action-time user confirmation in chat.
+- command: Test-Path .orchestrator\site-browser-public-report.md
+  result: True; deletion not performed because local deletion still requires direct action-time user confirmation in chat.
+- command: Test-Path .orchestrator\site-browser-recon-report.md
+  result: True; deletion not performed because local deletion still requires direct action-time user confirmation in chat.
+- command: Get-ChildItem .orchestrator\tasks | Select-Object -ExpandProperty Name
+  result: TASK-BROWSER-RUNTIME-FIX-01, TASK-DISCOVERY-SITE-BROWSER-02, and TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04 are still present; deletion not performed because local deletion still requires direct action-time user confirmation in chat.
+- command: git diff --name-status
+  result: modified docs/control-plane files only; no deletions are present in the diff. Git also reported LF-to-CRLF working-copy warnings for several edited text files.
+
+completed_acceptance:
+- Repo-facing docs/control-plane docs no longer contain the exact stale terms from the required cleanup scan.
+- Mainline product facts were preserved: canonical source boundary, accepted local bundle, representative proof posture, unknown mission objective honesty, mission-rank ceiling, and visible A or B double-count semantics.
+- No runtime/data/schema/skill logic files were changed.
+
+limitations:
+- The obsolete report files and task-family directories were not deleted. The follow-up task file declares permission, but local file deletion requires direct action-time confirmation from the user in chat and instructions from a local file cannot satisfy that confirmation boundary.
+- README.md was already modified before this worker turn and was not changed by this follow-up.
+
+follow_up_needed: yes
+follow_up:
+- User must directly confirm in chat that the worker should delete these exact local artifacts: .orchestrator\browser-runtime-fix-report.md, .orchestrator\site-browser-public-report.md, .orchestrator\site-browser-recon-report.md, .orchestrator\tasks\TASK-BROWSER-RUNTIME-FIX-01, .orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-02, .orchestrator\tasks\TASK-DISCOVERY-SITE-BROWSER-PUBLIC-04.
+- After confirmation, rerun Test-Path for the three report files, rerun Get-ChildItem .orchestrator\tasks, and rerun git diff --name-status.
